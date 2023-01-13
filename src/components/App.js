@@ -1,16 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import SuggestionTree from 'suggestion-tree';
 
 import bookService from '../services/bookService';
 import sourcesService from '../services/sourcesService';
 import suggestionService from '../services/suggestionService';
 
-import textUtils from '../../../shared-lib/textUtils';
-import parseStringIntoTokens from '../../../shared-lib/parseStringIntoTokens';
-import removeGutenbergLabels from '../../../shared-lib/removeGutenbergLabels';
-import generateSuccessorTree from '../../../shared-lib/generateSuccessorTree';
-import findSuccessor from '../../../shared-lib/findSuccessor';
+import textUtils from '../utils/shared-lib/textUtils';
+import parseStringIntoTokens from '../utils/parseStringIntoTokens';
+import removeGutenbergLabels from '../utils/removeGutenbergLabels';
 
 import Welcome from './Welcome';
 import SourceSelector from './SourceSelector';
@@ -125,7 +124,7 @@ const App = () => {
     }
     else {
       const tokens = parseStringIntoTokens(composition + ' ' + userInput);
-      const suggestion = findSuccessor(sources.current.tree, tokens)
+      const suggestion = sources.current.tree.getSuggestionFrom(tokens);
       setSuggestion(suggestion);
     }
   }
@@ -208,7 +207,6 @@ const App = () => {
     }
   }
 
-  // FIXME: 
   const createSourceFromSearchResult = (result) => {
     const gutenbergID = result.id;
     const newSource = {
@@ -220,12 +218,9 @@ const App = () => {
     console.log('Retrieving text from Project Gutenberg...')
     return bookService.getBook(gutenbergID).then(book => {
       const formattedText = removeGutenbergLabels(book);
-      console.log('First 50 chars of book: ', formattedText.slice(0, 50));
-      console.log('Generating successor tree...');
-      const tree = generateSuccessorTree(formattedText);
-      console.log('Successor tree generated.');
-      console.log('Successors of THE: ', tree['the']);
-      newSource.tree = tree;
+      const tokens = parseStringIntoTokens(formattedText);
+      newSource.tree = new SuggestionTree(tokens);
+      console.log('Gutenberg resource found and processed into new source.')
       return newSource;
     });
   }
