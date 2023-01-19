@@ -63,6 +63,7 @@ const App = () => {
   });
   const [showSearch, setShowSearch] = useState(false);
 
+  /** Initializes sources state by retrieving info from server. */
   const initializeSources = () => {
     sourcesService
       .getSourcesInfo()
@@ -86,31 +87,32 @@ const App = () => {
 
   useEffect(initializeSources, []);
 
-  const updateSuggestionFromServer = () => {
+  /**
+   * Retrieves a suggestion from the server using the current composition and userInput.
+   * @returns {Promise} the suggestion
+   */
+  const getSuggestion = () => {
     const tokens = parseStringIntoTokens(composition + ' ' + userInput);
-    if (sources.server.length) {
-      suggestionService
-        .retrieveSuggestion(
-          tokens,
-          sources.current,
-          options.suggestionAccuracy,
-          options.numSuggestedWords
-        )
-        .then((suggestion) => {
-          setSuggestion(suggestion);
-        });
-    }
+    return suggestionService.retrieveSuggestion(
+      tokens,
+      sources.current,
+      options.suggestionAccuracy,
+      options.numSuggestedWords
+    );
   };
 
   // FIXME: have it consistently update every 500ms, rather than waiting 500ms between updates?
   // Have the timeout handling up top, then do stuff based on timeout state?
+  /** Queue's  */
   const queueSuggestionUpdateFromServer = () => {
     const SUGGESTION_REQUEST_INTERVAL = 500;
     // Indicate suggestion is loading
     setSuggestion('...');
     // If there's no suggestion request timer active:
     if (!suggestionRequestTimeout) {
-      updateSuggestionFromServer();
+      getSuggestion().then(suggestion => {
+        setSuggestion(suggestion);
+      });
       // start a timeout which will be the suggestionRequestTimeout. After 1 sec, will be set to null.
       const timeoutID = setTimeout(() => {
         setSuggestionRequestTimeout(null);
@@ -121,9 +123,11 @@ const App = () => {
     // If there is already a suggestion request timer active:
     // Clear the current timeout
     clearTimeout(suggestionRequestTimeout);
-    // Create a new timeout that will update the suggestion after one second.
+    // Create a new timeout that will update the suggestion.
     const timeoutID = setTimeout(() => {
-      updateSuggestionFromServer();
+      getSuggestion().then(suggestion => {
+        setSuggestion(suggestion);
+      });
       setSuggestionRequestTimeout(null);
     }, SUGGESTION_REQUEST_INTERVAL);
     setSuggestionRequestTimeout(timeoutID);
@@ -131,7 +135,7 @@ const App = () => {
 
   const updateSuggestionHook = () => {
     // Check if current source has local data
-    if (!sources.current.tree) {
+    if (!sources.current.machine) {
       queueSuggestionUpdateFromServer();
     } else {
       const tokens = parseStringIntoTokens(composition + ' ' + userInput);
