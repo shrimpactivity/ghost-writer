@@ -33,7 +33,6 @@ const serverSourcesOptionsGroup = (serverSources) => {
 };
 
 const SourceSelector = ({ sources, onChange }) => {
-
   const showClientSources = sources.client.length > 0;
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SearchForm = ({onSubmit}) => {
+const SearchForm = ({ onSubmit }) => {
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -12,15 +12,14 @@ const SearchForm = ({onSubmit}) => {
           name="q"
           spellCheck="true"
         />
-        <button type='submit'>Search</button>
+        <button type="submit">Search</button>
       </form>
-        
     </div>
-  )
-}
+  );
+};
 
 SearchForm.propTypes = {
-  onSubmit: PropTypes.func
-}
+  onSubmit: PropTypes.func,
+};
 
 export default SearchForm;

@@ -13,12 +13,12 @@ const SearchResults = ({ results, onResultClick }) => {
         );
       })}
     </div>
-  )
-}
+  );
+};
 
-SearchResults.propTypes= {
+SearchResults.propTypes = {
   results: PropTypes.array,
-  onResultClick: PropTypes.func
-}
+  onResultClick: PropTypes.func,
+};
 
 export default SearchResults;

@@ -5,9 +5,9 @@ const Header = () => {
     <div>
       <h1>GhostWriter</h1>
       <div>About</div>
-      <div>Github</div> 
+      <div>Github</div>
     </div>
   );
-}
+};
 
 export default Header;

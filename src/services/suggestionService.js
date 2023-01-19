@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseURL = '/api/sources';
+const baseURL = '/api/suggest';
 
 const formatTokensIntoQuery = (tokens) => {
   let query = 'q=';
@@ -17,7 +17,9 @@ const retrieveSuggestion = (tokens, source, accuracy, amount) => {
     tokens = tokens.slice(tokens.length - accuracy);
   }
 
-  let url = `${baseURL}/${source.id}/?n=${amount}&a=${accuracy}&${formatTokensIntoQuery(tokens)}`;
+  let url = `${baseURL}/${
+    source.id
+  }/?n=${amount}&a=${accuracy}&${formatTokensIntoQuery(tokens)}`;
   const request = axios.get(url);
   return request
     .then((response) => response.data)

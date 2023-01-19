@@ -2,19 +2,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const config = {
-  entry: './client/src/index.js',
+  entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '/client/public'),
+    path: path.resolve(__dirname, '/public'),
     filename: 'main.js'
   },
   devServer: {
-    static: path.resolve(__dirname, '/client/public'),
+    static: path.resolve(__dirname, '/public'),
     compress: true,
-    port: 3000,
+    port: 3001,
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
-        router: () => 'http://localhost:3001',
+        target: 'http://localhost:3001',
+        router: () => 'http://localhost:3000',
         logLevel: 'debug'
       }
     }
@@ -24,6 +24,7 @@ const config = {
     rules: [
       {
         test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
           presets: ['@babel/preset-react', '@babel/preset-env']
@@ -41,7 +42,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/src/index.html'
+      template: './src/index.html'
     })
   ]
 }

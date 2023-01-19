@@ -3,19 +3,19 @@ const capitalize = (word) => {
     return word;
   }
   return word.substr(0, 1).toUpperCase() + word.substr(1);
-}
+};
 
 const endsInTerminalPunctuation = (word) => {
-  return /[!.?]+$/.test(word); 
-}
+  return /[!.?]+$/.test(word);
+};
 
 const beginsInTerminalPunctuation = (word) => {
   return /^[!.?]+/.test(word);
-}
+};
 
 const removeExtraWhitespace = (input) => {
   return input.replace(/[\s]+/g, ' ').trim();
-}
+};
 
 const formatWordArrayIntoSentence = (input) => {
   let result = '';
@@ -33,18 +33,18 @@ const formatWordArrayIntoSentence = (input) => {
     }
   }
   return result;
-}
+};
 
 const formatStringIntoSentence = (input) => {
   const inputArray = removeExtraWhitespace(input).split(' ');
   return formatWordArrayIntoSentence(inputArray);
-}
+};
 
-module.exports = { 
-  capitalize, 
-  endsInTerminalPunctuation, 
-  beginsInTerminalPunctuation, 
-  removeExtraWhitespace, 
-  formatWordArrayIntoSentence, 
-  formatStringIntoSentence 
+module.exports = {
+  capitalize,
+  endsInTerminalPunctuation,
+  beginsInTerminalPunctuation,
+  removeExtraWhitespace,
+  formatWordArrayIntoSentence,
+  formatStringIntoSentence,
 };

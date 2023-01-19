@@ -15,8 +15,7 @@ const GutenbergSearch = ({ onResultClick }) => {
       catalogService.searchCatalog(query).then((results) => {
         setResults(results);
       });
-    }
-    else {
+    } else {
       setResults([]);
     }
   };

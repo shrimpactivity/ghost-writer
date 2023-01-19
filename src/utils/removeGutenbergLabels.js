@@ -2,7 +2,7 @@
  * Removes header/footer content from Gutenberg book texts. Both header and footer start and end with '***'
  *
  * @param {String} text
- * @returns {String} 
+ * @returns {String}
  */
 const removeGutenbergLabels = (text) => {
   let result = text.slice();
