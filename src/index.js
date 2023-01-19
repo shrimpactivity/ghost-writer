@@ -1,4 +1,4 @@
-import 'core-js/stable/index.js';
+
 import 'regenerator-runtime/runtime.js';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -6,7 +6,6 @@ import App from './components/App';
 import './index.css';
 
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBVieoY7WzKZjYgUZaoqcVUv-olZIVMLWA',
@@ -19,6 +18,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);

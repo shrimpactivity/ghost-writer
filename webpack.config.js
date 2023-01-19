@@ -4,18 +4,17 @@ const path = require('path');
 const config = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, '/public'),
+    path: path.join(__dirname, '/public'),
     filename: 'main.js'
   },
   devServer: {
-    static: path.resolve(__dirname, '/public'),
+    static: path.join(__dirname, '/public'),
     compress: true,
     port: 3001,
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
         router: () => 'http://localhost:3000',
-        logLevel: 'debug'
       }
     }
   },
