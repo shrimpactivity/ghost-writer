@@ -13,8 +13,8 @@ const beginsInTerminalPunctuation = (word) => {
   return /^[!.?]+/.test(word);
 };
 
-const removeExtraWhitespace = (input) => {
-  return input.replace(/[\s]+/g, ' ').trim();
+const removeExtraWhitespace = (text) => {
+  return text.replace(/[\s]+/g, ' ').trim();
 };
 
 const formatWordArrayIntoSentence = (input) => {

@@ -6,8 +6,8 @@ import SuggestionMachine from 'suggestion-machine';
 import bookService from '../services/bookService';
 import suggestionService from '../services/suggestionService';
 
-import textUtils from '../utils/textUtils';
-import parseStringIntoTokens from '../utils/parseStringIntoTokens';
+import textUtils from '../utils/text';
+import parseStringIntoTokens from '../utils/tokens';
 import removeGutenbergLabels from '../utils/removeGutenbergLabels';
 
 import useSources from '../hooks/useSources';
@@ -44,6 +44,8 @@ TODO:
 - Add composition to local storage. 
 
 */
+
+
 
 const App = () => {
   const firstRender = useRef(true);

@@ -1,17 +1,17 @@
 /**
- * Returns an array of words that have had whitespace/special chars removed and lowercased.
+ * Returns an array of tokenized words that have had whitespace/special chars removed and lowercased.
  *
- * @param {String} input The text to be tokenized.
+ * @param {String} text The text to be tokenized.
  * @returns {Array} an array of string tokens.
  */
-const parseStringIntoTokens = (input) => {
+const parseIntoTokens = (text) => {
   // How not to make a regex:
   // const relicOfSin = /\d:\d|[A-Z]{2,}\.*|\d+\.|[:;@#$%^&*()\[\]{}=+\\\/`~<>"\d_\u007B-\uFFFF]+/gu;
 
-  if (!input.trim()) {
+  if (!text.trim()) {
     return [];
   }
-  const result = input
+  const result = text
     .replace(/[-.?!]+/g, ' ')
     .replace(/[^A-Za-z\s]+/g, '')
     .replace(/[\s]+/g, ' ')
@@ -24,4 +24,4 @@ const parseStringIntoTokens = (input) => {
   return result.split(' ');
 };
 
-module.exports = parseStringIntoTokens;
+module.exports = parseIntoTokens;

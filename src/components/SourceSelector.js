@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Autocomplete } from '@mui/material';
 
 const formatSource = (source) => {
   if (!source.author) {
@@ -32,6 +33,8 @@ const serverSourcesOptionsGroup = (serverSources) => {
   );
 };
 
+const options = 'this is a test'.split(' ');
+
 const SourceSelector = ({ sources, onChange }) => {
   const showClientSources = sources.client.length > 0;
 
@@ -42,6 +45,7 @@ const SourceSelector = ({ sources, onChange }) => {
         {showClientSources && clientSourcesOptionsGroups(sources.client)}
         {serverSourcesOptionsGroup(sources.server)}
       </select>
+
     </div>
   );
 };
