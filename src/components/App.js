@@ -1,15 +1,17 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SuggestionMachine from 'suggestion-machine';
 
 import bookService from '../services/bookService';
-import sourcesService from '../services/sourcesService';
 import suggestionService from '../services/suggestionService';
 
 import textUtils from '../utils/textUtils';
 import parseStringIntoTokens from '../utils/parseStringIntoTokens';
 import removeGutenbergLabels from '../utils/removeGutenbergLabels';
+
+import useSources from '../hooks/useSources';
+import useSuggestion from '../hooks/useSuggestion';
 
 import Welcome from './Welcome';
 import SourceSelector from './SourceSelector';
@@ -44,18 +46,11 @@ TODO:
 */
 
 const App = () => {
+  const firstRender = useRef(true);
   const [welcomeVisible] = useState(false);
   const [notification] = useState('');
-  const [sources, setSources] = useState({
-    current: {},
-    server: [],
-    client: [],
-  });
   const [composition, setComposition] = useState('');
   const [userInput, setUserInput] = useState('');
-  const [suggestion, setSuggestion] = useState('');
-  const [suggestionRequestTimeout, setSuggestionRequestTimeout] =
-    useState(null);
   const [options, setOptions] = useState({
     suggestionAccuracy: 3, // Articulate, intelligible, experimental, inebriated
     numSuggestedWords: 1,
@@ -63,99 +58,40 @@ const App = () => {
   });
   const [showSearch, setShowSearch] = useState(false);
 
-  /** Initializes sources state by retrieving info from server. */
-  const initializeSources = () => {
-    sourcesService
-      .getSourcesInfo()
-      .then((serverSources) => {
-        let current = serverSources.find((source) => {
-          return (
-            source.title === 'Complete Works' &&
-            source.author === 'William Shakespeare'
-          );
-        });
-        if (!current) {
-          current = serverSources[0];
-        }
-        const updatedSources = { ...sources, server: serverSources, current };
-        setSources(updatedSources);
-      })
-      .catch((error) => {
-        console.log('Error retrieving initial sources: ', error.message);
-      });
-  };
-
-  useEffect(initializeSources, []);
-
-  /**
-   * Retrieves a suggestion from the server using the current composition and userInput.
-   * @returns {Promise} the suggestion
-   */
-  const getSuggestion = () => {
-    const tokens = parseStringIntoTokens(composition + ' ' + userInput);
-    return suggestionService.retrieveSuggestion(
-      tokens,
-      sources.current,
-      options.suggestionAccuracy,
-      options.numSuggestedWords
-    );
-  };
-
-  // FIXME: have it consistently update every 500ms, rather than waiting 500ms between updates?
-  // Have the timeout handling up top, then do stuff based on timeout state?
-  /** Queue's  */
-  const queueSuggestionUpdateFromServer = () => {
-    const SUGGESTION_REQUEST_INTERVAL = 500;
-    // Indicate suggestion is loading
-    setSuggestion('...');
-    // If there's no suggestion request timer active:
-    if (!suggestionRequestTimeout) {
-      getSuggestion().then(suggestion => {
-        setSuggestion(suggestion);
-      });
-      // start a timeout which will be the suggestionRequestTimeout. After 1 sec, will be set to null.
-      const timeoutID = setTimeout(() => {
-        setSuggestionRequestTimeout(null);
-      }, SUGGESTION_REQUEST_INTERVAL);
-      setSuggestionRequestTimeout(timeoutID);
-      return;
-    }
-    // If there is already a suggestion request timer active:
-    // Clear the current timeout
-    clearTimeout(suggestionRequestTimeout);
-    // Create a new timeout that will update the suggestion.
-    const timeoutID = setTimeout(() => {
-      getSuggestion().then(suggestion => {
-        setSuggestion(suggestion);
-      });
-      setSuggestionRequestTimeout(null);
-    }, SUGGESTION_REQUEST_INTERVAL);
-    setSuggestionRequestTimeout(timeoutID);
-  };
+  const { sources, setCurrentSource, addClientSource, removeClientSource } =
+    useSources();
+  const { suggestion, queueSuggestionUpdate, isSuggestionTimedOut } =
+    useSuggestion();
 
   const updateSuggestionHook = () => {
-    // Check if current source has local data
-    if (!sources.current.machine) {
-      queueSuggestionUpdateFromServer();
-    } else {
-      const tokens = parseStringIntoTokens(composition + ' ' + userInput);
-      const suggestion = sources.current.tree.getSuggestionFrom(tokens);
-      setSuggestion(suggestion);
+    console.log('updating suggestion...')
+    const tokens = parseStringIntoTokens(composition + ' ' + userInput);
+    const params = {
+      tokens,
+      source: sources.current,
+      accuracy: options.suggestionAccuracy,
+      amount: options.numSuggestedWords,
+    };
+    if (firstRender.current) {
+      queueSuggestionUpdate(params);
     }
+    firstRender.current = false;
   };
 
   useEffect(updateSuggestionHook, [composition, userInput, sources, options]);
 
+  const findSource = (sourceID) => {
+    let result = sources.server.find((source) => source.id === sourceID);
+    if (!result) {
+      result = sources.client.find((source) => source.id === sourceID);
+    }
+    return result;
+  };
+
   const handleSourceSelection = (event) => {
     const selectedID = event.target.value;
-    const clientSourcesInfo = sources.client.map((source) => ({
-      ...source,
-      data: null,
-    }));
-    const allSources = sources.server.concat(clientSourcesInfo);
-    const newSource = allSources.find((source) => source.id === selectedID);
-    const updatedSources = { ...sources, current: newSource };
-    setSources(updatedSources);
+    const selectedSource = findSource(selectedID);
+    setCurrentSource(selectedSource);
   };
 
   const handleWritingChange = (event) => {
@@ -244,25 +180,17 @@ const App = () => {
       title: result.title,
       author: result.authors,
     };
-    console.log('New source information: ', newSource);
-    console.log('Retrieving text from Project Gutenberg...');
     return bookService.getBook(gutenbergID).then((book) => {
       const formattedText = removeGutenbergLabels(book);
       const tokens = parseStringIntoTokens(formattedText);
       newSource.machine = new SuggestionMachine(tokens);
-      console.log('Gutenberg resource found and processed into new source.');
       return newSource;
     });
   };
 
   const handleSearchResultClick = (result) => {
-    console.log('Selected result: ', result);
     createSourceFromSearchResult(result).then((source) => {
-      console.log('Adding source to state...');
-      const newClientSources = sources.client.concat(source);
-      setSources({ ...sources, client: newClientSources, current: source });
-      console.log('Done');
-      console.log('Char length of data: ', JSON.stringify(source.tree).length);
+      addClientSource(source);
     });
     setShowSearch(false);
   };
