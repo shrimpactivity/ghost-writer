@@ -15,7 +15,7 @@ const useComposition = () => {
     return parseIntoTokens(
       content.reduce((accum, word) => {
         return accum + ' ' + word;
-      })
+      }, "")
     );
   };
 
@@ -24,7 +24,7 @@ const useComposition = () => {
   };
 
   const getAllTokens = () => {
-    return getContentTokens().concat(getProposalTokens);
+    return getContentTokens().concat(getProposalTokens());
   };
 
   const clearContent = () => {

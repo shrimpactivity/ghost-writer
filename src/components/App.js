@@ -51,7 +51,6 @@ Footer
 */
 
 const App = () => {
-  const firstRender = useRef(true);
   const [welcomeVisible] = useState(false);
   const [notification] = useState('');
   const [userInput, setUserInput] = useState('');
@@ -131,15 +130,11 @@ const App = () => {
       {/* <Hint text='' /> */}
       <CompositionDisplay
         composition={composition}
-        currentSource={source.current}
+        currentSource={sources.current}
         options={options}
       />
       <SourceSelector sources={sources} onChange={handleSourceSelection} />
-      <Button label="Delete composition" onClick={deleteComposition} />
-      <Button
-        label="Delete previous word"
-        onClick={deleteLastWordOfComposition}
-      />
+      
       <OptionsMenu>
         <CheckboxInput
           label={"Show preview of ghostwriter's suggestion:"}
@@ -150,7 +145,7 @@ const App = () => {
           value={options.numSuggestedWords}
           onChange={handleNumSuggestedWordsChange}
           min="0"
-          max="100"
+          max="5"
           label={'Number of words ghostwriter suggests:'}
         />
         <NumberInput

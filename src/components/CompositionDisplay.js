@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import textUtils from '../utils/text';
-import { getLocalSuggestion, getServerSuggesion } from '../utils/getSuggestion';
+import parseIntoTokens from '../utils/parseIntoTokens';
+import useSuggestion from  '../hooks/useSuggestion';
+import { getLocalSuggestion, getServerSuggestion } from '../utils/getSuggestion';
 import WritingForm from './WritingForm';
+import Button from './Button';
 
 
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
 
 const CompositionDisplay = ({ composition, currentSource, options }) => {
+  const firstRender = useRef(true);
   const { suggestion, queueSuggestionUpdate, isSuggestionTimedOut } =
     useSuggestion();
 
@@ -52,7 +56,7 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
     const predecessorTokens = parseIntoTokens(
       predecessorWords.reduce((accum, word) => {
         return accum + ' ' + word;
-      })
+      }, '')
     );
     
     const params = {
@@ -87,21 +91,22 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
     newContent.pop();
     composition.setContent(newContent);
   };
+  
 
-  const potentialComposition = (composition + userInput).trim();
-  const formattedSuggestion =
-    !potentialComposition ||
-    textUtils.endsInTerminalPunctuation(potentialComposition)
-      ? textUtils.capitalize(suggestion)
-      : suggestion;
+  // const potentialComposition = (composition + userInput).trim();
+  // const formattedSuggestion =
+  //   !potentialComposition ||
+  //   textUtils.endsInTerminalPunctuation(potentialComposition)
+  //     ? textUtils.capitalize(suggestion)
+  //     : suggestion;
 
-  const compositionArray = composition.split(' ');
-  let formattedCompositionArray = compositionArray.map((word) => {
-    if (/$[!?.,]+/.test(word)) {
-      return word;
-    }
-    return ` ${word}`;
-  });
+  // const compositionArray = composition.split(' ');
+  // let formattedCompositionArray = compositionArray.map((word) => {
+  //   if (/$[!?.,]+/.test(word)) {
+  //     return word;
+  //   }
+  //   return ` ${word}`;
+  // });
 
   const getSentenceStyle = () => {
     return {
@@ -121,28 +126,33 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
 
   return (
     <div>
-      {formattedCompositionArray.map((word, index) => {
+      {composition.content.map((word, index) => {
         return (
           <div
             key={index}
             style={getSentenceStyle()}
-            onClick={() => onWordClick(index)}
+            onClick={() => handleContentClick(index)}
           >
             {word}
           </div>
         );
       })}
-      <div style={getUserInputStyle()}>{' ' + userInput + ' '}</div>
-      {showPreview && (
+      <div style={getUserInputStyle()}>{' ' + composition.proposal + ' '}</div>
+      {options.showSuggestionPreview && (
         <div style={getSuggestionStyle()}>
-          <em>{formattedSuggestion}</em>
+          <em>{suggestion}</em>
         </div>
       )}
       <WritingForm
         style={{ float: 'none' }}
         onSubmit={handleProposalSubmit}
         onChange={handleProposalChange}
-        value={userInput}
+        value={composition.proposal}
+      />
+      <Button label="Delete composition" onClick={deleteComposition} />
+      <Button
+        label="Delete previous word"
+        onClick={deleteLastWordOfComposition}
       />
     </div>
   );
