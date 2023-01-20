@@ -64,7 +64,7 @@ const App = () => {
     useSuggestion();
 
   const updateSuggestionHook = () => {
-    console.log('updating suggestion...')
+    console.log('Suggestion hooked...')
     const tokens = parseStringIntoTokens(composition + ' ' + userInput);
     const params = {
       tokens,
@@ -72,7 +72,7 @@ const App = () => {
       accuracy: options.suggestionAccuracy,
       amount: options.numSuggestedWords,
     };
-    if (firstRender.current) {
+    if (!firstRender.current) {
       queueSuggestionUpdate(params);
     }
     firstRender.current = false;
@@ -91,6 +91,7 @@ const App = () => {
   const handleSourceSelection = (event) => {
     const selectedID = event.target.value;
     const selectedSource = findSource(selectedID);
+    console.log('Source selected: ', selectedSource.title);
     setCurrentSource(selectedSource);
   };
 
@@ -101,7 +102,7 @@ const App = () => {
 
   const handleWritingSubmit = (event) => {
     event.preventDefault();
-    if (!suggestionRequestTimeout) {
+    if (!isSuggestionTimedOut()) {
       const newComposition = composition + ' ' + userInput + ' ' + suggestion;
       const formattedComposition =
         textUtils.formatStringIntoSentence(newComposition);
@@ -180,18 +181,26 @@ const App = () => {
       title: result.title,
       author: result.authors,
     };
-    return bookService.getBook(gutenbergID).then((book) => {
-      const formattedText = removeGutenbergLabels(book);
-      const tokens = parseStringIntoTokens(formattedText);
-      newSource.machine = new SuggestionMachine(tokens);
-      return newSource;
-    });
+
+    newSource.machine = new SuggestionMachine('this is a test'.split(' '));
+    console.log('Test machine created for new source.');
+    addClientSource(newSource);
+    console.log(newSource.machine);
+
+    // return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
+    //   const tokens = formattedBook.split(' ');
+    //   console.log('Creating SuggestionMachine for new local source.');
+    //   newSource.machine = new SuggestionMachine(tokens);
+    //   return newSource;
+    // });
   };
 
   const handleSearchResultClick = (result) => {
-    createSourceFromSearchResult(result).then((source) => {
-      addClientSource(source);
-    });
+    console.log('Search result selected: ', result);
+    createSourceFromSearchResult(result)
+    // .then((source) => {
+    //   addClientSource(source);
+    // });
     setShowSearch(false);
   };
 

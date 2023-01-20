@@ -11,6 +11,7 @@ const CompositionDisplay = ({
   showPreview,
   onWordClick,
 }) => {
+  
   const potentialComposition = (composition + userInput).trim();
   const formattedSuggestion =
     !potentialComposition ||
@@ -20,7 +21,7 @@ const CompositionDisplay = ({
 
   const compositionArray = composition.split(' ');
   let formattedCompositionArray = compositionArray.map((word) => {
-    if (/[!?.,]+/.test(word)) {
+    if (/$[!?.,]+/.test(word)) {
       return word;
     }
     return ` ${word}`;

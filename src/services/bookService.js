@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const baseURL = '/api/books';
 
-const getBook = (id) => {
+const getFormattedBook = (id) => {
   const bookURL = `${baseURL}/${id}`;
   const request = axios.get(bookURL);
   return request
@@ -10,4 +10,4 @@ const getBook = (id) => {
     .catch((error) => console.log('Error retrieving book: ', error));
 };
 
-export default { getBook };
+export default { getFormattedBook };
