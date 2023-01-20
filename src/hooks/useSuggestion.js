@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import suggestionService from '../services/suggestionService';
+import { getLocalSuggestion, getServerSuggestion } from '../utils/getSuggestion';
 
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
@@ -14,65 +14,36 @@ const useSuggestion = () => {
   };
 
   /**
-   * Returns true if the source exists locally - that is, it has a defined machine key. 
-   * @param {Object} source 
+   * Returns true if the source exists locally - that is, it has a defined machine key.
+   * @param {Object} source
    * @returns {boolean}
    */
   const isSourceLocal = (source) => {
     if (!source.machine) {
       return false;
     }
-    return true
-  };
-
-  const updateLocalSuggestion = ({ tokens, source, accuracy, amount }) => {
-    const relevantTokens = tokens.slice(-1 * accuracy);
-    console.log('Updating suggestion using local source with tokens: ', relevantTokens);
-    if (amount > 1) {
-      let result;
-      source.machine
-        .suggestSequenceFor(relevantTokens, amount, accuracy)
-        .forEach((suggestion) => {
-          result += suggestion + ' ';
-        });
-      console.log('Suggestion found: ', result.trim());
-      setSuggestion(result.trim());
-      return;
-    }
-
-    setSuggestion(source.machine.suggestFor(relevantTokens));
-  };
-
-  const updateServerSuggestion = ({ tokens, source, accuracy, amount }) => {
-    const relevantTokens = tokens.slice(-1 * accuracy);
-    console.log('Updating suggestion from server source for tokens: ', relevantTokens);
-    suggestionService
-      .retrieveSuggestion(relevantTokens, source, accuracy, amount)
-      .then((result) => {
-        console.log('Suggestion found: ', result);
-        setSuggestion(result);
-      });
+    return true;
   };
 
   /**
    * Queue's an update to the suggestion state. If the source is a local one, this happens immediately. If the source
-   * is on the server, this will use a timeout to delay server requests by the specified timeoutLength. 
+   * is on the server, this will use a timeout to delay server requests by the specified timeoutLength.
    * @param {Object} params Parameters of suggestion request, must have keys tokens, source, accuracy, amount.
-   * @param {*} [timeoutLength=200] The length in milliseconds of the timeout delay. 
-   * @returns 
+   * @param {*} [timeoutLength=200] The length in milliseconds of the timeout delay.
+   * @returns
    */
-  const queueSuggestionUpdate = (
-    params,
-    timeoutLength = 200
-  ) => {
+  const queueSuggestionUpdate = (params, timeoutLength = 200) => {
     if (isSourceLocal(params.source)) {
-      updateLocalSuggestion(params);
+      const suggestion = getLocalSuggestion(params);
+      setSuggestion(suggestion);
       return;
     }
 
     if (!isSuggestionTimedOut()) {
-      console.log('No suggestion request queued, updating immediately.')
-      updateServerSuggestion(params);
+      console.log('No suggestion request queued, updating immediately.');
+      getServerSuggestion(params).then((result) => {
+        setSuggestion(result);
+      });
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
       }, timeoutLength);
@@ -84,7 +55,9 @@ const useSuggestion = () => {
 
     clearTimeout(suggestionTimeout);
     const timeoutID = setTimeout(() => {
-      updateServerSuggestion(params);
+      getServerSuggestion(params).then((result) => {
+        setSuggestion(result);
+      });
       setSuggestionTimeout(null);
     }, timeoutLength);
     setSuggestionTimeout(timeoutID);
