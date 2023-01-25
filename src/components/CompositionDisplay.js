@@ -1,36 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import textUtils from '../utils/text';
-import parseIntoTokens from '../utils/parseIntoTokens';
-import useSuggestion from  '../hooks/useSuggestion';
-import { getLocalSuggestion, getServerSuggestion } from '../utils/getSuggestion';
 import WritingForm from './WritingForm';
 import Button from './Button';
 
-
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
 
-const CompositionDisplay = ({ composition, currentSource, options }) => {
-  const firstRender = useRef(true);
-  const { suggestion, queueSuggestionUpdate, isSuggestionTimedOut } =
-    useSuggestion();
-
-  const updateSuggestionHook = () => {
-    console.log('Suggestion hooked...');
-    const params = {
-      tokens: composition.getAllTokens(),
-      source: currentSource,
-      accuracy: options.suggestionAccuracy,
-      amount: options.numSuggestedWords,
-    };
-    if (!firstRender.current) {
-      queueSuggestionUpdate(params);
-    }
-    firstRender.current = false;
-  };
-
-  useEffect(updateSuggestionHook, [composition, currentSource, options]);
-
+const CompositionDisplay = ({ composition, suggestion, allowSubmit, onContentClick, options}) => {
+  
   const handleProposalChange = (event) => {
     const newUserInput = event.target.value;
     composition.setProposal(newUserInput);
@@ -38,43 +14,9 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
 
   const handleProposalSubmit = (event) => {
     event.preventDefault();
-    if (!isSuggestionTimedOut()) {
+    if (allowSubmit) {
       composition.addProposalAndSuggestion(suggestion);
     }
-  };
-
-  const isCurrentSourceLocal = () => {
-    if (currentSource.machine) {
-      return true;
-    }
-    return false;
-  }
-
-  const handleContentClick = (wordIndex) => {
-    console.log('Word clicked at index ', wordIndex);
-    const predecessorWords = composition.content.slice(0, wordIndex);
-    const predecessorTokens = parseIntoTokens(
-      predecessorWords.reduce((accum, word) => {
-        return accum + ' ' + word;
-      }, '')
-    );
-    
-    const params = {
-      tokens: predecessorTokens,
-      source: currentSource,
-      accuracy: options.suggestionAccuracy,
-      amount: options.numSuggestedWords,
-    };
-
-    if (isCurrentSourceLocal()) {
-      const suggestion = getLocalSuggestion(params);
-      composition.updateContentAtIndex(wordIndex, suggestion);
-      return;
-    }
-
-    getServerSuggestion(params).then(result => {
-      composition.updateContentAtIndex(wordIndex, result);
-    })
   };
 
   const deleteComposition = () => {
@@ -82,7 +24,7 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
       composition.content.length &&
       confirm('Are you sure you want to delete your composition?')
     ) {
-      setComposition([]);
+      composition.setContent([]);
     }
   };
 
@@ -92,7 +34,6 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
     composition.setContent(newContent);
   };
   
-
   // const potentialComposition = (composition + userInput).trim();
   // const formattedSuggestion =
   //   !potentialComposition ||
@@ -131,9 +72,9 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
           <div
             key={index}
             style={getSentenceStyle()}
-            onClick={() => handleContentClick(index)}
+            onClick={() => onContentClick(index)}
           >
-            {word}
+            {word + ' '}
           </div>
         );
       })}
@@ -160,7 +101,9 @@ const CompositionDisplay = ({ composition, currentSource, options }) => {
 
 CompositionDisplay.propTypes = {
   composition: PropTypes.object,
-  currentSource: PropTypes.object,
+  suggestion: PropTypes.string,
+  allowSubmit: PropTypes.bool,
+  onContentClick: PropTypes.func,
   options: PropTypes.object,
 };
 

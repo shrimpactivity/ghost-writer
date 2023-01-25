@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getLocalSuggestion, getServerSuggestion } from '../utils/getSuggestion';
+import { getServerSuggestion, getLocalSuggestion } from '../utils/getSuggestion';
 
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
@@ -13,35 +13,16 @@ const useSuggestion = () => {
     return suggestionTimeout !== null;
   };
 
-  /**
-   * Returns true if the source exists locally - that is, it has a defined machine key.
-   * @param {Object} source
-   * @returns {boolean}
-   */
-  const isSourceLocal = (source) => {
-    if (!source.machine) {
-      return false;
-    }
-    return true;
-  };
+  const updateLocalSuggestion = (tokens, accuracy, amount, suggestionMachine) => {
+    const suggestion = getLocalSuggestion(tokens, accuracy, amount, suggestionMachine);
+    setSuggestion(suggestion);
+  }
 
-  /**
-   * Queue's an update to the suggestion state. If the source is a local one, this happens immediately. If the source
-   * is on the server, this will use a timeout to delay server requests by the specified timeoutLength.
-   * @param {Object} params Parameters of suggestion request, must have keys tokens, source, accuracy, amount.
-   * @param {*} [timeoutLength=200] The length in milliseconds of the timeout delay.
-   * @returns
-   */
-  const queueSuggestionUpdate = (params, timeoutLength = 200) => {
-    if (isSourceLocal(params.source)) {
-      const suggestion = getLocalSuggestion(params);
-      setSuggestion(suggestion);
-      return;
-    }
+  const queueSuggestionUpdateFromServer = (tokens, accuracy, amount, source, timeoutLength = 200) => {
 
     if (!isSuggestionTimedOut()) {
       console.log('No suggestion request queued, updating immediately.');
-      getServerSuggestion(params).then((result) => {
+      getServerSuggestion(tokens, accuracy, amount, source).then((result) => {
         setSuggestion(result);
       });
       const timeoutID = setTimeout(() => {
@@ -55,7 +36,7 @@ const useSuggestion = () => {
 
     clearTimeout(suggestionTimeout);
     const timeoutID = setTimeout(() => {
-      getServerSuggestion(params).then((result) => {
+      getServerSuggestion(tokens, accuracy, amount, source).then((result) => {
         setSuggestion(result);
       });
       setSuggestionTimeout(null);
@@ -63,7 +44,7 @@ const useSuggestion = () => {
     setSuggestionTimeout(timeoutID);
   };
 
-  return { suggestion, queueSuggestionUpdate, isSuggestionTimedOut };
+  return { suggestion, updateLocalSuggestion, queueSuggestionUpdateFromServer, isSuggestionTimedOut };
 };
 
 export default useSuggestion;

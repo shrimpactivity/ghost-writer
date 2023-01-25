@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Autocomplete } from '@mui/material';
 
 const formatSource = (source) => {
   if (!source.author) {
@@ -9,10 +8,10 @@ const formatSource = (source) => {
   return `${source.author} - ${source.title}`;
 };
 
-const clientSourcesOptionsGroups = (clientSources) => {
+const localSourcesOptionsGroup = (sources) => {
   return (
     <optgroup label="Downloaded Ghosts">
-      {clientSources.map((source) => (
+      {sources.filter(s => s.isLocal).map((source) => (
         <option key={source.id} value={source.id}>
           {formatSource(source)}
         </option>
@@ -21,10 +20,10 @@ const clientSourcesOptionsGroups = (clientSources) => {
   );
 };
 
-const serverSourcesOptionsGroup = (serverSources) => {
+const serverSourcesOptionsGroup = (sources) => {
   return (
     <optgroup label="Ghosts">
-      {serverSources.map((source) => (
+      {sources.filter(s => !s.isLocal).map((source) => (
         <option key={source.id} value={source.id}>
           {formatSource(source)}
         </option>
@@ -33,25 +32,22 @@ const serverSourcesOptionsGroup = (serverSources) => {
   );
 };
 
-const options = 'this is a test'.split(' ');
-
-const SourceSelector = ({ sources, onChange }) => {
-  const showClientSources = sources.client.length > 0;
+const SourceSelector = ({ sources, currentSource, onChange }) => {
 
   return (
     <div style={{ padding: '10px' }}>
       <div style={{ float: 'left' }}>Now co-writing with:</div>
-      <select value={sources.current.id} onChange={onChange}>
-        {showClientSources && clientSourcesOptionsGroups(sources.client)}
-        {serverSourcesOptionsGroup(sources.server)}
+      <select value={currentSource.id} onChange={onChange}>
+        {localSourcesOptionsGroup(sources)}
+        {serverSourcesOptionsGroup(sources)}
       </select>
-
     </div>
   );
 };
 
 SourceSelector.propTypes = {
-  sources: PropTypes.object,
+  sources: PropTypes.array,
+  currentSource: PropTypes.object,
   onChange: PropTypes.func,
 };
 

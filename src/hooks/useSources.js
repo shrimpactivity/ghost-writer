@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import sourcesService from '../services/sourcesService';
 
 const useSources = () => {
-  const [sources, setSources] = useState({
-    current: {},
-    server: [],
-    client: [],
-  });
+  const [currentSource, setCurrentSource] = useState({});
+  const [sources, setSources] = useState([]);
+  const [suggestionMachines, setSuggestionMachines] = useState([]);
 
   const defaultSource = {
     title: 'Complete Works',
@@ -26,10 +24,11 @@ const useSources = () => {
     sourcesService
       .getSourcesInfo()
       .then((serverSources) => {
-        let current = findDefaultSourceIn(serverSources);
-        current = current ? current : serverSources[0];
-        const updatedSources = { ...sources, server: serverSources, current };
-        setSources(updatedSources);
+        const processedSources = serverSources.map(s => ({...s, isLocal: false}));
+        let current = findDefaultSourceIn(processedSources);
+        current = current ? current : processedSources[0];
+        setSources(processedSources);
+        setCurrentSource(current);
       })
       .catch((error) => {
         console.log('Error retrieving initial sources: ', error.message);
@@ -38,23 +37,35 @@ const useSources = () => {
 
   useEffect(initializeSourcesHook, []);
 
-  const setCurrentSource = (source) => {
-    setSources({...sources, current: source});
+  const addLocalSourceAndMachine = (source, sourceSuggestionMachine) => {
+    const processedSource = {...source, isLocal: true};
+    sourceSuggestionMachine.id = source.id;
+    setSources(sources.concat(processedSource));
+    setCurrentSource(processedSource);
+    setSuggestionMachines(suggestionMachines.concat(sourceSuggestionMachine));
   }
 
-  const addClientSource = (source) => {
-    setSources({...sources, client: sources.client.concat(source)})
+  const removeLocalSourceAndMachine = (sourceID) => {
+    const filteredSources = sources.filter(s => s.id !== sourceID);
+    setSources(filteredSources);
+    if (currentSource.id === sourceID) {
+      setCurrentSource(filteredSources[0]);
+    }
+    setSuggestionMachines(suggestionMachines.filter(s => s.id !== sourceID));
   }
 
-  const removeClientSource = (sourceID) => {
-    setSources({...sources, client: sources.client.filter(s => s.id !== sourceID)})
+  const getSuggestionMachine = (sourceID) => {
+    console.log('machine ', suggestionMachines);
+    return suggestionMachines.find(s => s.id === sourceID);
   }
 
   return {
     sources, 
+    currentSource, 
     setCurrentSource,
-    addClientSource,
-    removeClientSource
+    addLocalSourceAndMachine,
+    removeLocalSourceAndMachine,
+    getSuggestionMachine
   };
 };
 

@@ -1,12 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import parseIntoTokens from '../utils/parseIntoTokens';
+import { removeExtraWhitespace } from '../utils/text';
 
 const useComposition = () => {
   const [content, setContent] = useState([]);
   const [proposal, setProposal] = useState('');
 
   const addProposalAndSuggestion = (suggestion) => {
-    const newContent = content.concat([proposal.trim(), suggestion]);
+    const formattedProposal = removeExtraWhitespace(proposal);
+    const proposalItems = formattedProposal ? formattedProposal.split(' ') : [];
+    const newContent = content
+      .concat(proposalItems)
+      .concat(suggestion);
     setContent(newContent);
     setProposal('');
   };

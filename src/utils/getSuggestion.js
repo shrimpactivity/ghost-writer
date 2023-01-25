@@ -1,6 +1,6 @@
 import suggestionService from "../services/suggestionService";
 
-const getLocalSuggestion = ({ tokens, source, accuracy, amount }) => {
+const getLocalSuggestion = (tokens, accuracy, amount, suggestionMachine) => {
   const relevantTokens = tokens.slice(-1 * accuracy);
   console.log(
     'Retrieving suggestion using local source with tokens: ',
@@ -8,7 +8,7 @@ const getLocalSuggestion = ({ tokens, source, accuracy, amount }) => {
   );
   if (amount > 1) {
     let result;
-    source.machine
+    suggestionMachine
       .suggestSequenceFor(relevantTokens, amount, accuracy)
       .forEach((suggestion) => {
         result += suggestion + ' ';
@@ -16,10 +16,10 @@ const getLocalSuggestion = ({ tokens, source, accuracy, amount }) => {
     console.log('Suggestion found: ', result.trim());
     return result.trim();
   }
-  return source.machine.suggestFor(relevantTokens);
+  return suggestionMachine.suggestFor(relevantTokens);
 };
 
-const getServerSuggestion = ({ tokens, source, accuracy, amount }) => {
+const getServerSuggestion = (tokens, accuracy, amount, source) => {
   const relevantTokens = tokens.slice(-1 * accuracy);
   console.log(
     'Retrieving suggestion from server source for tokens: ',

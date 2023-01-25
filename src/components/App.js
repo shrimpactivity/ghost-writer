@@ -2,11 +2,14 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SuggestionMachine from 'suggestion-machine';
+import parseIntoTokens from '../utils/parseIntoTokens';
+import { getServerSuggestion, getLocalSuggestion } from '../utils/getSuggestion';
 
 import bookService from '../services/bookService';
 
 import useSources from '../hooks/useSources';
 import useComposition from '../hooks/useComposition';
+import useSuggestion from '../hooks/useSuggestion';
 
 import Welcome from './Welcome';
 import SourceSelector from './SourceSelector';
@@ -14,7 +17,6 @@ import CompositionDisplay from './CompositionDisplay';
 import OptionsMenu from './OptionsMenu';
 import CheckboxInput from './CheckboxInput';
 import NumberInput from './NumberInput';
-import Button from './Button';
 import GutenbergSearch from './GutenbergSearch';
 import Header from './Header';
 
@@ -37,12 +39,6 @@ TODO:
 - Only allow up to 3 local sources
 - Add composition to local storage. 
 
-*/
-
-/*
-What does Composition care about? 
-- the composition content
-- the user input
 Header
 Composition
 Options
@@ -51,31 +47,106 @@ Footer
 */
 
 const App = () => {
+  const firstRender = useRef(true);
   const [welcomeVisible] = useState(false);
   const [notification] = useState('');
-  const [userInput, setUserInput] = useState('');
   const [options, setOptions] = useState({
     suggestionAccuracy: 3, // Articulate, intelligible, experimental, inebriated
     numSuggestedWords: 1,
     showSuggestionPreview: true,
   });
   const [showSearch, setShowSearch] = useState(false);
-
   const composition = useComposition();
-  const { sources, setCurrentSource, addClientSource, removeClientSource } =
-    useSources();
+  const {
+    sources,
+    currentSource,
+    setCurrentSource,
+    addLocalSourceAndMachine,
+    removeLocalSourceAndMachine,
+    getSuggestionMachine,
+  } = useSources();
+  const {
+    suggestion,
+    updateLocalSuggestion,
+    queueSuggestionUpdateFromServer,
+    isSuggestionTimedOut,
+  } = useSuggestion();
 
-  const findSource = (sourceID) => {
-    let result = sources.server.find((source) => source.id === sourceID);
-    if (!result) {
-      result = sources.client.find((source) => source.id === sourceID);
+  const updateSuggestionHook = () => {
+    if (!firstRender.current) {
+      console.group('Suggestion hooked...');
+      const suggestionParams = [
+        composition.getAllTokens(),
+        options.suggestionAccuracy,
+        options.numSuggestedWords,
+      ];
+
+      if (currentSource.isLocal) {
+        console.log('Updating suggestion from local source: ', currentSource.title);
+        const machine = getSuggestionMachine(currentSource.id);
+        console.log('machine: ', machine);
+        updateLocalSuggestion(...suggestionParams, machine);
+      } else {
+        console.log('Queuing a suggestion update from server source: ', currentSource.title);
+        queueSuggestionUpdateFromServer(...suggestionParams, currentSource);
+      }
+
+      console.groupEnd();
     }
-    return result;
+
+    firstRender.current = false;
+  };
+
+  useEffect(updateSuggestionHook, [
+    composition.content,
+    composition.proposal,
+    currentSource,
+    options,
+  ]);
+
+  const getPredecessorTokens = (wordIndex) => {
+    const predecessorWords = composition.content.slice(0, wordIndex);
+    console.log(predecessorWords);
+    const predecessorTokens = parseIntoTokens(
+      predecessorWords.reduce((accum, word) => {
+        return accum + ' ' + word;
+      }, '')
+    );
+    return predecessorTokens;
+  };
+
+  const handleContentClick = (wordIndex) => {
+    console.group('Word clicked at index ', wordIndex);
+    const predecessorTokens = getPredecessorTokens(wordIndex);
+    console.log('Predecessors of word clicked: ', predecessorTokens);
+    const suggestionParams = [
+      predecessorTokens,
+      options.suggestionAccuracy,
+      options.numSuggestedWords,
+    ];
+
+    if (currentSource.isLocal) {
+      const suggestion = getLocalSuggestion(
+        ...suggestionParams,
+        getSuggestionMachine(currentSource.id)
+      );
+      console.log('Local suggestion found: ', suggestion);
+      composition.updateContentAtIndex(wordIndex, suggestion);
+      return;
+    }
+
+    getServerSuggestion(...suggestionParams, currentSource).then(
+      (suggestion) => {
+        console.log('Server suggestion found: ', suggestion);
+        composition.updateContentAtIndex(wordIndex, suggestion);
+      }
+    );
+    console.groupEnd();
   };
 
   const handleSourceSelection = (event) => {
     const selectedID = event.target.value;
-    const selectedSource = findSource(selectedID);
+    const selectedSource = sources.find((s) => s.id === selectedID);
     console.log('Source selected: ', selectedSource.title);
     setCurrentSource(selectedSource);
   };
@@ -98,7 +169,7 @@ const App = () => {
     setOptions(updatedOptions);
   };
 
-  const createSourceFromSearchResult = (result) => {
+  const createSourceAndMachine = (result) => {
     const gutenbergID = result.id;
     const newSource = {
       id: uuidv4(),
@@ -109,16 +180,15 @@ const App = () => {
     return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
       const tokens = formattedBook.split(' ');
       console.log('Creating SuggestionMachine for new local source.');
-      newSource.machine = new SuggestionMachine(tokens);
-      return newSource;
+      const newMachine = new SuggestionMachine(tokens);
+      console.log('New machine: ', newMachine)
+      addLocalSourceAndMachine(newSource, newMachine);
     });
   };
 
   const handleSearchResultClick = (result) => {
     console.log('Search result selected: ', result);
-    createSourceFromSearchResult(result).then((source) => {
-      addClientSource(source);
-    });
+    createSourceAndMachine(result);
     setShowSearch(false);
   };
 
@@ -130,11 +200,17 @@ const App = () => {
       {/* <Hint text='' /> */}
       <CompositionDisplay
         composition={composition}
-        currentSource={sources.current}
+        suggestion={suggestion}
+        allowSubmit={!isSuggestionTimedOut()}
+        onContentClick={handleContentClick}
         options={options}
       />
-      <SourceSelector sources={sources} onChange={handleSourceSelection} />
-      
+      <SourceSelector
+        sources={sources}
+        currentSource={currentSource}
+        onChange={handleSourceSelection}
+      />
+
       <OptionsMenu>
         <CheckboxInput
           label={"Show preview of ghostwriter's suggestion:"}
