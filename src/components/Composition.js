@@ -1,4 +1,0 @@
-
-const Composition = ({suggestion, options}) => {
-
-}

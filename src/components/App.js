@@ -13,7 +13,7 @@ import useSuggestion from '../hooks/useSuggestion';
 
 import Welcome from './Welcome';
 import SourceSelector from './SourceSelector';
-import CompositionDisplay from './CompositionDisplay';
+import CompositionContainer from './CompositionContainer';
 import OptionsMenu from './OptionsMenu';
 import CheckboxInput from './CheckboxInput';
 import NumberInput from './NumberInput';
@@ -74,7 +74,7 @@ const App = () => {
 
   const updateSuggestionHook = () => {
     if (!firstRender.current) {
-      console.group('Suggestion hooked...');
+      console.groupCollapsed('Suggestion hooked...');
       const suggestionParams = [
         composition.getAllTokens(),
         options.suggestionAccuracy,
@@ -84,7 +84,6 @@ const App = () => {
       if (currentSource.isLocal) {
         console.log('Updating suggestion from local source: ', currentSource.title);
         const machine = getSuggestionMachine(currentSource.id);
-        console.log('machine: ', machine);
         updateLocalSuggestion(...suggestionParams, machine);
       } else {
         console.log('Queuing a suggestion update from server source: ', currentSource.title);
@@ -131,6 +130,7 @@ const App = () => {
         getSuggestionMachine(currentSource.id)
       );
       console.log('Local suggestion found: ', suggestion);
+      console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
       return;
     }
@@ -138,10 +138,10 @@ const App = () => {
     getServerSuggestion(...suggestionParams, currentSource).then(
       (suggestion) => {
         console.log('Server suggestion found: ', suggestion);
+        console.groupEnd();
         composition.updateContentAtIndex(wordIndex, suggestion);
       }
     );
-    console.groupEnd();
   };
 
   const handleSourceSelection = (event) => {
@@ -181,7 +181,6 @@ const App = () => {
       const tokens = formattedBook.split(' ');
       console.log('Creating SuggestionMachine for new local source.');
       const newMachine = new SuggestionMachine(tokens);
-      console.log('New machine: ', newMachine)
       addLocalSourceAndMachine(newSource, newMachine);
     });
   };
@@ -198,7 +197,7 @@ const App = () => {
       {notification}
       {welcomeVisible && <Welcome />}
       {/* <Hint text='' /> */}
-      <CompositionDisplay
+      <CompositionContainer
         composition={composition}
         suggestion={suggestion}
         allowSubmit={!isSuggestionTimedOut()}
