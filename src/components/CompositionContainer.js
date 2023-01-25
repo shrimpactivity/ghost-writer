@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import WritingForm from './WritingForm';
-import Button from './Button';
+import CompositionForm from './CompositionForm';
 import CompositionViewer from './CompositionViewer';
 
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
@@ -9,36 +8,12 @@ import CompositionViewer from './CompositionViewer';
 const CompositionContainer = ({
   composition,
   suggestion,
-  allowSubmit,
-  onContentClick,
   options,
+  onProposalChange,
+  onProposalSubmit,
+  onContentClick,
 }) => {
-  const handleProposalChange = (event) => {
-    const newUserInput = event.target.value;
-    composition.setProposal(newUserInput);
-  };
-
-  const handleProposalSubmit = (event) => {
-    event.preventDefault();
-    if (allowSubmit) {
-      composition.addProposalAndSuggestion(suggestion);
-    }
-  };
-
-  const deleteComposition = () => {
-    if (
-      composition.content.length &&
-      confirm('Are you sure you want to delete your composition?')
-    ) {
-      composition.setContent([]);
-    }
-  };
-
-  const deleteLastWordOfComposition = () => {
-    const newContent = [...composition.content];
-    newContent.pop();
-    composition.setContent(newContent);
-  };
+  
 
   // const potentialComposition = (composition + userInput).trim();
   // const formattedSuggestion =
@@ -63,16 +38,11 @@ const CompositionContainer = ({
         onContentClick={onContentClick}
         options={options}
       />
-      <WritingForm
+      <CompositionForm
         style={{ float: 'none' }}
-        onSubmit={handleProposalSubmit}
-        onChange={handleProposalChange}
+        onSubmit={onProposalSubmit}
+        onChange={onProposalChange}
         value={composition.proposal}
-      />
-      <Button label="Delete composition" onClick={deleteComposition} />
-      <Button
-        label="Delete previous word"
-        onClick={deleteLastWordOfComposition}
       />
     </div>
   );
@@ -81,9 +51,10 @@ const CompositionContainer = ({
 CompositionContainer.propTypes = {
   composition: PropTypes.object,
   suggestion: PropTypes.string,
-  allowSubmit: PropTypes.bool,
-  onContentClick: PropTypes.func,
   options: PropTypes.object,
+  onProposalChange: PropTypes.func,
+  onProposalSubmit: PropTypes.func,
+  onContentClick: PropTypes.func,
 };
 
 export default CompositionContainer;

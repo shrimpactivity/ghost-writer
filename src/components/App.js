@@ -19,6 +19,8 @@ import CheckboxInput from './CheckboxInput';
 import NumberInput from './NumberInput';
 import GutenbergSearch from './GutenbergSearch';
 import Header from './Header';
+import Button from './Button';
+
 
 /*
 Initial sources:
@@ -115,7 +117,7 @@ const App = () => {
   };
 
   const handleContentClick = (wordIndex) => {
-    console.group('Word clicked at index ', wordIndex);
+    console.groupCollapsed('Word clicked at index ', wordIndex);
     const predecessorTokens = getPredecessorTokens(wordIndex);
     console.log('Predecessors of word clicked: ', predecessorTokens);
     const suggestionParams = [
@@ -142,6 +144,33 @@ const App = () => {
         composition.updateContentAtIndex(wordIndex, suggestion);
       }
     );
+  };
+
+  const handleProposalChange = (event) => {
+    const newUserInput = event.target.value;
+    composition.setProposal(newUserInput);
+  };
+
+  const handleProposalSubmit = (event) => {
+    event.preventDefault();
+    if (!isSuggestionTimedOut()) {
+      composition.addProposalAndSuggestion(suggestion);
+    }
+  };
+
+  const handleDeleteComposition = () => {
+    if (
+      composition.content.length &&
+      confirm('Are you sure you want to delete your composition?')
+    ) {
+      composition.setContent([]);
+    }
+  };
+
+  const handleDeleteLastWord = () => {
+    const newContent = [...composition.content];
+    newContent.pop();
+    composition.setContent(newContent);
   };
 
   const handleSourceSelection = (event) => {
@@ -200,14 +229,21 @@ const App = () => {
       <CompositionContainer
         composition={composition}
         suggestion={suggestion}
-        allowSubmit={!isSuggestionTimedOut()}
-        onContentClick={handleContentClick}
         options={options}
+        onProposalChange={handleProposalChange}
+        onProposalSubmit={handleProposalSubmit}
+        onContentClick={handleContentClick}
       />
       <SourceSelector
         sources={sources}
         currentSource={currentSource}
         onChange={handleSourceSelection}
+      />
+
+      <Button label="X" onClick={handleDeleteComposition} />
+      <Button
+        label="<-"
+        onClick={handleDeleteLastWord}
       />
 
       <OptionsMenu>
