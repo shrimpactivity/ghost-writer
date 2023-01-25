@@ -3,12 +3,8 @@ import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SuggestionMachine from 'suggestion-machine';
 import parseIntoTokens from '../utils/parseIntoTokens';
-import {
-  getServerSuggestion,
-  getLocalSuggestion,
-} from '../utils/getSuggestion';
-
 import bookService from '../services/bookService';
+import suggestionService from '../services/suggestionService';
 
 import useSources from '../hooks/useSources';
 import useComposition from '../hooks/useComposition';
@@ -132,7 +128,7 @@ const App = () => {
   const handleContentClick = (wordIndex) => {
     console.groupCollapsed('Word clicked at index ', wordIndex);
     if (currentSource.isLocal) {
-      const suggestion = getLocalSuggestion(
+      const suggestion = suggestionService.getSuggestionFromMachine(
         ...getWordClickSuggestionParams(wordIndex),
         getSuggestionMachine(currentSource.id)
       );
@@ -140,7 +136,7 @@ const App = () => {
       console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
     } else if (!isSuggestionTimedOut()) {
-      getServerSuggestion(
+      suggestionService.retrieveSuggestionFromServer(
         ...getWordClickSuggestionParams(wordIndex),
         currentSource
       ).then((suggestion) => {

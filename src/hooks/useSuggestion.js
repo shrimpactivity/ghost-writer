@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import {
-  getServerSuggestion,
-  getLocalSuggestion,
-} from '../utils/getSuggestion';
+import suggestionService from '../services/suggestionService';
 
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
@@ -36,7 +33,7 @@ const useSuggestion = () => {
     amount,
     suggestionMachine
   ) => {
-    const suggestion = getLocalSuggestion(
+    const suggestion = suggestionService.getSuggestionFromMachine(
       tokens,
       accuracy,
       amount,
@@ -54,7 +51,7 @@ const useSuggestion = () => {
   ) => {
     if (!isSuggestionTimedOut()) {
       console.log('No suggestion request queued, updating immediately.');
-      getServerSuggestion(tokens, accuracy, amount, source).then((result) => {
+      suggestionService.retrieveSuggestionFromServer(tokens, accuracy, amount, source).then((result) => {
         setSuggestion(result);
       });
       const timeoutID = setTimeout(() => {
@@ -68,7 +65,7 @@ const useSuggestion = () => {
 
     clearTimeout(suggestionTimeout);
     const timeoutID = setTimeout(() => {
-      getServerSuggestion(tokens, accuracy, amount, source).then((result) => {
+      suggestionService.retrieveSuggestionFromServer(tokens, accuracy, amount, source).then((result) => {
         setSuggestion(result);
       });
       setSuggestionTimeout(null);

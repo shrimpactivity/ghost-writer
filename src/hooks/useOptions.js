@@ -6,14 +6,17 @@ const useOptions = () => {
   const [showSuggestionPreview, setShowSuggestionPreview] = useState(true);
 
   const onSuggestionAccuracyChange = (event) => {
+    console.log('Suggestion accuracy changed to: ', event.target.value);
     setSuggestionAccuracy(Number(event.target.value));
   }
 
   const onNumSuggestedWordsChange = (event) => {
+    console.log('Number of suggested words changed to: ', event.target.value);
     setNumSuggestedWords(Number(event.target.value));
   }
 
   const onShowSuggestionPreviewChange = () => {
+    console.log('Suggestion preview changed to: ', !showSuggestionPreview);
     setShowSuggestionPreview(!showSuggestionPreview);
   }
 
