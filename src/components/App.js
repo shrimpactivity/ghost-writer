@@ -3,7 +3,10 @@ import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SuggestionMachine from 'suggestion-machine';
 import parseIntoTokens from '../utils/parseIntoTokens';
-import { getServerSuggestion, getLocalSuggestion } from '../utils/getSuggestion';
+import {
+  getServerSuggestion,
+  getLocalSuggestion,
+} from '../utils/getSuggestion';
 
 import bookService from '../services/bookService';
 
@@ -15,12 +18,10 @@ import Welcome from './Welcome';
 import SourceSelector from './SourceSelector';
 import CompositionContainer from './CompositionContainer';
 import OptionsMenu from './OptionsMenu';
-import CheckboxInput from './CheckboxInput';
-import NumberInput from './NumberInput';
 import GutenbergSearch from './GutenbergSearch';
 import Header from './Header';
 import Button from './Button';
-
+import useOptions from '../hooks/useOptions';
 
 /*
 Initial sources:
@@ -52,12 +53,8 @@ const App = () => {
   const firstRender = useRef(true);
   const [welcomeVisible] = useState(false);
   const [notification] = useState('');
-  const [options, setOptions] = useState({
-    suggestionAccuracy: 3, // Articulate, intelligible, experimental, inebriated
-    numSuggestedWords: 1,
-    showSuggestionPreview: true,
-  });
   const [showSearch, setShowSearch] = useState(false);
+  const options = useOptions();
   const composition = useComposition();
   const {
     sources,
@@ -72,6 +69,7 @@ const App = () => {
     updateLocalSuggestion,
     queueSuggestionUpdateFromServer,
     isSuggestionTimedOut,
+    timeSuggestionOut,
   } = useSuggestion();
 
   const updateSuggestionHook = () => {
@@ -84,11 +82,17 @@ const App = () => {
       ];
 
       if (currentSource.isLocal) {
-        console.log('Updating suggestion from local source: ', currentSource.title);
+        console.log(
+          'Updating suggestion from local source: ',
+          currentSource.title
+        );
         const machine = getSuggestionMachine(currentSource.id);
         updateLocalSuggestion(...suggestionParams, machine);
       } else {
-        console.log('Queuing a suggestion update from server source: ', currentSource.title);
+        console.log(
+          'Queuing a suggestion update from server source: ',
+          currentSource.title
+        );
         queueSuggestionUpdateFromServer(...suggestionParams, currentSource);
       }
 
@@ -102,12 +106,12 @@ const App = () => {
     composition.content,
     composition.proposal,
     currentSource,
-    options,
+    options.suggestionAccuracy,
+    options.numSuggestedWords,
   ]);
 
   const getPredecessorTokens = (wordIndex) => {
     const predecessorWords = composition.content.slice(0, wordIndex);
-    console.log(predecessorWords);
     const predecessorTokens = parseIntoTokens(
       predecessorWords.reduce((accum, word) => {
         return accum + ' ' + word;
@@ -116,34 +120,36 @@ const App = () => {
     return predecessorTokens;
   };
 
-  const handleContentClick = (wordIndex) => {
-    console.groupCollapsed('Word clicked at index ', wordIndex);
-    const predecessorTokens = getPredecessorTokens(wordIndex);
-    console.log('Predecessors of word clicked: ', predecessorTokens);
+  const getWordClickSuggestionParams = (wordIndex) => {
     const suggestionParams = [
-      predecessorTokens,
+      getPredecessorTokens(wordIndex),
       options.suggestionAccuracy,
       options.numSuggestedWords,
     ];
+    return suggestionParams;
+  };
 
+  const handleContentClick = (wordIndex) => {
+    console.groupCollapsed('Word clicked at index ', wordIndex);
     if (currentSource.isLocal) {
       const suggestion = getLocalSuggestion(
-        ...suggestionParams,
+        ...getWordClickSuggestionParams(wordIndex),
         getSuggestionMachine(currentSource.id)
       );
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
-      return;
-    }
-
-    getServerSuggestion(...suggestionParams, currentSource).then(
-      (suggestion) => {
+    } else if (!isSuggestionTimedOut()) {
+      getServerSuggestion(
+        ...getWordClickSuggestionParams(wordIndex),
+        currentSource
+      ).then((suggestion) => {
         console.log('Server suggestion found: ', suggestion);
         console.groupEnd();
         composition.updateContentAtIndex(wordIndex, suggestion);
-      }
-    );
+      });
+      timeSuggestionOut();
+    }
   };
 
   const handleProposalChange = (event) => {
@@ -178,24 +184,6 @@ const App = () => {
     const selectedSource = sources.find((s) => s.id === selectedID);
     console.log('Source selected: ', selectedSource.title);
     setCurrentSource(selectedSource);
-  };
-
-  const handleShowSuggestionPreviewChange = () => {
-    const newValue = !options.showSuggestionPreview;
-    const updatedOptions = { ...options, showSuggestionPreview: newValue };
-    setOptions(updatedOptions);
-  };
-
-  const handleNumSuggestedWordsChange = (event) => {
-    const newAmount = Number(event.target.value);
-    const updatedOptions = { ...options, numSuggestedWords: newAmount };
-    setOptions(updatedOptions);
-  };
-
-  const handleSuggestionAccuracyChange = (event) => {
-    const newAccuracy = Number(event.target.value);
-    const updatedOptions = { ...options, suggestionAccuracy: newAccuracy };
-    setOptions(updatedOptions);
   };
 
   const createSourceAndMachine = (result) => {
@@ -241,32 +229,9 @@ const App = () => {
       />
 
       <Button label="X" onClick={handleDeleteComposition} />
-      <Button
-        label="<-"
-        onClick={handleDeleteLastWord}
-      />
+      <Button label="<-" onClick={handleDeleteLastWord} />
 
-      <OptionsMenu>
-        <CheckboxInput
-          label={"Show preview of ghostwriter's suggestion:"}
-          value={options.showSuggestionPreview}
-          onChange={handleShowSuggestionPreviewChange}
-        />
-        <NumberInput
-          value={options.numSuggestedWords}
-          onChange={handleNumSuggestedWordsChange}
-          min="0"
-          max="5"
-          label={'Number of words ghostwriter suggests:'}
-        />
-        <NumberInput
-          value={options.suggestionAccuracy}
-          onChange={handleSuggestionAccuracyChange}
-          min="0"
-          max="3"
-          label={'Suggestion accuracy:'}
-        />
-      </OptionsMenu>
+      <OptionsMenu options={options} />
       <button onClick={() => setShowSearch(!showSearch)}>
         {showSearch ? 'Hide Search Bar' : 'Search Bar'}
       </button>

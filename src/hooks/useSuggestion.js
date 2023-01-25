@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { getServerSuggestion, getLocalSuggestion } from '../utils/getSuggestion';
+import {
+  getServerSuggestion,
+  getLocalSuggestion,
+} from '../utils/getSuggestion';
 
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
   const [suggestionTimeout, setSuggestionTimeout] = useState(null);
+  const TIMEOUT_LENGTH = 300;
 
   /**
    * Returns true if a suggestion request to the server is queued up.
@@ -13,13 +17,41 @@ const useSuggestion = () => {
     return suggestionTimeout !== null;
   };
 
-  const updateLocalSuggestion = (tokens, accuracy, amount, suggestionMachine) => {
-    const suggestion = getLocalSuggestion(tokens, accuracy, amount, suggestionMachine);
-    setSuggestion(suggestion);
+  /**
+   * Times out server requests for suggestions so that any following request is made TIMEOUT_LENGTH
+   * milliseconds in the future. 
+   */
+  const timeSuggestionOut = () => {
+    if (!isSuggestionTimedOut) {
+      const timeoutID = setTimeout(() => {
+        setSuggestionTimeout(null);
+      }, TIMEOUT_LENGTH);
+      setSuggestionTimeout(timeoutID);
+    }
   }
 
-  const queueSuggestionUpdateFromServer = (tokens, accuracy, amount, source, timeoutLength = 200) => {
+  const updateLocalSuggestion = (
+    tokens,
+    accuracy,
+    amount,
+    suggestionMachine
+  ) => {
+    const suggestion = getLocalSuggestion(
+      tokens,
+      accuracy,
+      amount,
+      suggestionMachine
+    );
+    setSuggestion(suggestion);
+  };
 
+  const queueSuggestionUpdateFromServer = (
+    tokens,
+    accuracy,
+    amount,
+    source,
+    timeoutLength = TIMEOUT_LENGTH
+  ) => {
     if (!isSuggestionTimedOut()) {
       console.log('No suggestion request queued, updating immediately.');
       getServerSuggestion(tokens, accuracy, amount, source).then((result) => {
@@ -44,7 +76,13 @@ const useSuggestion = () => {
     setSuggestionTimeout(timeoutID);
   };
 
-  return { suggestion, updateLocalSuggestion, queueSuggestionUpdateFromServer, isSuggestionTimedOut };
+  return {
+    suggestion,
+    updateLocalSuggestion,
+    queueSuggestionUpdateFromServer,
+    isSuggestionTimedOut,
+    timeSuggestionOut,
+  };
 };
 
 export default useSuggestion;
