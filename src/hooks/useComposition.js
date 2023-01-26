@@ -9,9 +9,10 @@ const useComposition = () => {
   const addProposalAndSuggestion = (suggestion) => {
     const formattedProposal = removeExtraWhitespace(proposal);
     const proposalItems = formattedProposal ? formattedProposal.split(' ') : [];
+    const suggestionItems = suggestion.split(' ');
     const newContent = content
       .concat(proposalItems)
-      .concat(suggestion);
+      .concat(suggestionItems);
     setContent(newContent);
     setProposal('');
   };

@@ -120,7 +120,7 @@ const App = () => {
     const suggestionParams = [
       getPredecessorTokens(wordIndex),
       options.suggestionAccuracy,
-      options.numSuggestedWords,
+      1,
     ];
     return suggestionParams;
   };
