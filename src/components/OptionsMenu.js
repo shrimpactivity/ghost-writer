@@ -11,7 +11,7 @@ const OptionInputs = ({ options }) => {
         label={"Show preview of ghostwriter's suggestion:"}
       />
       <NumberInput
-        {...options.numSuggestedWordsField}
+        {...options.suggestionCountField}
         min="0"
         max="5"
         label={'Number of words ghostwriter suggests:'}

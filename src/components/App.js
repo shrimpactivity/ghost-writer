@@ -74,7 +74,7 @@ const App = () => {
       const suggestionParams = [
         composition.getAllTokens(),
         options.suggestionAccuracy,
-        options.numSuggestedWords,
+        options.suggestionCount,
       ];
 
       if (currentSource.isLocal) {
@@ -103,7 +103,7 @@ const App = () => {
     composition.proposal,
     currentSource,
     options.suggestionAccuracy,
-    options.numSuggestedWords,
+    options.suggestionCount,
   ]);
 
   const getPredecessorTokens = (wordIndex) => {
@@ -191,6 +191,7 @@ const App = () => {
     };
 
     return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
+      console.log(formattedBook);
       const tokens = formattedBook.split(' ');
       console.log('Creating SuggestionMachine for new local source.');
       const newMachine = new SuggestionMachine(tokens);

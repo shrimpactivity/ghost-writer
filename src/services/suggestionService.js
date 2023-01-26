@@ -2,18 +2,17 @@ import axios from 'axios';
 const baseURL = '/api/suggest';
 
 const getSuggestionFromMachine = (tokens, accuracy, amount, suggestionMachine) => {
-  const relevantTokens = tokens.slice(-1 * accuracy);
+  const relevantTokens = accuracy > 0 
+  ? tokens.slice(-1 * accuracy)
+  : [];
   console.log(
     'Retrieving suggestion using local source with tokens: ',
     relevantTokens
   );
   if (amount > 1) {
-    let result;
-    suggestionMachine
-      .suggestSequenceFor(relevantTokens, amount, accuracy)
-      .forEach((suggestion) => {
-        result += suggestion + ' ';
-      });
+    let result  = '';
+    const sequence = suggestionMachine.suggestSequenceFor(relevantTokens, amount, accuracy);
+    sequence.forEach(word => result += word + ' ');
     console.log('Suggestion found: ', result.trim());
     return result.trim();
   }
@@ -21,8 +20,9 @@ const getSuggestionFromMachine = (tokens, accuracy, amount, suggestionMachine) =
 };
 
 const formatTokensIntoQuery = (tokens) => {
-  let query = 'q=';
+  let query = '';
   if (tokens.length) {
+    query += 'q=';
     for (let token of tokens) {
       query += `${token}+`;
     }

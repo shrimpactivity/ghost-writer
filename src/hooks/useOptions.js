@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const useOptions = () => {
   const [suggestionAccuracy, setSuggestionAccuracy] = useState(3);
-  const [numSuggestedWords, setNumSuggestedWords] = useState(1);
+  const [suggestionCount, setSuggestionCount] = useState(1);
   const [showSuggestionPreview, setShowSuggestionPreview] = useState(true);
 
   const onSuggestionAccuracyChange = (event) => {
@@ -10,9 +10,9 @@ const useOptions = () => {
     setSuggestionAccuracy(Number(event.target.value));
   }
 
-  const onNumSuggestedWordsChange = (event) => {
+  const onSuggestionCountChange = (event) => {
     console.log('Number of suggested words changed to: ', event.target.value);
-    setNumSuggestedWords(Number(event.target.value));
+    setSuggestionCount(Number(event.target.value));
   }
 
   const onShowSuggestionPreviewChange = () => {
@@ -22,10 +22,10 @@ const useOptions = () => {
 
   return {
     suggestionAccuracy,
-    numSuggestedWords,
+    suggestionCount,
     showSuggestionPreview,
     suggestionAccuracyField: {value: suggestionAccuracy, onChange: onSuggestionAccuracyChange},
-    numSuggestedWordsField: {value: numSuggestedWords, onChange: onNumSuggestedWordsChange},
+    suggestionCountField: {value: suggestionCount, onChange: onSuggestionCountChange},
     showSuggestionPreviewField: {value: showSuggestionPreview, onChange: onShowSuggestionPreviewChange},
   };
 };
