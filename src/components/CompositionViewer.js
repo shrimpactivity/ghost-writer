@@ -25,6 +25,7 @@ const CompositionViewer = ({
 
   return (
     <div>
+      Hi
       {composition.content.map((word, index) => {
         return (
           <div

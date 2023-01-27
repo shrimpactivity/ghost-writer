@@ -16,8 +16,10 @@ import CompositionContainer from './CompositionContainer';
 import OptionsMenu from './OptionsMenu';
 import GutenbergSearch from './GutenbergSearch';
 import Header from './Header';
-import Button from './Button';
 import useOptions from '../hooks/useOptions';
+
+import Button from '@mui/material/Button';
+import { Container, CssBaseline } from '@mui/material';
 
 /*
 Initial sources:
@@ -37,6 +39,11 @@ idk at least like 20-30 options?
 TODO:
 - Only allow up to 3 local sources
 - Add composition to local storage. 
+
+inebriated
+experimental
+intelligible
+articulate
 
 Header
 Composition
@@ -136,14 +143,16 @@ const App = () => {
       console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
     } else if (!isSuggestionTimedOut()) {
-      suggestionService.retrieveSuggestionFromServer(
-        ...getWordClickSuggestionParams(wordIndex),
-        currentSource
-      ).then((suggestion) => {
-        console.log('Server suggestion found: ', suggestion);
-        console.groupEnd();
-        composition.updateContentAtIndex(wordIndex, suggestion);
-      });
+      suggestionService
+        .retrieveSuggestionFromServer(
+          ...getWordClickSuggestionParams(wordIndex),
+          currentSource
+        )
+        .then((suggestion) => {
+          console.log('Server suggestion found: ', suggestion);
+          console.groupEnd();
+          composition.updateContentAtIndex(wordIndex, suggestion);
+        });
       timeSuggestionOut();
     }
   };
@@ -206,38 +215,40 @@ const App = () => {
   };
 
   return (
-    <div>
+    <>
+      <CssBaseline />
       <Header />
-      {notification}
-      {welcomeVisible && <Welcome />}
-      {/* <Hint text='' /> */}
-      <CompositionContainer
-        composition={composition}
-        suggestion={suggestion}
-        options={options}
-        onProposalChange={handleProposalChange}
-        onProposalSubmit={handleProposalSubmit}
-        onContentClick={handleContentClick}
-      />
-      <SourceSelector
-        sources={sources}
-        currentSource={currentSource}
-        onChange={handleSourceSelection}
-      />
+      <Container maxWidth="sm">
+      
+        {notification}
+        {welcomeVisible && <Welcome />}
+        <SourceSelector
+          sources={sources}
+          currentSource={currentSource}
+          onChange={handleSourceSelection}
+        />
+        <CompositionContainer
+          composition={composition}
+          suggestion={suggestion}
+          options={options}
+          onProposalChange={handleProposalChange}
+          onProposalSubmit={handleProposalSubmit}
+          onContentClick={handleContentClick}
+        />
+        <Button variant="contained" onClick={handleDeleteComposition}>X</Button>
+        <Button variant="contained" onClick={handleDeleteLastWord}>Backspace</Button>
 
-      <Button label="X" onClick={handleDeleteComposition} />
-      <Button label="<-" onClick={handleDeleteLastWord} />
+        <OptionsMenu options={options} />
+        <Button onClick={() => setShowSearch(!showSearch)}>
+          {showSearch ? 'Hide Search Bar' : 'Search Bar'}
+        </Button>
+        {showSearch && (
+          <GutenbergSearch onResultClick={handleSearchResultClick} />
+        )}
 
-      <OptionsMenu options={options} />
-      <button onClick={() => setShowSearch(!showSearch)}>
-        {showSearch ? 'Hide Search Bar' : 'Search Bar'}
-      </button>
-      {showSearch && (
-        <GutenbergSearch onResultClick={handleSearchResultClick} />
-      )}
-
-      {/* TODO: <Footer/> */}
-    </div>
+        {/* TODO: <Footer/> */}
+      </Container>
+    </>
   );
 };
 
