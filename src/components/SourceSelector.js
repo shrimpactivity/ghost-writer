@@ -1,19 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MenuItem, Select } from '@mui/material';
 
-const formatSource = (source) => {
+const formatSourceName = (source) => {
   if (!source.author) {
     return source.title;
   }
-  return `${source.author} - ${source.title}`;
+  return `${source.author} \u2015 ${source.title}`;
 };
 
 const localSourcesOptionsGroup = (sources) => {
+  const localSources = sources.filter((s) => s.isLocal);
+  if (localSources.length === 0) {
+    return;
+  }
+
   return (
     <optgroup label="Downloaded Ghosts">
-      {sources.filter(s => s.isLocal).map((source) => (
+      {localSources.map((source) => (
         <option key={source.id} value={source.id}>
-          {formatSource(source)}
+          {formatSourceName(source)}
         </option>
       ))}
     </optgroup>
@@ -21,23 +27,31 @@ const localSourcesOptionsGroup = (sources) => {
 };
 
 const serverSourcesOptionsGroup = (sources) => {
+  const serverSources = sources.filter((s) => !s.isLocal);
   return (
     <optgroup label="Ghosts">
-      {sources.filter(s => !s.isLocal).map((source) => (
+      {serverSources.map((source) => (
         <option key={source.id} value={source.id}>
-          {formatSource(source)}
+          {formatSourceName(source)}
         </option>
       ))}
     </optgroup>
   );
 };
 
-const SourceSelector = ({ sources, currentSource, onChange }) => {
-
+const SourceSelector = ({ value, onChange, sources }) => {
+  if (sources.length === 0) value = '';
+  
   return (
     <div style={{ padding: '10px' }}>
-      <div style={{ float: 'left' }}>Now co-writing with:</div>
-      <select value={currentSource.id} onChange={onChange}>
+      <select
+        style={{
+          width: "100%"
+        }}
+        value={value}
+        onChange={onChange}
+        label={'Choose your Ghost Writer'}
+      >
         {localSourcesOptionsGroup(sources)}
         {serverSourcesOptionsGroup(sources)}
       </select>
@@ -46,9 +60,9 @@ const SourceSelector = ({ sources, currentSource, onChange }) => {
 };
 
 SourceSelector.propTypes = {
-  sources: PropTypes.array,
-  currentSource: PropTypes.object,
+  value: PropTypes.string,
   onChange: PropTypes.func,
+  sources: PropTypes.array
 };
 
 export default SourceSelector;

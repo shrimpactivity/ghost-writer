@@ -15,11 +15,12 @@ import SourceSelector from './SourceSelector';
 import CompositionContainer from './CompositionContainer';
 import OptionsMenu from './OptionsMenu';
 import GutenbergSearch from './GutenbergSearch';
-import Header from './Header';
+import Navbar from './Navbar';
 import useOptions from '../hooks/useOptions';
 
-import Button from '@mui/material/Button';
-import { Container, CssBaseline } from '@mui/material';
+import { Container, CssBaseline, Paper, Box, Button } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../config/theme';
 
 /*
 Initial sources:
@@ -217,36 +218,47 @@ const App = () => {
   return (
     <>
       <CssBaseline />
-      <Header />
+      <Navbar />
       <Container maxWidth="sm">
-      
-        {notification}
-        {welcomeVisible && <Welcome />}
-        <SourceSelector
-          sources={sources}
-          currentSource={currentSource}
-          onChange={handleSourceSelection}
-        />
-        <CompositionContainer
-          composition={composition}
-          suggestion={suggestion}
-          options={options}
-          onProposalChange={handleProposalChange}
-          onProposalSubmit={handleProposalSubmit}
-          onContentClick={handleContentClick}
-        />
-        <Button variant="contained" onClick={handleDeleteComposition}>X</Button>
-        <Button variant="contained" onClick={handleDeleteLastWord}>Backspace</Button>
+          <Box mt="20px">
+            <Paper sx={{backgroundColor:"pink"}} elevation={5} >
+            <SourceSelector
+              value={currentSource.id}
+              onChange={handleSourceSelection}
+              sources={sources}
+            />
+            </Paper>
+          </Box>
+          <Box mt="20px">
+          <Paper elevation={5}>
+            <CompositionContainer
+              composition={composition}
+              suggestion={suggestion}
+              options={options}
+              onProposalChange={handleProposalChange}
+              onProposalSubmit={handleProposalSubmit}
+              onContentClick={handleContentClick}
+            />
+            <Button variant="contained" onClick={handleDeleteComposition}>
+              X
+            </Button>
+            <Button variant="contained" onClick={handleDeleteLastWord}>
+              Backspace
+            </Button>
 
-        <OptionsMenu options={options} />
-        <Button onClick={() => setShowSearch(!showSearch)}>
-          {showSearch ? 'Hide Search Bar' : 'Search Bar'}
-        </Button>
-        {showSearch && (
-          <GutenbergSearch onResultClick={handleSearchResultClick} />
-        )}
+            <OptionsMenu options={options} />
+            <Button onClick={() => setShowSearch(!showSearch)}>
+              {showSearch ? 'Hide Search Bar' : 'Search Bar'}
+            </Button>
+            {showSearch && (
+              <GutenbergSearch onResultClick={handleSearchResultClick} />
+            )}
+          </Paper>
+          </Box>
+          
 
-        {/* TODO: <Footer/> */}
+          {/* TODO: <Footer/> */}
+
       </Container>
     </>
   );
