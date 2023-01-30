@@ -8,23 +8,26 @@ const useSources = () => {
 
   const defaultSource = {
     title: 'Complete Works',
-    author: 'William Shakespeare'
-  }
+    author: 'William Shakespeare',
+  };
 
   const findDefaultSourceIn = (items) => {
     items.find((source) => {
-        return (
-          source.title === defaultSource.title &&
-          source.author === defaultSource.author
-        );
-      });
-  }
+      return (
+        source.title === defaultSource.title &&
+        source.author === defaultSource.author
+      );
+    });
+  };
 
   const initializeSourcesHook = () => {
     sourcesService
       .getSourcesInfo()
       .then((serverSources) => {
-        const processedSources = serverSources.map(s => ({...s, isLocal: false}));
+        const processedSources = serverSources.map((s) => ({
+          ...s,
+          isLocal: false,
+        }));
         let current = findDefaultSourceIn(processedSources);
         current = current ? current : processedSources[0];
         setSources(processedSources);
@@ -38,34 +41,34 @@ const useSources = () => {
   useEffect(initializeSourcesHook, []);
 
   const addLocalSourceAndMachine = (source, sourceSuggestionMachine) => {
-    const processedSource = {...source, isLocal: true};
+    const processedSource = { ...source, isLocal: true };
     sourceSuggestionMachine.id = source.id;
     setSources(sources.concat(processedSource));
     setCurrentSource(processedSource);
     setSuggestionMachines(suggestionMachines.concat(sourceSuggestionMachine));
-  }
+  };
 
   const removeLocalSourceAndMachine = (sourceID) => {
-    const filteredSources = sources.filter(s => s.id !== sourceID);
+    const filteredSources = sources.filter((s) => s.id !== sourceID);
     setSources(filteredSources);
     if (currentSource.id === sourceID) {
       setCurrentSource(filteredSources[0]);
     }
-    setSuggestionMachines(suggestionMachines.filter(s => s.id !== sourceID));
-  }
+    setSuggestionMachines(suggestionMachines.filter((s) => s.id !== sourceID));
+  };
 
   const getSuggestionMachine = (sourceID) => {
     console.log('machine ', suggestionMachines);
-    return suggestionMachines.find(s => s.id === sourceID);
-  }
+    return suggestionMachines.find((s) => s.id === sourceID);
+  };
 
   return {
-    sources, 
-    currentSource, 
+    sources,
+    currentSource,
     setCurrentSource,
     addLocalSourceAndMachine,
     removeLocalSourceAndMachine,
-    getSuggestionMachine
+    getSuggestionMachine,
   };
 };
 

@@ -6,6 +6,7 @@ const capitalize = (word) => {
 };
 
 const endsInTerminalPunctuation = (word) => {
+  if (!word) return false;
   return /[!.?]+$/.test(word);
 };
 

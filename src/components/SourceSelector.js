@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MenuItem, Select } from '@mui/material';
+import { Box, ThemeProvider, Typography } from '@mui/material';
+import { formatWordArrayIntoSentence } from '../utils/text';
+import theme from '../config/theme';
 
 const formatSourceName = (source) => {
   if (!source.author) {
@@ -41,28 +43,37 @@ const serverSourcesOptionsGroup = (sources) => {
 
 const SourceSelector = ({ value, onChange, sources }) => {
   if (sources.length === 0) value = '';
-  
+
   return (
-    <div style={{ padding: '10px' }}>
-      <select
-        style={{
-          width: "100%"
-        }}
-        value={value}
-        onChange={onChange}
-        label={'Choose your Ghost Writer'}
+    <>
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+        style={{ padding: '10px' }}
       >
-        {localSourcesOptionsGroup(sources)}
-        {serverSourcesOptionsGroup(sources)}
-      </select>
-    </div>
+        <Box display="flex">
+          <Typography variant="h6">Now writing with:</Typography>
+        </Box>
+        <select
+          style={{
+            borderRadius: '3px',
+          }}
+          value={value}
+          onChange={onChange}
+        >
+          {localSourcesOptionsGroup(sources)}
+          {serverSourcesOptionsGroup(sources)}
+        </select>
+      </Box>
+    </>
   );
 };
 
 SourceSelector.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
-  sources: PropTypes.array
+  sources: PropTypes.array,
 };
 
 export default SourceSelector;

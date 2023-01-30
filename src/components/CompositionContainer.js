@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CompositionForm from './CompositionForm';
-import CompositionViewer from './CompositionViewer';
+import CompositionView from './CompositionView';
 
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
 
@@ -13,26 +13,10 @@ const CompositionContainer = ({
   onProposalSubmit,
   onContentClick,
 }) => {
-  
-
-  // const potentialComposition = (composition + userInput).trim();
-  // const formattedSuggestion =
-  //   !potentialComposition ||
-  //   textUtils.endsInTerminalPunctuation(potentialComposition)
-  //     ? textUtils.capitalize(suggestion)
-  //     : suggestion;
-
-  // const compositionArray = composition.split(' ');
-  // let formattedCompositionArray = compositionArray.map((word) => {
-  //   if (/$[!?.,]+/.test(word)) {
-  //     return word;
-  //   }
-  //   return ` ${word}`;
-  // });
 
   return (
     <div>
-      <CompositionViewer
+      <CompositionView
         composition={composition}
         suggestion={suggestion}
         onContentClick={onContentClick}
