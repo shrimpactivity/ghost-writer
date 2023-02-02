@@ -1,6 +1,13 @@
 import React from 'react';
+import { Button } from '@mui/material';
 
-const WritingForm = ({ onSubmit, onChange, value }) => {
+const WritingForm = ({
+  onSubmit,
+  onChange,
+  value,
+  onDeleteLastWord,
+  onDeleteComposition,
+}) => {
   return (
     <div style={{ padding: '10px' }}>
       <form onSubmit={onSubmit}>
@@ -11,7 +18,15 @@ const WritingForm = ({ onSubmit, onChange, value }) => {
           value={value}
           spellCheck="true"
         />
-        <button type="submit">Compose</button>
+        <Button variant="contained" type="submit">
+          +
+        </Button>
+        <Button variant="contained" onClick={onDeleteLastWord}>
+          {'<-'}
+        </Button>
+        <Button variant="contained" onClick={onDeleteComposition}>
+          X
+        </Button>
       </form>
     </div>
   );

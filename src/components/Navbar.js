@@ -12,6 +12,14 @@ const appBarStyle = {
   borderColor: theme.medium,
 };
 
+const titleContainerStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  width: '100vw',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const linkContainerStyle = {
   display: 'flex',
   flexGrow: 1,
@@ -22,28 +30,23 @@ const linkContainerStyle = {
 const buttonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.light
-    }
+      main: theme.light,
+    },
   },
 });
 
 const linkButtonStyle = {
   borderRadius: '5px',
-  font: "15px",
-  padding: "12px"
+  font: '15px',
+  padding: '12px',
 };
 
-const Navbar = ({onLoginClick, userLoggedIn}) => {
+const Navbar = ({ onLoginClick, userLoggedIn }) => {
   return (
     <AppBar component="nav" position="static" style={appBarStyle}>
       <Toolbar>
-        <Box display="flex" flexWrap="wrap" width="100vw">
-          <Box
-            display="flex"
-            flexBasis="50%"
-            justifyContent="center"
-            alignItems="center"
-          >
+        <Box style={titleContainerStyle}>
+          <Box display="flex" justifyContent="center" flexBasis="50%">
             <Box pr="15px">
               <Typography variant="h4" component="div">
                 GhostWriter
@@ -55,8 +58,16 @@ const Navbar = ({onLoginClick, userLoggedIn}) => {
           </Box>
           <Box style={linkContainerStyle}>
             <ThemeProvider theme={buttonTheme}>
-              <Button onClick={onLoginClick} style={linkButtonStyle}>{userLoggedIn ? "Logout" : "Login"}</Button>
-              <Button style={linkButtonStyle}  href="https://github.com/shrampi/ghostwriter-web" target="_blank">GitHub</Button>
+              <Button onClick={onLoginClick} style={linkButtonStyle}>
+                {userLoggedIn ? 'Logout' : 'Login'}
+              </Button>
+              <Button
+                style={linkButtonStyle}
+                href="https://github.com/shrampi/ghostwriter-web"
+                target="_blank"
+              >
+                GitHub
+              </Button>
             </ThemeProvider>
           </Box>
         </Box>
@@ -67,7 +78,7 @@ const Navbar = ({onLoginClick, userLoggedIn}) => {
 
 Navbar.propTypes = {
   onLoginClick: PropTypes.func,
-  userLoggedIn: PropTypes.bool
-}
+  userLoggedIn: PropTypes.bool,
+};
 
 export default Navbar;

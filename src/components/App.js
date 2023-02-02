@@ -6,14 +6,8 @@ import theme from '../config/colorPalette';
 
 const backgroundStyle = {
   width: '100vw',
-  height: '100vh',
+  minHeight: '100vh',
   backgroundColor: theme.darkest,
-};
-
-const mainWrapperStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
 };
 
 const App = () => {
@@ -28,11 +22,7 @@ const App = () => {
       <CssBaseline />
       <div className="background" style={backgroundStyle}>
         <Navbar onLoginClick={handleLogin} userLoggedIn={userLoggedIn} />
-        <div style={mainWrapperStyle}>
-          <div>
-            <MainContainer />
-          </div>
-        </div>
+        <MainContainer />
       </div>
     </>
   );

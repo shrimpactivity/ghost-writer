@@ -11,18 +11,21 @@ const containerStyle = {
   padding: '15px',
   backgroundColor: theme.dark,
   borderRadius: '10px',
+  border: '2px solid',
+  borderColor: theme.medium
 };
 
 const textContainerStyle = {
-  flexGrow: 1,
+  padding: "9px",
   color: theme.light,
   textAlign: 'center',
   fontStyle: 'italic',
-  fontSize: '18px',
+  fontSize: '17px',
 };
 
 const selectStyle = {
   width: '100%',
+  height: '30px',
   color: 'black',
   backgroundColor: theme.light,
   borderColor: theme.darkest,
@@ -32,11 +35,23 @@ const selectStyle = {
   overflow: 'hidden',
 };
 
+const optionStyle = {
+  overflow: "hidden",
+  textOverflow: 'ellipsis',
+  fontSize: "14px"
+}
+
 const formatSourceName = (source) => {
+  let result = ""
   if (!source.author) {
-    return source.title;
+    result = source.title;
+  } else {
+    result = `${source.author} \u2015 ${source.title}`;
   }
-  return `${source.author} \u2015 ${source.title}`;
+  if (result.length > 60) {
+    result = result.slice(0, 60) + '...';
+  }
+  return result;
 };
 
 const localSourcesOptionsGroup = (sources) => {
@@ -44,11 +59,10 @@ const localSourcesOptionsGroup = (sources) => {
   if (localSources.length === 0) {
     return;
   }
-
   return (
-    <optgroup label="Downloaded Ghosts">
+    <optgroup style={optionStyle} label="Downloaded Ghosts">
       {localSources.map((source) => (
-        <option key={source.id} value={source.id}>
+        <option style={optionStyle} key={source.id} value={source.id}>
           {formatSourceName(source)}
         </option>
       ))}
@@ -61,7 +75,7 @@ const serverSourcesOptionsGroup = (sources) => {
   return (
     <optgroup label="Ghosts">
       {serverSources.map((source) => (
-        <option key={source.id} value={source.id}>
+        <option style={optionStyle} key={source.id} value={source.id}>
           {formatSourceName(source)}
         </option>
       ))}
@@ -74,8 +88,8 @@ const SourceSelector = ({ value, onChange, sources }) => {
 
   return (
     <div style={containerStyle}>
-      <div style={textContainerStyle}>Now writing with: </div>
-      <div style={{ maxWidth: '360px' }}>
+      <div style={textContainerStyle}>You're writing with</div>
+      <div style={{ maxWidth: '350px' }}>
         <select style={selectStyle} value={value} onChange={onChange}>
           {localSourcesOptionsGroup(sources)}
           {serverSourcesOptionsGroup(sources)}

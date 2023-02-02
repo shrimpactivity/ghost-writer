@@ -11,10 +11,9 @@ import useComposition from '../hooks/useComposition';
 import useSuggestion from '../hooks/useSuggestion';
 
 import SourceSelector from './SourceSelector';
-import CompositionContainer from './CompositionContainer';
+import WritingContainer from './WritingContainer';
 import OptionsMenu from './OptionsMenu';
 import GutenbergSearch from './GutenbergSearch';
-import Navbar from './Navbar';
 import useOptions from '../hooks/useOptions';
 
 import { Container, CssBaseline, Paper, Box, Button } from '@mui/material';
@@ -55,7 +54,7 @@ Footer
 const MainContainer = () => {
   const firstRender = useRef(true);
   const [showSearch, setShowSearch] = useState(false);
-  
+
   const options = useOptions();
   const composition = useComposition();
   const {
@@ -213,35 +212,27 @@ const MainContainer = () => {
     setShowSearch(false);
   };
 
-  
-
   return (
     <>
       <Container maxWidth="sm">
-          <Box mt="50px">
-            <SourceSelector
-              value={currentSource.id}
-              onChange={handleSourceSelection}
-              sources={sources}
-            />
-          </Box>
-          <Box mt="20px">
-          <Paper elevation={5}>
-            <CompositionContainer
+        <Box mt="50px">
+          <SourceSelector
+            value={currentSource.id}
+            onChange={handleSourceSelection}
+            sources={sources}
+          />
+        </Box>
+        <Box mt="20px">
+            <WritingContainer
               composition={composition}
               suggestion={suggestion}
               options={options}
               onProposalChange={handleProposalChange}
               onProposalSubmit={handleProposalSubmit}
               onContentClick={handleContentClick}
+              onDeleteLastWord={handleDeleteLastWord}
+              onDeleteComposition={handleDeleteComposition}
             />
-            <Button variant="contained" onClick={handleDeleteComposition}>
-              X
-            </Button>
-            <Button variant="contained" onClick={handleDeleteLastWord}>
-              Backspace
-            </Button>
-
             <OptionsMenu options={options} />
             <Button onClick={() => setShowSearch(!showSearch)}>
               {showSearch ? 'Hide Search Bar' : 'Search Bar'}
@@ -249,15 +240,12 @@ const MainContainer = () => {
             {showSearch && (
               <GutenbergSearch onResultClick={handleSearchResultClick} />
             )}
-          </Paper>
-          </Box>
-            
+        </Box>
 
-          {/* TODO: <Footer/> */}
-
+        {/* TODO: <Footer/> */}
       </Container>
     </>
   );
-}
+};
 
 export default MainContainer;

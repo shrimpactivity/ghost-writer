@@ -7,14 +7,12 @@ import {
   removeExtraWhitespace,
 } from '../utils/text';
 
-const viewStyle = () => {
-  return {
+const containerStyle = {
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     wordWrap: 'break-word',
     padding: '1vw',
-  };
 };
 
 const CompositionWords = ({
@@ -27,7 +25,7 @@ const CompositionWords = ({
   const formattedProposal = removeExtraWhitespace(composition.proposal);
 
   return (
-    <div style={viewStyle()}>
+    <div style={containerStyle}>
       <CompositionContent
         formattedContent={formattedContent}
         formattedProposal={formattedProposal}

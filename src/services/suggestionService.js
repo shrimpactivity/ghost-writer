@@ -38,7 +38,10 @@ const getRequestURL = (tokens, accuracy, amount, source) => {
 }
 
 const retrieveSuggestionFromServer = (tokens, accuracy, amount, source) => {
-  const relevantTokens = tokens.slice(-1 * accuracy);
+  let relevantTokens = tokens.slice(-1 * accuracy);
+  if (accuracy === 0) {
+    relevantTokens = [];
+  }
 
   let url = getRequestURL(relevantTokens, accuracy, amount, source);
   const request = axios.get(url);
