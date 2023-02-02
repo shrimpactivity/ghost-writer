@@ -1,8 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, ThemeProvider, Typography } from '@mui/material';
-import { formatWordArrayIntoSentence } from '../utils/text';
-import theme from '../config/theme';
+import theme from '../config/colorPalette';
+
+const containerStyle = {
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '15px',
+  backgroundColor: theme.dark,
+  borderRadius: '10px',
+};
+
+const textContainerStyle = {
+  flexGrow: 1,
+  color: theme.light,
+  textAlign: 'center',
+  fontStyle: 'italic',
+  fontSize: '18px',
+};
+
+const selectStyle = {
+  width: '100%',
+  color: 'black',
+  backgroundColor: theme.light,
+  borderColor: theme.darkest,
+  borderRadius: '5px',
+  font: '18px Roboto',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+};
 
 const formatSourceName = (source) => {
   if (!source.author) {
@@ -45,28 +73,15 @@ const SourceSelector = ({ value, onChange, sources }) => {
   if (sources.length === 0) value = '';
 
   return (
-    <>
-      <Box
-        display="flex"
-        alignItems="center"
-        flexDirection="column"
-        style={{ padding: '10px' }}
-      >
-        <Box display="flex">
-          <Typography variant="h6">Now writing with:</Typography>
-        </Box>
-        <select
-          style={{
-            borderRadius: '3px',
-          }}
-          value={value}
-          onChange={onChange}
-        >
+    <div style={containerStyle}>
+      <div style={textContainerStyle}>Now writing with: </div>
+      <div style={{ maxWidth: '360px' }}>
+        <select style={selectStyle} value={value} onChange={onChange}>
           {localSourcesOptionsGroup(sources)}
           {serverSourcesOptionsGroup(sources)}
         </select>
-      </Box>
-    </>
+      </div>
+    </div>
   );
 };
 

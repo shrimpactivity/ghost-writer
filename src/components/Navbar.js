@@ -1,18 +1,51 @@
 import React from 'react';
-import { AppBar, Box, Toolbar, Typography, Grid, Tooltip } from '@mui/material';
+import PropTypes from 'prop-types';
+import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../config/theme';
+import theme from '../config/colorPalette';
 
-const Navbar = () => {
+const appBarStyle = {
+  backgroundColor: theme.dark,
+  color: theme.light,
+  borderBottom: 'solid 1px',
+  borderColor: theme.medium,
+};
+
+const linkContainerStyle = {
+  display: 'flex',
+  flexGrow: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+};
+
+const buttonTheme = createTheme({
+  palette: {
+    primary: {
+      main: theme.light
+    }
+  },
+});
+
+const linkButtonStyle = {
+  borderRadius: '5px',
+  font: "15px",
+  padding: "12px"
+};
+
+const Navbar = ({onLoginClick, userLoggedIn}) => {
   return (
-    <ThemeProvider theme={theme}>
-    <AppBar component="nav" position="static">
+    <AppBar component="nav" position="static" style={appBarStyle}>
       <Toolbar>
         <Box display="flex" flexWrap="wrap" width="100vw">
-          <Box display="flex" flexGrow={1} justifyContent="center" alignItems="center">
+          <Box
+            display="flex"
+            flexBasis="50%"
+            justifyContent="center"
+            alignItems="center"
+          >
             <Box pr="15px">
-              <Typography variant="h5" component="div">
+              <Typography variant="h4" component="div">
                 GhostWriter
               </Typography>
             </Box>
@@ -20,21 +53,21 @@ const Navbar = () => {
               <AgricultureIcon fontSize="large" />
             </Box>
           </Box>
-          <Box
-            display="flex"
-            flexGrow={1}
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Box pr="15px">About</Box>
-            <Box pr="15px">Login</Box>
-            <Box pr="15px">GitHub</Box>
+          <Box style={linkContainerStyle}>
+            <ThemeProvider theme={buttonTheme}>
+              <Button onClick={onLoginClick} style={linkButtonStyle}>{userLoggedIn ? "Logout" : "Login"}</Button>
+              <Button style={linkButtonStyle}  href="https://github.com/shrampi/ghostwriter-web" target="_blank">GitHub</Button>
+            </ThemeProvider>
           </Box>
         </Box>
       </Toolbar>
     </AppBar>
-    </ThemeProvider>
   );
 };
+
+Navbar.propTypes = {
+  onLoginClick: PropTypes.func,
+  userLoggedIn: PropTypes.bool
+}
 
 export default Navbar;

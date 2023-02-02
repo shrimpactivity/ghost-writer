@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CompositionForm from './CompositionForm';
-import CompositionView from './CompositionView';
+import CompositionWords from './CompositionWords';
 
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
 
@@ -16,7 +16,7 @@ const CompositionContainer = ({
 
   return (
     <div>
-      <CompositionView
+      <CompositionWords
         composition={composition}
         suggestion={suggestion}
         onContentClick={onContentClick}

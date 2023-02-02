@@ -17,7 +17,7 @@ const viewStyle = () => {
   };
 };
 
-const CompositionView = ({
+const CompositionWords = ({
   composition,
   suggestion,
   onContentClick,
@@ -44,11 +44,11 @@ const CompositionView = ({
   );
 };
 
-CompositionView.propTypes = {
+CompositionWords.propTypes = {
   composition: PropTypes.object,
   suggestion: PropTypes.string,
   onContentClick: PropTypes.func,
   options: PropTypes.object,
 };
 
-export default CompositionView;
+export default CompositionWords;
