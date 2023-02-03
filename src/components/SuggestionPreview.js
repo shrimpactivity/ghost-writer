@@ -9,7 +9,7 @@ const suggestionStyle = {
   marginRight: '6px',
   padding: '1px',
   wordWrap: 'break-word',
-  color: theme.complement,
+  color: theme.light,
   fontFamily: 'Georgia',
   borderRadius: '3px',
 };

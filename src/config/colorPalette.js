@@ -3,7 +3,7 @@ const theme = {
   dark: "#303030",
   medium: "#50775e",
   light: "#80fcbc",
-  complement: "#fc4e82",
+  complement: "#ff6090",
   complementDark: "#c42b59",
   lightest: "#F8F8F8",
 }

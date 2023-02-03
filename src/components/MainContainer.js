@@ -172,14 +172,12 @@ const MainContainer = () => {
       composition.content.length &&
       confirm('Are you sure you want to delete your composition?')
     ) {
-      composition.setContent([]);
+      composition.clearContent();
     }
   };
 
   const handleDeleteLastWord = () => {
-    const newContent = [...composition.content];
-    newContent.pop();
-    composition.setContent(newContent);
+    composition.deleteLastWordOfContent();
   };
 
   const handleSourceSelection = (event) => {

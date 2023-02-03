@@ -2,33 +2,35 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import theme from '../config/colorPalette';
 
-const contentWordStyle = {
-  marginRight: '6px',
-  padding: '1px',
-  cursor: 'pointer',
-  wordWrap: 'break-word',
-  color: theme.lightest,
-  fontFamily: 'Georgia',
-  borderRadius: '3px',
+const getWordStyle = (isGhostWord) => {
+  return {
+    marginRight: '4px',
+    padding: '1px',
+    cursor: 'pointer',
+    wordWrap: 'break-word',
+    color: isGhostWord ? theme.light : theme.lightest,
+    fontFamily: 'Georgia',
+    borderRadius: '3px',
+  };
 };
 
 const proposalStyle = {
-  ...contentWordStyle,
-  color: theme.light,
+  ...getWordStyle(false),
+  color: theme.complement,
 };
 
-const ContentDivs = ({formattedContent, onContentClick}) => {
-  if (formattedContent.length === 0) {
+const ContentDivs = ({ composition, onContentClick }) => {
+  if (composition.content.length === 0) {
     return;
   }
   return (
     <>
-      {formattedContent.split(' ').map((word, index) => {
+      {composition.content.map((word, index) => {
         return (
           <div
             className="content-word"
             key={index} // It's an antipattern, congrats if you've found this
-            style={contentWordStyle}
+            style={getWordStyle(composition.ghostWords[index])}
             onClick={() => onContentClick(index)}
           >
             {word}
@@ -39,7 +41,7 @@ const ContentDivs = ({formattedContent, onContentClick}) => {
   );
 };
 
-const ProposalDivs = ({formattedProposal}) => {
+const ProposalDivs = ({ formattedProposal }) => {
   if (formattedProposal.length === 0) {
     return;
   }
@@ -58,17 +60,20 @@ const ProposalDivs = ({formattedProposal}) => {
       })}
     </>
   );
-}
+};
 
 const CompositionContent = ({
-  formattedContent,
+  composition,
   formattedProposal,
   onContentClick,
 }) => {
   return (
     <>
-      <ContentDivs formattedContent={formattedContent} onContentclick={onContentClick}/>
-      <ProposalDivs formattedProposal={formattedProposal}/>
+      <ContentDivs
+        composition={composition}
+        onContentClick={onContentClick}
+      />
+      <ProposalDivs formattedProposal={formattedProposal} />
     </>
   );
 };

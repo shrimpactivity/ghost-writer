@@ -19,7 +19,7 @@ const CompositionWords = ({
   composition,
   suggestion,
   onContentClick,
-  options,
+  options
 }) => {
   const formattedContent = formatWordArrayIntoSentence(composition.content);
   const formattedProposal = removeExtraWhitespace(composition.proposal);
@@ -27,7 +27,7 @@ const CompositionWords = ({
   return (
     <div style={containerStyle}>
       <CompositionContent
-        formattedContent={formattedContent}
+        composition={composition}
         formattedProposal={formattedProposal}
         onContentClick={onContentClick}
       />
@@ -46,7 +46,6 @@ CompositionWords.propTypes = {
   composition: PropTypes.object,
   suggestion: PropTypes.string,
   onContentClick: PropTypes.func,
-  options: PropTypes.object,
 };
 
 export default CompositionWords;
