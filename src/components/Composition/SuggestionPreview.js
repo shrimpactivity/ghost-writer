@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { endsInTerminalPunctuation } from '../utils/text';
+import { endsInTerminalPunctuation } from '../../utils/text';
 import { capitalize } from '@mui/material';
-import theme from '../config/colorPalette';
+import theme from '../../config/colorPalette';
 
 const suggestionStyle = {
-  marginRight: '6px',
-  padding: '1px',
+  marginLeft: '5px',
   wordWrap: 'break-word',
   color: theme.light,
   fontFamily: 'Georgia',
@@ -23,13 +22,13 @@ const SuggestionPreview = ({ suggestion, formattedContent, formattedProposal }) 
   }
 
   return (
-    <div className="suggestion-preview" style={suggestionStyle}>
+    <span className="suggestion-preview" style={suggestionStyle}>
       {formattedSuggestion.split('').map((letter, index) => {
         return (
           <span key={index} style={{"--i": index}}>{letter}</span>
         )
       })}
-    </div>
+    </span>
   );
 };
 

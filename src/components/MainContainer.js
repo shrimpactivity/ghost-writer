@@ -11,14 +11,13 @@ import useComposition from '../hooks/useComposition';
 import useSuggestion from '../hooks/useSuggestion';
 
 import SourceSelector from './SourceSelector';
-import CompositionContainer from './CompositionContainer';
+import CompositionContainer from './Composition/CompositionContainer';
 import OptionsMenu from './OptionsMenu';
 import GutenbergSearch from './GutenbergSearch';
 import useOptions from '../hooks/useOptions';
 
-import { Container, CssBaseline, Paper, Box, Button } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import theme from '../config/colorPalette';
+import { Container, Box, Button } from '@mui/material';
+
 
 /*
 Initial sources:

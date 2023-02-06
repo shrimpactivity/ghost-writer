@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CompositionForm from './CompositionForm';
-import CompositionWriting from './CompositionWriting';
-import theme from '../config/colorPalette';
+import CompositionWords from './CompositionWords';
+import theme from '../../config/colorPalette';
 
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
 
@@ -29,7 +29,7 @@ const CompositionContainer = ({
 }) => {
   return (
     <div style={containerStyle}>
-      <div style={{alignSelf:"center"}}>
+      <div>
         <CompositionForm
           proposal={composition.proposal}
           onProposalChange={onProposalChange}
@@ -39,7 +39,7 @@ const CompositionContainer = ({
         />
       </div>
       <div>
-        <CompositionWriting
+        <CompositionWords
           composition={composition}
           suggestion={suggestion}
           onContentClick={onContentClick}

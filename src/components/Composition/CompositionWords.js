@@ -1,21 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CompositionContentAndProposal from './CompositionContentAndProposal';
 import SuggestionPreview from './SuggestionPreview';
 import {
   formatWordArrayIntoSentence,
   removeExtraWhitespace,
-} from '../utils/text';
+  capitalize, endsInTerminalPunctuation
+} from '../../utils/text';
+import theme from '../../config/colorPalette';
+import ProposalItem from './ProposalItem';
+import ContentItems from './ContentItems';
 
 const containerStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    wordWrap: 'break-word',
-    padding: '1vw',
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  wordWrap: 'break-word',
+  padding: '1vw',
 };
 
-const CompositionWriting = ({
+const CompositionWords = ({
   composition,
   suggestion,
   onContentClick,
@@ -26,11 +29,11 @@ const CompositionWriting = ({
 
   return (
     <div style={containerStyle}>
-      <CompositionContentAndProposal
+      <ContentItems
         composition={composition}
-        formattedProposal={formattedProposal}
         onContentClick={onContentClick}
       />
+      <ProposalItem formattedProposal={formattedProposal} />
       {options.showSuggestionPreview && (
         <SuggestionPreview
           suggestion={suggestion}
@@ -42,10 +45,10 @@ const CompositionWriting = ({
   );
 };
 
-CompositionWriting.propTypes = {
+CompositionWords.propTypes = {
   composition: PropTypes.object,
   suggestion: PropTypes.string,
   onContentClick: PropTypes.func,
 };
 
-export default CompositionWriting;
+export default CompositionWords;
