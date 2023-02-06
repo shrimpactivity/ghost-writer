@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CompositionContent from './CompositionContent';
+import CompositionContentAndProposal from './CompositionContentAndProposal';
 import SuggestionPreview from './SuggestionPreview';
 import {
   formatWordArrayIntoSentence,
@@ -15,7 +15,7 @@ const containerStyle = {
     padding: '1vw',
 };
 
-const CompositionWords = ({
+const CompositionWriting = ({
   composition,
   suggestion,
   onContentClick,
@@ -26,7 +26,7 @@ const CompositionWords = ({
 
   return (
     <div style={containerStyle}>
-      <CompositionContent
+      <CompositionContentAndProposal
         composition={composition}
         formattedProposal={formattedProposal}
         onContentClick={onContentClick}
@@ -42,10 +42,10 @@ const CompositionWords = ({
   );
 };
 
-CompositionWords.propTypes = {
+CompositionWriting.propTypes = {
   composition: PropTypes.object,
   suggestion: PropTypes.string,
   onContentClick: PropTypes.func,
 };
 
-export default CompositionWords;
+export default CompositionWriting;

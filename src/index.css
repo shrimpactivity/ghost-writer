@@ -1,3 +1,25 @@
 .content-word:hover {
   background-color: #0c0c0c
 }
+
+.suggestion-preview {
+  -webkit-box-reflect: below -3px linear-gradient(transparent, rgba(0,0,0,.2));
+}
+.suggestion-preview span {
+  display: inline-block;
+  animation: wave 1s infinite;
+  animation-delay: calc(.2s * var(--i));
+}
+@keyframes wave {
+  0%, 50%, 100% {
+    transform: translateY(0px);
+  }
+  25% {
+    transform: translateY(2px);
+    color: cyan;
+  }
+  75% {
+    transform: translateY(-2px)
+  }
+}
+

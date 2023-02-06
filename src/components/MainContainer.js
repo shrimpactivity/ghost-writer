@@ -11,7 +11,7 @@ import useComposition from '../hooks/useComposition';
 import useSuggestion from '../hooks/useSuggestion';
 
 import SourceSelector from './SourceSelector';
-import WritingContainer from './WritingContainer';
+import CompositionContainer from './CompositionContainer';
 import OptionsMenu from './OptionsMenu';
 import GutenbergSearch from './GutenbergSearch';
 import useOptions from '../hooks/useOptions';
@@ -31,6 +31,7 @@ pride and prejudice
 jane eyre
 moby dick
 federalist papers
+long cat ipsum
 idk at least like 20-30 options? 
 */
 
@@ -221,7 +222,7 @@ const MainContainer = () => {
           />
         </Box>
         <Box mt="20px">
-            <WritingContainer
+            <CompositionContainer
               composition={composition}
               suggestion={suggestion}
               options={options}

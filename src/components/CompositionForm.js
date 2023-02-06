@@ -1,12 +1,13 @@
 import React from 'react';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
-const WritingForm = ({
-  onSubmit,
-  onChange,
-  value,
+const CompositionForm = ({
+  proposal,
+  onProposalChange,
   onDeleteLastWord,
   onDeleteComposition,
+  onSubmit,
 }) => {
   return (
     <div style={{ padding: '10px' }}>
@@ -14,8 +15,8 @@ const WritingForm = ({
         <input
           type="text"
           placeholder="Start typing here"
-          onChange={onChange}
-          value={value}
+          onChange={onProposalChange}
+          value={proposal}
           spellCheck="true"
         />
         <Button variant="contained" type="submit">
@@ -32,4 +33,12 @@ const WritingForm = ({
   );
 };
 
-export default WritingForm;
+CompositionForm.propTypes = {
+  proposal: PropTypes.string.isRequired,
+  onProposalChange: PropTypes.func.isRequired,
+  onDeleteLastWord: PropTypes.func.isRequired,
+  onDeleteComposition: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+}
+
+export default CompositionForm;

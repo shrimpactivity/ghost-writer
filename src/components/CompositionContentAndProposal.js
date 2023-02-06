@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import theme from '../config/colorPalette';
+import { endsInTerminalPunctuation } from '../utils/text';
+import { capitalize } from '@mui/material';
 
 const getWordStyle = (isGhostWord) => {
   return {
@@ -23,6 +25,19 @@ const ContentDivs = ({ composition, onContentClick }) => {
   if (composition.content.length === 0) {
     return;
   }
+
+  const formatContentWord = (word, index) => {
+    if (index === 0) {
+      return capitalize(word);
+    }
+
+    const prevWord = composition.content[index - 1];
+    if (endsInTerminalPunctuation(prevWord)) {
+      return capitalize(word);
+    }
+
+    return word;
+  }
   return (
     <>
       {composition.content.map((word, index) => {
@@ -33,7 +48,7 @@ const ContentDivs = ({ composition, onContentClick }) => {
             style={getWordStyle(composition.ghostWords[index])}
             onClick={() => onContentClick(index)}
           >
-            {word}
+            {formatContentWord(word, index)}
           </div>
         );
       })}
@@ -62,7 +77,7 @@ const ProposalDivs = ({ formattedProposal }) => {
   );
 };
 
-const CompositionContent = ({
+const CompositionContentAndProposal = ({
   composition,
   formattedProposal,
   onContentClick,
@@ -78,9 +93,9 @@ const CompositionContent = ({
   );
 };
 
-CompositionContent.propTypes = {
+CompositionContentAndProposal.propTypes = {
   formattedContent: PropTypes.string,
   onContentClick: PropTypes.func,
 };
 
-export default CompositionContent;
+export default CompositionContentAndProposal;
