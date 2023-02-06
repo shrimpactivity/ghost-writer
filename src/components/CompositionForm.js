@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
+import CompositionFormButtons from './CompositionFormButtons';
 
 const CompositionForm = ({
   proposal,
@@ -19,15 +20,7 @@ const CompositionForm = ({
           value={proposal}
           spellCheck="true"
         />
-        <Button variant="contained" type="submit">
-          +
-        </Button>
-        <Button variant="contained" onClick={onDeleteLastWord}>
-          {'<-'}
-        </Button>
-        <Button variant="contained" onClick={onDeleteComposition}>
-          X
-        </Button>
+        <CompositionFormButtons onDeleteLastWord={onDeleteLastWord} onDeleteComposition={onDeleteComposition} />
       </form>
     </div>
   );
