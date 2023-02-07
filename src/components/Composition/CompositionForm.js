@@ -13,7 +13,6 @@ const formItemsContainerStyle = {
 };
 
 const inputStyle = {
-  width: '100%',
   borderRadius: "5px",
   border: "2px solid",
   borderColor: theme.light,
@@ -25,6 +24,7 @@ const inputStyle = {
 const CompositionForm = ({
   proposal,
   onProposalChange,
+  onCopyComposition,
   onDeleteLastWord,
   onDeleteComposition,
   onSubmit,
@@ -44,6 +44,7 @@ const CompositionForm = ({
         </div>
         <div>
           <CompositionFormButtons
+            onCopyComposition={onCopyComposition}
             onDeleteLastWord={onDeleteLastWord}
             onDeleteComposition={onDeleteComposition}
           />
@@ -56,6 +57,7 @@ const CompositionForm = ({
 CompositionForm.propTypes = {
   proposal: PropTypes.string.isRequired,
   onProposalChange: PropTypes.func.isRequired,
+  onCopyComposition: PropTypes.func.isRequired,
   onDeleteLastWord: PropTypes.func.isRequired,
   onDeleteComposition: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,

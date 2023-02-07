@@ -9,7 +9,6 @@ const containerStyle = {
   justifyContent: 'center',
   alignItems: 'center',
   padding: '15px',
-  marginTop: '50px',
   backgroundColor: theme.dark,
   borderRadius: '10px',
   border: '2px solid',

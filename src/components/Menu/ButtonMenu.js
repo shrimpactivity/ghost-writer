@@ -8,15 +8,15 @@ import theme from '../../config/colorPalette';
 const buttonContainerStyle = {
   display: 'flex',
   flexDirection: 'row',
-  justifyContent: 'center',
+  flexWrap: "wrap",
+  justifyContent: "space-between",
   alignItems: 'center',
-  padding: '10px',
 };
 
 const buttonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.light,
+      main: theme.complement,
     },
   },
 });
@@ -24,14 +24,13 @@ const buttonTheme = createTheme({
 const searchButtonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.complement,
+      main: theme.light,
     },
   },
 })
 
 const buttonStyle = {
-  paddingLeft: '20px',
-  paddingRight: '20px'
+  margin: '10px',
 }
 
 const ButtonMenu = ({
@@ -41,18 +40,28 @@ const ButtonMenu = ({
 }) => {
   return (
     <div style={buttonContainerStyle}>
-      <ThemeProvider theme={searchButtonTheme}>
-        <Button sx={buttonStyle} variant="text" onClick={onSearchButtonClick}>
+      
+        <div style={{justifySelf: "flex-start"}}>
+        <ThemeProvider theme={searchButtonTheme}>
+        <Button sx={buttonStyle} variant="outlined" onClick={onSearchButtonClick}>
           Find New Ghosts
         </Button>
         </ThemeProvider>
-        <ThemeProvider theme={buttonTheme}>
-        <Button sx={buttonStyle} variant="text" onClick={onOptionButtonClick}>
-          {showOptions ? 'Hide Options' : 'Options'}
-        </Button>
-        <Button sx={buttonStyle} variant="text">Save</Button>
-        <Button sx={buttonStyle} variant="text">Load</Button>
-      </ThemeProvider>
+        </div>
+        
+       
+        
+          <div style={{justifySelf: "flex-end"}}>
+          <ThemeProvider theme={buttonTheme}>
+              <Button sx={{...buttonStyle, width: "130px"}} variant="outlined" onClick={onOptionButtonClick}>
+              {showOptions ? 'Hide Options' : 'Options'}
+            </Button>
+            <Button sx={buttonStyle} variant="outlined">Save</Button>
+            <Button sx={buttonStyle} variant="outlined">Load</Button>
+            </ThemeProvider>
+          </div>
+        
+      
     </div>
   );
 };

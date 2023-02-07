@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CompositionForm from './CompositionForm';
 import CompositionWords from './CompositionWords';
 import theme from '../../config/colorPalette';
+import { formatWordArrayIntoSentence } from '../../utils/text';
 
 // Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
 
@@ -28,12 +29,19 @@ const CompositionContainer = ({
   onDeleteLastWord,
   onDeleteComposition,
 }) => {
+
+  const handleCopyComposition = () => {
+    const formattedContent = formatWordArrayIntoSentence(composition.content);
+    navigator.clipboard.writeText(formattedContent);
+  }
+
   return (
     <div style={containerStyle}>
       <div>
         <CompositionForm
           proposal={composition.proposal}
           onProposalChange={onProposalChange}
+          onCopyComposition={handleCopyComposition}
           onDeleteLastWord={onDeleteLastWord}
           onDeleteComposition={onDeleteComposition}
           onSubmit={onProposalSubmit}

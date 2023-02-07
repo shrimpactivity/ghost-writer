@@ -14,7 +14,7 @@ const buttonTheme = createTheme({
   },
 });
 
-const CompositionFormButtons = ({ onDeleteLastWord, onDeleteComposition }) => {
+const CompositionFormButtons = ({ onCopyComposition, onDeleteLastWord, onDeleteComposition }) => {
   return (
     <>
       <ThemeProvider theme={buttonTheme}>
@@ -24,7 +24,7 @@ const CompositionFormButtons = ({ onDeleteLastWord, onDeleteComposition }) => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Copy composition">
-          <IconButton aria-label="copy composition" variant="contained" type="submit">
+          <IconButton aria-label="copy composition" variant="contained" onClick={onCopyComposition}>
             <ContentCopyIcon sx={{ color: theme.light }} fontSize="medium" />
           </IconButton>
         </Tooltip>
@@ -44,6 +44,7 @@ const CompositionFormButtons = ({ onDeleteLastWord, onDeleteComposition }) => {
 };
 
 CompositionFormButtons.propTypes = {
+  onCopyComposition: PropTypes.func.isRequired,
   onDeleteLastWord: PropTypes.func.isRequired,
   onDeleteComposition: PropTypes.func.isRequired,
 };

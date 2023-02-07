@@ -20,7 +20,7 @@ const App = () => {
   return (
     <>
       <CssBaseline />
-      <div className="background" style={backgroundStyle}>
+      <div className="background" style={{}}>
         <Navbar onLoginClick={handleLogin} userLoggedIn={userLoggedIn} />
         <MainContainer />
       </div>

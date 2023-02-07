@@ -1,3 +1,9 @@
+.background {
+  height: 100vh;
+  background: center no-repeat url("./assets/testBackground.png");
+  background-size: cover;
+}
+
 .content-word:hover {
   background-color: #0c0c0c
 }
@@ -23,3 +29,15 @@
   }
 }
 
+.notification-container {
+  animation: fadeCycle 1s infinite;
+}
+
+@keyframes fadeCycle {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}

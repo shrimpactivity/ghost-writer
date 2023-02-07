@@ -4,9 +4,9 @@ const theme = {
   dark: "#303030",
   medium: "#50775e",
   light: "#80fcbc",
-  complement: "#ff6090",
-  complementDark: "#c42b59",
   lightest: "#F8F8F8",
+  complement: "#fc719b",
+  complementDark: "#2b1018",
 }
 
 export default theme;

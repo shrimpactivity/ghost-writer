@@ -4,7 +4,7 @@ import suggestionService from '../services/suggestionService';
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
   const [suggestionTimeout, setSuggestionTimeout] = useState(null);
-  const TIMEOUT_LENGTH = 300;
+  const TIMEOUT_LENGTH = 250;
 
   /**
    * Returns true if a suggestion request to the server is queued up.
@@ -40,6 +40,7 @@ const useSuggestion = () => {
       suggestionMachine
     );
     setSuggestion(suggestion);
+    console.log('Suggestion found from local source: ', suggestion);
   };
 
   const queueSuggestionUpdateFromServer = (
@@ -50,9 +51,9 @@ const useSuggestion = () => {
     timeoutLength = TIMEOUT_LENGTH
   ) => {
     if (!isSuggestionTimedOut()) {
-      console.log('No suggestion request queued, updating immediately.');
       suggestionService.retrieveSuggestionFromServer(tokens, accuracy, amount, source).then((result) => {
         setSuggestion(result);
+        console.log('Suggestion found for server source: ', result);
       });
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
@@ -61,12 +62,11 @@ const useSuggestion = () => {
       return;
     }
 
-    console.log('Suggestion already queued, setting new request to be queued.');
-
     clearTimeout(suggestionTimeout);
     const timeoutID = setTimeout(() => {
       suggestionService.retrieveSuggestionFromServer(tokens, accuracy, amount, source).then((result) => {
         setSuggestion(result);
+        console.log('Suggestion found for server source: ', result);
       });
       setSuggestionTimeout(null);
     }, timeoutLength);

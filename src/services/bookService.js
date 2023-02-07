@@ -3,8 +3,11 @@ import axios from 'axios';
 const baseURL = '/api/books';
 
 const getFormattedBook = (id) => {
-  const bookURL = `${baseURL}/${id}`;
-  const request = axios.get(bookURL);
+  // const bookURL = `${baseURL}/${id}`;
+  // const request = axios.get(bookURL);
+  return new Promise((resolve, reject) => {
+    resolve('this is some example text');
+  })
   return request
     .then((response) => response.data)
     .catch((error) => console.log('Error retrieving book: ', error));

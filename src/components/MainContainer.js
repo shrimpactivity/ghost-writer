@@ -9,15 +9,16 @@ import suggestionService from '../services/suggestionService';
 import useSources from '../hooks/useSources';
 import useComposition from '../hooks/useComposition';
 import useSuggestion from '../hooks/useSuggestion';
+import useNotification from '../hooks/useNotification';
+import useOptions from '../hooks/useOptions';
 
+import NotificationContainer from './NotificationContainer';
 import SourceSelector from './SourceSelector';
 import CompositionContainer from './Composition/CompositionContainer';
 import MenuContainer from './Menu/MenuContainer';
-import OptionsMenu from './Menu/ButtonMenu';
-import GutenbergSearch from './Menu/GutenbergSearch';
-import useOptions from '../hooks/useOptions';
 
-import { Container, Box, Button } from '@mui/material';
+
+import { Container } from '@mui/material';
 
 /*
 Initial sources:
@@ -55,6 +56,7 @@ const MainContainer = () => {
   const firstRender = useRef(true);
   const [showSearch, setShowSearch] = useState(false);
 
+  const notification = useNotification('Loading Ghosts...');
   const options = useOptions();
   const composition = useComposition();
   const {
@@ -75,7 +77,6 @@ const MainContainer = () => {
 
   const updateSuggestionHook = () => {
     if (!firstRender.current) {
-      console.groupCollapsed('Suggestion hooked...');
       const suggestionParams = [
         composition.getAllTokens(),
         options.suggestionAccuracy,
@@ -83,21 +84,11 @@ const MainContainer = () => {
       ];
 
       if (currentSource.isLocal) {
-        console.log(
-          'Updating suggestion from local source: ',
-          currentSource.title
-        );
         const machine = getSuggestionMachine(currentSource.id);
         updateLocalSuggestion(...suggestionParams, machine);
       } else {
-        console.log(
-          'Queuing a suggestion update from server source: ',
-          currentSource.title
-        );
         queueSuggestionUpdateFromServer(...suggestionParams, currentSource);
       }
-
-      console.groupEnd();
     }
 
     firstRender.current = false;
@@ -110,6 +101,12 @@ const MainContainer = () => {
     options.suggestionAccuracy,
     options.suggestionCount,
   ]);
+
+  useEffect(() => {
+    if (!sources.isLoading) {
+      notification.update("Ghosts loaded, ready to write!")
+    }
+  }, [sources.isLoading])
 
   const getPredecessorTokens = (wordIndex) => {
     const predecessorWords = composition.content.slice(0, wordIndex);
@@ -173,6 +170,7 @@ const MainContainer = () => {
       confirm('Are you sure you want to delete your composition?')
     ) {
       composition.clearContent();
+      notification.update('Composition deleted');
     }
   };
 
@@ -195,11 +193,15 @@ const MainContainer = () => {
       author: result.authors,
     };
 
+    notification.update(`Extracting ${newSource.title} from Project Gutenberg...`, Infinity);
+
     return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
-      console.log(formattedBook);
-      const tokens = formattedBook.split(' ');
+      notification.update(`Sublimating Ghost in alphabetic vestibule...`, Infinity)
       console.log('Creating SuggestionMachine for new local source.');
+      const tokens = formattedBook.split(' ');
       const newMachine = new SuggestionMachine(tokens);
+      console.log('New Machine created no problem...')
+      notification.update('Cleaning ectoplasm...');
       addLocalSourceAndMachine(newSource, newMachine);
     });
   };
@@ -213,6 +215,7 @@ const MainContainer = () => {
   return (
     <>
       <Container maxWidth="sm">
+        <NotificationContainer text={notification.text}/>
         <SourceSelector
           value={currentSource.id}
           onChange={handleSourceSelection}
