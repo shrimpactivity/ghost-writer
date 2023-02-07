@@ -12,12 +12,12 @@ import useSuggestion from '../hooks/useSuggestion';
 
 import SourceSelector from './SourceSelector';
 import CompositionContainer from './Composition/CompositionContainer';
-import OptionsMenu from './OptionsMenu';
-import GutenbergSearch from './GutenbergSearch';
+import MenuContainer from './Menu/MenuContainer';
+import OptionsMenu from './Menu/OptionsMenu';
+import GutenbergSearch from './Menu/GutenbergSearch';
 import useOptions from '../hooks/useOptions';
 
 import { Container, Box, Button } from '@mui/material';
-
 
 /*
 Initial sources:
@@ -213,34 +213,33 @@ const MainContainer = () => {
   return (
     <>
       <Container maxWidth="sm">
-        <Box mt="50px">
-          <SourceSelector
-            value={currentSource.id}
-            onChange={handleSourceSelection}
-            sources={sources}
-          />
-        </Box>
-        <Box mt="20px">
-            <CompositionContainer
-              composition={composition}
-              suggestion={suggestion}
-              options={options}
-              onProposalChange={handleProposalChange}
-              onProposalSubmit={handleProposalSubmit}
-              onContentClick={handleContentClick}
-              onDeleteLastWord={handleDeleteLastWord}
-              onDeleteComposition={handleDeleteComposition}
-            />
-            <OptionsMenu options={options} />
-            <Button onClick={() => setShowSearch(!showSearch)}>
-              {showSearch ? 'Hide Search Bar' : 'Search Bar'}
-            </Button>
-            {showSearch && (
-              <GutenbergSearch onResultClick={handleSearchResultClick} />
-            )}
-        </Box>
+        <SourceSelector
+          value={currentSource.id}
+          onChange={handleSourceSelection}
+          sources={sources}
+        />
 
-        {/* TODO: <Footer/> */}
+        <CompositionContainer
+          composition={composition}
+          suggestion={suggestion}
+          options={options}
+          onProposalChange={handleProposalChange}
+          onProposalSubmit={handleProposalSubmit}
+          onContentClick={handleContentClick}
+          onDeleteLastWord={handleDeleteLastWord}
+          onDeleteComposition={handleDeleteComposition}
+        />
+
+        <MenuContainer 
+          options={options}
+          handleOpenSearch={() => setShowSearch(!showSearch)}
+          showSearchModal={showSearch}
+          onSearchResultClick={handleSearchResultClick}
+        /> 
+        <OptionsMenu options={options} />
+        {showSearch && (
+          <GutenbergSearch onResultClick={handleSearchResultClick} />
+        )}
       </Container>
     </>
   );

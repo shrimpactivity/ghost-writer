@@ -4,9 +4,7 @@ import SuggestionPreview from './SuggestionPreview';
 import {
   formatWordArrayIntoSentence,
   removeExtraWhitespace,
-  capitalize, endsInTerminalPunctuation
 } from '../../utils/text';
-import theme from '../../config/colorPalette';
 import ProposalItem from './ProposalItem';
 import ContentItems from './ContentItems';
 
@@ -46,9 +44,10 @@ const CompositionWords = ({
 };
 
 CompositionWords.propTypes = {
-  composition: PropTypes.object,
-  suggestion: PropTypes.string,
-  onContentClick: PropTypes.func,
+  composition: PropTypes.object.isRequired,
+  suggestion: PropTypes.string.isRequired,
+  onContentClick: PropTypes.func.isRequired,
+  options: PropTypes.object.isRequired
 };
 
 export default CompositionWords;

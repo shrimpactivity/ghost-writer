@@ -11,6 +11,7 @@ const containerStyle = {
   flexDirection: "column",
   minHeight: '40vh',
   padding: '10px',
+  marginTop: '20px',
   backgroundColor: theme.dark,
   borderRadius: '10px',
   border: '2px solid',
