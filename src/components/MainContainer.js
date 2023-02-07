@@ -13,7 +13,7 @@ import useSuggestion from '../hooks/useSuggestion';
 import SourceSelector from './SourceSelector';
 import CompositionContainer from './Composition/CompositionContainer';
 import MenuContainer from './Menu/MenuContainer';
-import OptionsMenu from './Menu/OptionsMenu';
+import OptionsMenu from './Menu/ButtonMenu';
 import GutenbergSearch from './Menu/GutenbergSearch';
 import useOptions from '../hooks/useOptions';
 
@@ -236,10 +236,7 @@ const MainContainer = () => {
           showSearchModal={showSearch}
           onSearchResultClick={handleSearchResultClick}
         /> 
-        <OptionsMenu options={options} />
-        {showSearch && (
-          <GutenbergSearch onResultClick={handleSearchResultClick} />
-        )}
+        
       </Container>
     </>
   );

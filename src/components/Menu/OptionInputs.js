@@ -12,13 +12,13 @@ const OptionInputs = ({ options }) => {
       />
       <NumberInput
         {...options.suggestionCountField}
-        min="0"
+        min="1"
         max="5"
         label={'Number of words ghostwriter suggests:'}
       />
       <NumberInput
         {...options.suggestionAccuracyField}
-        min="0"
+        min="1"
         max="3"
         label={'Suggestion accuracy:'}
       />
@@ -26,20 +26,8 @@ const OptionInputs = ({ options }) => {
   );
 };
 
-const OptionsMenu = ({ options }) => {
-  const [hidden, setHidden] = React.useState(true);
-  return (
-    <div>
-      <button onClick={() => setHidden(!hidden)}>
-        {hidden ? 'Options' : 'Hide Options'}
-      </button>
-      {!hidden && <OptionInputs options={options}/>}
-    </div>
-  );
+OptionInputs.propTypes = {
+    options: PropTypes.object.isRequired,
 };
 
-OptionsMenu.propTypes = {
-  options: PropTypes.object,
-};
-
-export default OptionsMenu;
+export default OptionInputs
