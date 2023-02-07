@@ -18,7 +18,7 @@ const OptionInputs = ({ options }) => {
       />
       <NumberInput
         {...options.suggestionAccuracyField}
-        min="1"
+        min="0"
         max="3"
         label={'Suggestion accuracy:'}
       />
