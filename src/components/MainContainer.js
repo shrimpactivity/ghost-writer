@@ -196,13 +196,12 @@ const MainContainer = () => {
     notification.update(`Extracting ${newSource.title} from Project Gutenberg...`, Infinity);
 
     return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
-      notification.update(`Sublimating Ghost in alphabetic vestibule...`, Infinity)
+      notification.update(`Sublimating Ghost in alphabetic vestibule...`, Infinity);
       console.log('Creating SuggestionMachine for new local source.');
       const tokens = formattedBook.split(' ');
       const newMachine = new SuggestionMachine(tokens);
-      console.log('New Machine created no problem...')
-      notification.update('Cleaning ectoplasm...');
       addLocalSourceAndMachine(newSource, newMachine);
+      notification.update('New Ghost materialized!')
     });
   };
 
