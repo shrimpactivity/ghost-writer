@@ -27,10 +27,12 @@ const formatContentWord = (word, index, composition) => {
   return word;
 };
 
-const ContentItems = ({ composition, onContentClick }) => {
+const ContentItems = ({ composition, onContentClick, highlightGhostWords }) => {
   if (composition.content.length === 0) {
     return;
   }
+
+   
 
   return (
     <>
@@ -39,7 +41,7 @@ const ContentItems = ({ composition, onContentClick }) => {
           <span
             className="content-word"
             key={index} // It's an antipattern, congrats if you've found this
-            style={getWordStyle(word, composition.ghostWords[index])}
+            style={getWordStyle(word, highlightGhostWords && composition.ghostWords[index])}
             onClick={() => onContentClick(index)}
           >
             {formatContentWord(word, index, composition)}
@@ -52,7 +54,8 @@ const ContentItems = ({ composition, onContentClick }) => {
 
 ContentItems.propTypes = {
   composition: PropTypes.object.isRequired,
-  onContentClick: PropTypes.func.isRequired
+  onContentClick: PropTypes.func.isRequired,
+  highlightGhostWords: PropTypes.bool,
 }
 
 export default ContentItems;

@@ -15,7 +15,7 @@ const ProposalItem = ({ formattedProposal }) => {
   if (formattedProposal.length === 0) {
     return;
   }
-  return <span style={proposalStyle}>{formattedProposal}</span>;
+  return <span className="proposal-word" style={proposalStyle}>{formattedProposal}</span>;
 };
 
 ProposalItem.propTypes = {

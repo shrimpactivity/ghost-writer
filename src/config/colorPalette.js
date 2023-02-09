@@ -7,6 +7,7 @@ const theme = {
   lightest: "#F8F8F8",
   complement: "#fc719b",
   complementDark: "#2b1018",
+  alternate: "#27dbdb"
 }
 
 export default theme;

@@ -8,7 +8,11 @@ const OptionInputs = ({ options }) => {
     <>
       <CheckboxInput
         {...options.showSuggestionPreviewField}
-        label={"Show preview of ghostwriter's suggestion:"}
+        label={"Show preview of Ghost's suggestion:"}
+      />
+      <CheckboxInput
+        {...options.highlightGhostWordsField}
+        label={"Highlight Ghost's contributions:"}
       />
       <NumberInput
         {...options.suggestionCountField}

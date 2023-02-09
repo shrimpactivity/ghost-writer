@@ -2,23 +2,29 @@ import { useEffect, useState } from 'react';
 import sourcesService from '../services/sourcesService';
 
 const useSources = () => {
-  const [currentSource, setCurrentSource] = useState({});
   const [sources, setSources] = useState([]);
   const [suggestionMachines, setSuggestionMachines] = useState([]);
+  const [current, setCurrent] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  const defaultSource = {
-    title: 'Complete Works',
-    author: 'William Shakespeare',
-  };
+  const getInitialSource = (processedSources) => {
+    const defaultSource = {
+      title: 'Complete Works',
+      author: 'William Shakespeare',
+    };
 
-  const findDefaultSourceIn = (items) => {
-    items.find((source) => {
+    let result = processedSources.find((source) => {
       return (
         source.title === defaultSource.title &&
         source.author === defaultSource.author
       );
     });
+
+    if (!result) {
+      return processedSources[0];
+    }
+
+    return result;
   };
 
   const initializeSourcesHook = () => {
@@ -30,10 +36,9 @@ const useSources = () => {
           ...s,
           isLocal: false,
         }));
-        let current = findDefaultSourceIn(processedSources);
-        current = current ? current : processedSources[0];
+        const current = getInitialSource(processedSources);
         setSources(processedSources);
-        setCurrentSource(current);
+        setCurrent(current);
         setIsLoading(false);
         console.log('Server sources found: ', processedSources);
         console.log('Current source set to: ', current.title);
@@ -49,7 +54,7 @@ const useSources = () => {
     const processedSource = { ...source, isLocal: true };
     sourceSuggestionMachine.id = source.id;
     setSources(sources.concat(processedSource));
-    setCurrentSource(processedSource);
+    setCurrent(processedSource);
     setSuggestionMachines(suggestionMachines.concat(sourceSuggestionMachine));
     console.log('Added local source and machine: ', processedSource.title);
   };
@@ -58,8 +63,8 @@ const useSources = () => {
     const filteredSources = sources.filter((s) => s.id !== sourceID);
     setSources(filteredSources);
     console.log('Removed local source and machine: ', sources.find(s => s.id === sourceID).title);
-    if (currentSource.id === sourceID) {
-      setCurrentSource(filteredSources[0]);
+    if (current.id === sourceID) {
+      setCurrent(filteredSources[0]);
     }
     setSuggestionMachines(suggestionMachines.filter((s) => s.id !== sourceID));
   };
@@ -69,10 +74,10 @@ const useSources = () => {
   };
 
   return {
-    sources,
-    currentSource,
+    all: sources,
+    current: current,
     isLoading,
-    setCurrentSource,
+    setCurrent,
     addLocalSourceAndMachine,
     removeLocalSourceAndMachine,
     getSuggestionMachine,

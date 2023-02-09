@@ -15,6 +15,8 @@ const suggestionStyle = {
 
 const SuggestionPreview = ({ suggestion, formattedContent, formattedProposal }) => {
 
+  if (!suggestion) suggestion = '';
+
   let predecessorToSuggestion = formattedContent + formattedProposal;
   let formattedSuggestion = suggestion;
   if (!predecessorToSuggestion || endsInTerminalPunctuation(predecessorToSuggestion)) {

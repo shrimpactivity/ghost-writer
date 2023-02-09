@@ -20,12 +20,12 @@ const CompositionFormButtons = ({ onCopyComposition, onDeleteLastWord, onDeleteC
       <ThemeProvider theme={buttonTheme}>
         <Tooltip title="Add to composition">
           <IconButton aria-label="add to composition" variant="contained" type="submit">
-            <AddBoxIcon sx={{ color: theme.light }} fontSize="medium" />
+            <AddBoxIcon sx={{ color: theme.alternate }} fontSize="medium" />
           </IconButton>
         </Tooltip>
         <Tooltip title="Copy composition">
           <IconButton aria-label="copy composition" variant="contained" onClick={onCopyComposition}>
-            <ContentCopyIcon sx={{ color: theme.light }} fontSize="medium" />
+            <ContentCopyIcon sx={{ color: theme.alternate }} fontSize="medium" />
           </IconButton>
         </Tooltip>
         <Tooltip title="Delete last word">

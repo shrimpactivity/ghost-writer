@@ -30,6 +30,7 @@ const CompositionWords = ({
       <ContentItems
         composition={composition}
         onContentClick={onContentClick}
+        highlightGhostWords={options.highlightGhostWords}
       />
       <ProposalItem formattedProposal={formattedProposal} />
       {options.showSuggestionPreview && (
@@ -45,7 +46,7 @@ const CompositionWords = ({
 
 CompositionWords.propTypes = {
   composition: PropTypes.object.isRequired,
-  suggestion: PropTypes.string.isRequired,
+  suggestion: PropTypes.string,
   onContentClick: PropTypes.func.isRequired,
   options: PropTypes.object.isRequired
 };

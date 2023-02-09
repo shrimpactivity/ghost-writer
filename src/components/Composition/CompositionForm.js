@@ -18,7 +18,10 @@ const inputStyle = {
   borderColor: theme.light,
   backgroundColor: theme.darker,
   color: theme.lightest,
-  minWidth: "300px"
+  minWidth: "300px",
+  marginRight: "10px",
+  height: "30px",
+  fontSize: "14px"
 };
 
 const CompositionForm = ({

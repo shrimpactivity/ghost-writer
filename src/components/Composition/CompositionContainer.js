@@ -62,7 +62,7 @@ const CompositionContainer = ({
 
 CompositionContainer.propTypes = {
   composition: PropTypes.object.isRequired,
-  suggestion: PropTypes.string.isRequired,
+  suggestion: PropTypes.string,
   options: PropTypes.object.isRequired,
   onProposalChange: PropTypes.func.isRequired,
   onProposalSubmit: PropTypes.func.isRequired,

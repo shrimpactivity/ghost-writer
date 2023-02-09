@@ -67,6 +67,7 @@ const useComposition = () => {
     ghostWords,
     setProposal,
     setContent,
+    setGhostWords,
     clearContent,
     deleteLastWordOfContent,
     updateContentAtIndex,

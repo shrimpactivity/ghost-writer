@@ -1,32 +1,59 @@
 import { useState } from 'react';
+import storage from '../services/localStorage';
 
 const useOptions = () => {
-  const [suggestionAccuracy, setSuggestionAccuracy] = useState(3);
-  const [suggestionCount, setSuggestionCount] = useState(1);
-  const [showSuggestionPreview, setShowSuggestionPreview] = useState(true);
+
+  const [options, setOptions] = useState({
+    suggestionAccuracy: 3,
+    suggestionCount: 1,
+    showSuggestionPreview: true,
+    highlightGhostWords: true,
+    weightedSuggestions: true,
+  })
 
   const onSuggestionAccuracyChange = (event) => {
-    console.log('Suggestion accuracy changed to: ', event.target.value);
-    setSuggestionAccuracy(Number(event.target.value));
+    const newValue = Number(event.target.value);
+    console.log('Suggestion accuracy changed to: ', newValue);
+    setOptions({...options, suggestionAccuracy: newValue});
   }
 
   const onSuggestionCountChange = (event) => {
-    console.log('Number of suggested words changed to: ', event.target.value);
-    setSuggestionCount(Number(event.target.value));
+    const newValue = Number(event.target.value);
+    console.log('Number of suggested words changed to: ', newValue);
+    setOptions({...options, suggestionCount: newValue});
   }
 
   const onShowSuggestionPreviewChange = () => {
-    console.log('Suggestion preview changed to: ', !showSuggestionPreview);
-    setShowSuggestionPreview(!showSuggestionPreview);
+    const newValue = !options.showSuggestionPreview;
+    console.log('Suggestion preview changed to: ', newValue);
+    setOptions({...options, showSuggestionPreview: newValue});
+  }
+
+  const onHighlightGhostWordsChange = () => {
+    const newValue = !options.highlightGhostWords;
+    console.log('Highlight ghost words changed to: ', newValue);
+    setOptions({...options, highlightGhostWords: newValue});
+  }
+
+  const onWeightedSuggestionsChange = () => {
+    const newValue = !options.weightedSuggestions;
+    console.log('Weighted suggestions changed to: ', newValue);
+    setOptions({...options, weightedSuggestions: newValue});
   }
 
   return {
-    suggestionAccuracy,
-    suggestionCount,
-    showSuggestionPreview,
-    suggestionAccuracyField: {value: suggestionAccuracy, onChange: onSuggestionAccuracyChange},
-    suggestionCountField: {value: suggestionCount, onChange: onSuggestionCountChange},
-    showSuggestionPreviewField: {value: showSuggestionPreview, onChange: onShowSuggestionPreviewChange},
+    values: options,
+    setOptions,
+    suggestionAccuracy: options.suggestionAccuracy,
+    suggestionCount: options.suggestionCount,
+    showSuggestionPreview: options.showSuggestionPreview,
+    highlightGhostWords: options.highlightGhostWords,
+    weightedSuggestions: options.weightedSuggestions, 
+    suggestionAccuracyField: {value: options.suggestionAccuracy, onChange: onSuggestionAccuracyChange},
+    suggestionCountField: {value: options.suggestionCount, onChange: onSuggestionCountChange},
+    showSuggestionPreviewField: {value: options.showSuggestionPreview, onChange: onShowSuggestionPreviewChange},
+    highlightGhostWordsField: {value: options.highlightGhostWords, onChange: onHighlightGhostWordsChange},
+    WeightedSuggestionsField: {value: options.weightedSuggestions, onChange: onWeightedSuggestionsChange}
   };
 };
 

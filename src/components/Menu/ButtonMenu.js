@@ -8,8 +8,8 @@ import theme from '../../config/colorPalette';
 const buttonContainerStyle = {
   display: 'flex',
   flexDirection: 'row',
-  flexWrap: "wrap",
-  justifyContent: "space-between",
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
   alignItems: 'center',
 };
 
@@ -27,11 +27,11 @@ const searchButtonTheme = createTheme({
       main: theme.light,
     },
   },
-})
+});
 
 const buttonStyle = {
   margin: '10px',
-}
+};
 
 const ButtonMenu = ({
   showOptions,
@@ -40,28 +40,34 @@ const ButtonMenu = ({
 }) => {
   return (
     <div style={buttonContainerStyle}>
-      
-        <div style={{justifySelf: "flex-start"}}>
+      <div style={{ justifySelf: 'flex-start' }}>
         <ThemeProvider theme={searchButtonTheme}>
-        <Button sx={buttonStyle} variant="outlined" onClick={onSearchButtonClick}>
-          Find New Ghosts
-        </Button>
+          <Button
+            sx={buttonStyle}
+            variant="outlined"
+            onClick={onSearchButtonClick}
+          >
+            Find New Ghosts
+          </Button>
         </ThemeProvider>
-        </div>
-        
-       
-        
-          <div style={{justifySelf: "flex-end"}}>
-          <ThemeProvider theme={buttonTheme}>
-              <Button sx={{...buttonStyle, width: "130px"}} variant="outlined" onClick={onOptionButtonClick}>
-              {showOptions ? 'Hide Options' : 'Options'}
-            </Button>
-            <Button sx={buttonStyle} variant="outlined">Save</Button>
-            <Button sx={buttonStyle} variant="outlined">Load</Button>
-            </ThemeProvider>
-          </div>
-        
-      
+      </div>
+      <div style={{ justifySelf: 'flex-end' }}>
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            sx={{ ...buttonStyle, width: '140px' }}
+            variant="outlined"
+            onClick={onOptionButtonClick}
+          >
+            {showOptions ? 'Hide Options' : 'Options'}
+          </Button>
+          <Button sx={buttonStyle} variant="outlined">
+            Save
+          </Button>
+          <Button sx={buttonStyle} variant="outlined">
+            Load
+          </Button>
+        </ThemeProvider>
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import SuggestionMachine from 'suggestion-machine';
 import parseIntoTokens from '../utils/parseIntoTokens';
 import bookService from '../services/bookService';
 import suggestionService from '../services/suggestionService';
+import storage from '../services/localStorage';
 
 import useSources from '../hooks/useSources';
 import useComposition from '../hooks/useComposition';
@@ -13,7 +14,7 @@ import useNotification from '../hooks/useNotification';
 import useOptions from '../hooks/useOptions';
 
 import NotificationContainer from './NotificationContainer';
-import SourceSelector from './SourceSelector';
+import SourcePicker from './SourcePicker/SourcePicker';
 import CompositionContainer from './Composition/CompositionContainer';
 import MenuContainer from './Menu/MenuContainer';
 
@@ -53,20 +54,13 @@ Footer
 */
 
 const MainContainer = () => {
-  const firstRender = useRef(true);
+  const [showWelcome, setShowWelcome] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
 
   const notification = useNotification('Loading Ghosts...');
   const options = useOptions();
   const composition = useComposition();
-  const {
-    sources,
-    currentSource,
-    setCurrentSource,
-    addLocalSourceAndMachine,
-    removeLocalSourceAndMachine,
-    getSuggestionMachine,
-  } = useSources();
+  const sources = useSources();
   const {
     suggestion,
     updateLocalSuggestion,
@@ -75,29 +69,52 @@ const MainContainer = () => {
     timeSuggestionOut,
   } = useSuggestion();
 
-  const updateSuggestionHook = () => {
-    if (!firstRender.current) {
+  const initFromLocalStorage = () => {
+    if (!storage.isSet('userHasVisited')) {
+      setShowWelcome(true);
+      storage.set('userHasVisited', 'true');
+    }
+    if (storage.isSet('composition')) {
+      const initialComposition = JSON.parse(storage.get('composition'))
+      composition.setContent(initialComposition.content);
+      composition.setGhostWords(initialComposition.ghostWords);
+    }
+  }
+
+  useEffect(initFromLocalStorage, []);
+
+  const updateCompositionLocalStorage = () => {
+    const serializedComposition = JSON.stringify({
+      content: composition.content,
+      ghostWords: composition.ghostWords
+    });
+    storage.set('composition', serializedComposition);
+    console.log('Updated composition in local storage.');
+  }
+
+  useEffect(updateCompositionLocalStorage, [composition.content]);
+
+  const updateSuggestion = () => {
+    if (sources.current.id) {
       const suggestionParams = [
         composition.getAllTokens(),
         options.suggestionAccuracy,
         options.suggestionCount,
       ];
 
-      if (currentSource.isLocal) {
-        const machine = getSuggestionMachine(currentSource.id);
+      if (sources.current.isLocal) {
+        const machine = sources.getSuggestionMachine(sources.current.id);
         updateLocalSuggestion(...suggestionParams, machine);
       } else {
-        queueSuggestionUpdateFromServer(...suggestionParams, currentSource);
+        queueSuggestionUpdateFromServer(...suggestionParams, sources.current);
       }
     }
-
-    firstRender.current = false;
   };
 
-  useEffect(updateSuggestionHook, [
+  useEffect(updateSuggestion, [
     composition.content,
     composition.proposal,
-    currentSource,
+    sources.current,
     options.suggestionAccuracy,
     options.suggestionCount,
   ]);
@@ -129,10 +146,10 @@ const MainContainer = () => {
 
   const handleContentClick = (wordIndex) => {
     console.groupCollapsed('Word clicked at index ', wordIndex);
-    if (currentSource.isLocal) {
+    if (sources.current.isLocal) {
       const suggestion = suggestionService.getSuggestionFromMachine(
         ...getWordClickSuggestionParams(wordIndex),
-        getSuggestionMachine(currentSource.id)
+        sources.getSuggestionMachine(sources.current.id)
       );
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
@@ -141,7 +158,7 @@ const MainContainer = () => {
       suggestionService
         .retrieveSuggestionFromServer(
           ...getWordClickSuggestionParams(wordIndex),
-          currentSource
+          sources.current
         )
         .then((suggestion) => {
           console.log('Server suggestion found: ', suggestion);
@@ -180,15 +197,15 @@ const MainContainer = () => {
 
   const handleSourceSelection = (event) => {
     const selectedID = event.target.value;
-    const selectedSource = sources.find((s) => s.id === selectedID);
+    const selectedSource = sources.all.find((s) => s.id === selectedID);
     console.log('Source selected: ', selectedSource.title);
-    setCurrentSource(selectedSource);
+    sources.setCurrent(selectedSource);
   };
 
   const createSourceAndMachine = (result) => {
-    const gutenbergID = result.id;
     const newSource = {
       id: uuidv4(),
+      gutenbergID: result.id,
       title: result.title,
       author: result.authors,
     };
@@ -196,11 +213,10 @@ const MainContainer = () => {
     notification.update(`Extracting ${newSource.title} from Project Gutenberg...`, Infinity);
 
     return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
-      notification.update(`Sublimating Ghost in alphabetic vestibule...`, Infinity);
-      console.log('Creating SuggestionMachine for new local source.');
+      notification.update(`Sublimating Ghost in alphabetic vat...`, Infinity);
       const tokens = formattedBook.split(' ');
       const newMachine = new SuggestionMachine(tokens);
-      addLocalSourceAndMachine(newSource, newMachine);
+      sources.addLocalSourceAndMachine(newSource, newMachine);
       notification.update('New Ghost materialized!')
     });
   };
@@ -215,10 +231,10 @@ const MainContainer = () => {
     <>
       <Container maxWidth="sm">
         <NotificationContainer text={notification.text}/>
-        <SourceSelector
-          value={currentSource.id}
+        <SourcePicker
+          value={sources.current.id}
           onChange={handleSourceSelection}
-          sources={sources}
+          allSources={sources.all}
         />
 
         <CompositionContainer
