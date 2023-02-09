@@ -118,6 +118,7 @@ const MainContainer = () => {
     sources.current,
     options.suggestionAccuracy,
     options.suggestionCount,
+    options.weightedSuggestions
   ]);
 
   useEffect(() => {
@@ -213,7 +214,7 @@ const MainContainer = () => {
 
     notification.update(`Extracting ${newSource.title} from Project Gutenberg...`, Infinity);
 
-    return bookService.getFormattedBook(gutenbergID).then((formattedBook) => {
+    return bookService.getFormattedBook(newSource.gutenbergID).then((formattedBook) => {
       notification.update(`Sublimating Ghost in alphabetic vat...`, Infinity);
       const tokens = formattedBook.split(' ');
       const newMachine = new SuggestionMachine(tokens);

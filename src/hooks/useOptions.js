@@ -8,7 +8,7 @@ const useOptions = () => {
     suggestionCount: 1,
     showSuggestionPreview: true,
     highlightGhostWords: true,
-    weightedSuggestions: true,
+    weightedSuggestions: false,
   })
 
   const onSuggestionAccuracyChange = (event) => {
@@ -53,7 +53,7 @@ const useOptions = () => {
     suggestionCountField: {value: options.suggestionCount, onChange: onSuggestionCountChange},
     showSuggestionPreviewField: {value: options.showSuggestionPreview, onChange: onShowSuggestionPreviewChange},
     highlightGhostWordsField: {value: options.highlightGhostWords, onChange: onHighlightGhostWordsChange},
-    WeightedSuggestionsField: {value: options.weightedSuggestions, onChange: onWeightedSuggestionsChange}
+    weightedSuggestionsField: {value: options.weightedSuggestions, onChange: onWeightedSuggestionsChange}
   };
 };
 

@@ -4,6 +4,9 @@ import random from '../utils/random';
 const baseURL = '/api/books';
 
 const getFormattedBook = (id) => {
+  return new Promise((resolve, reject) => {
+    resolve('a a a a a a a a a b');
+  })
   let book = ''
   let letters = ['a', 'b', 'c', 'd', 'e'];
   for (let i = 0; i < 60000; i += 1) {
