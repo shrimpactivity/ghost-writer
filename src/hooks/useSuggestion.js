@@ -16,45 +16,38 @@ const useSuggestion = () => {
 
   /**
    * Times out server requests for suggestions so that any following request is made TIMEOUT_LENGTH
-   * milliseconds in the future. 
+   * milliseconds in the future.
    */
-  const timeSuggestionOut = () => {
+  const timeSuggestionOut = (duration = TIMEOUT_LENGTH) => {
     if (!isSuggestionTimedOut) {
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
-      }, TIMEOUT_LENGTH);
+      }, duration);
       setSuggestionTimeout(timeoutID);
     }
-  }
+  };
 
-  const updateLocalSuggestion = (
-    tokens,
-    accuracy,
-    amount,
-    suggestionMachine
-  ) => {
+  const updateLocalSuggestion = (suggestionMachine, params) => {
     const suggestion = suggestionService.getSuggestionFromMachine(
-      tokens,
-      accuracy,
-      amount,
-      suggestionMachine
+      suggestionMachine,
+      ...params
     );
     setSuggestion(suggestion);
     console.log('Suggestion found from local source: ', suggestion);
   };
 
   const queueSuggestionUpdateFromServer = (
-    tokens,
-    accuracy,
-    amount,
     source,
+    params,
     timeoutLength = TIMEOUT_LENGTH
   ) => {
     if (!isSuggestionTimedOut()) {
-      suggestionService.retrieveSuggestionFromServer(tokens, accuracy, amount, source).then((result) => {
-        setSuggestion(result);
-        console.log('Suggestion found for server source: ', result);
-      });
+      suggestionService
+        .retrieveSuggestionFromServer(source, ...params)
+        .then((result) => {
+          setSuggestion(result);
+          console.log('Suggestion found for server source: ', result);
+        });
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
       }, timeoutLength);
@@ -64,10 +57,12 @@ const useSuggestion = () => {
 
     clearTimeout(suggestionTimeout);
     const timeoutID = setTimeout(() => {
-      suggestionService.retrieveSuggestionFromServer(tokens, accuracy, amount, source).then((result) => {
-        setSuggestion(result);
-        console.log('Suggestion found for server source: ', result);
-      });
+      suggestionService
+        .retrieveSuggestionFromServer(source, ...params)
+        .then((result) => {
+          setSuggestion(result);
+          console.log('Suggestion found for server source: ', result);
+        });
       setSuggestionTimeout(null);
     }, timeoutLength);
     setSuggestionTimeout(timeoutID);

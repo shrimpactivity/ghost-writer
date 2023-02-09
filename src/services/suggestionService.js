@@ -2,10 +2,11 @@ import axios from 'axios';
 const baseURL = '/api/suggest';
 
 const getSuggestionFromMachine = (
+  suggestionMachine,
   tokens,
   accuracy,
   amount,
-  suggestionMachine
+  weighted
 ) => {
   const relevantTokens = accuracy > 0 ? tokens.slice(-1 * accuracy) : [];
   console.log(
@@ -17,14 +18,15 @@ const getSuggestionFromMachine = (
     const sequence = suggestionMachine.suggestSequenceFor(
       relevantTokens,
       amount,
-      accuracy
+      accuracy,
+      weighted
     );
     sequence.forEach((word) => (result += word + ' '));
     console.log('Suggestion found: ', result.trim());
     return result.trim();
   }
 
-  const result = suggestionMachine.suggestFor(relevantTokens);
+  const result = suggestionMachine.suggestFor(relevantTokens, weighted);
 
   return result;
 };
@@ -41,19 +43,23 @@ const formatTokensIntoQuery = (tokens) => {
   return query;
 };
 
-const getRequestURL = (tokens, accuracy, amount, source) => {
+const getRelevantTokens = (tokens, accuracy) => {
+  let result = tokens.slice(-1 * accuracy);
+  if (accuracy === 0) {
+    result = [];
+  }
+  return result;
+}
+
+const getRequestURL = (source, tokens, accuracy, amount, weighted) => {
   return `${baseURL}/${
     source.id
-  }/?n=${amount}&a=${accuracy}&${formatTokensIntoQuery(tokens)}`;
+  }/?${formatTokensIntoQuery(tokens)}&n=${amount}&a=${accuracy}&w=${weighted}`;
 };
 
-const retrieveSuggestionFromServer = (tokens, accuracy, amount, source) => {
-  let relevantTokens = tokens.slice(-1 * accuracy);
-  if (accuracy === 0) {
-    relevantTokens = [];
-  }
-
-  let url = getRequestURL(relevantTokens, accuracy, amount, source);
+const retrieveSuggestionFromServer = (source, tokens, accuracy, amount, weighted) => {
+  const relevantTokens = getRelevantTokens(tokens, accuracy);
+  const url = getRequestURL(source, relevantTokens, accuracy, amount, weighted);
   const request = axios.get(url);
   return request
     .then((response) => response.data)

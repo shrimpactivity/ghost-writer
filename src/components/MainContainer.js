@@ -100,13 +100,14 @@ const MainContainer = () => {
         composition.getAllTokens(),
         options.suggestionAccuracy,
         options.suggestionCount,
+        options.weightedSuggestions,
       ];
 
       if (sources.current.isLocal) {
         const machine = sources.getSuggestionMachine(sources.current.id);
-        updateLocalSuggestion(...suggestionParams, machine);
+        updateLocalSuggestion(machine, suggestionParams);
       } else {
-        queueSuggestionUpdateFromServer(...suggestionParams, sources.current);
+        queueSuggestionUpdateFromServer(sources.current, suggestionParams);
       }
     }
   };
