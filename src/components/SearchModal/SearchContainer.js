@@ -4,7 +4,7 @@ import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 import catalogService from '../../services/catalogService';
 
-const GutenbergSearch = ({ onResultClick }) => {
+const SearchContainer = ({ onSearchResultClick }) => {
   const [results, setResults] = useState([]);
 
   const handleBookSearchSubmit = (event) => {
@@ -21,15 +21,15 @@ const GutenbergSearch = ({ onResultClick }) => {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor: "blue", maxHeight: "100%", overflow: "auto"}}>
       <SearchForm onSubmit={handleBookSearchSubmit} />
-      <SearchResults results={results} onResultClick={onResultClick} />
+      <SearchResults results={results} onResultClick={onSearchResultClick} />
     </div>
   );
 };
 
-GutenbergSearch.propTypes = {
-  onResultClick: PropTypes.func,
+SearchContainer.propTypes = {
+  onSearchResultClick: PropTypes.func.isRequired,
 };
 
-export default GutenbergSearch;
+export default SearchContainer;

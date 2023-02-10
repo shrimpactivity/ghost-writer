@@ -8,6 +8,7 @@ const backgroundStyle = {
   width: '100%',
   minHeight: '100vh',
   backgroundColor: theme.darkest,
+  paddingBottom: '50px',
 };
 
 const App = () => {

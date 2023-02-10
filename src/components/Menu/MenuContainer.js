@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ButtonMenu from './ButtonMenu';
-import GutenbergSearch from './GutenbergSearch';
+import GutenbergSearch from '../SearchModal/GutenbergSearch';
 import OptionInputs from './OptionInputs';
 import theme from '../../config/colorPalette';
 
@@ -19,27 +19,20 @@ const containerStyle = {
 
 const MenuContainer = ({
   options,
-  handleOpenSearch,
-  showSearchModal,
-  onSearchResultClick,
+  onOpenSearchClick,
 }) => {
   const [showOptions, setShowOptions] = useState(false);
   return (
     <div style={containerStyle}>
-      <ButtonMenu showOptions={showOptions} onOptionButtonClick={() => setShowOptions(!showOptions)} onSearchButtonClick={handleOpenSearch} />
+      <ButtonMenu showOptions={showOptions} onOptionButtonClick={() => setShowOptions(!showOptions)} onSearchButtonClick={onOpenSearchClick} />
       {showOptions && <OptionInputs options={options}/>}
-      {showSearchModal && (
-        <GutenbergSearch onResultClick={onSearchResultClick} />
-      )}
     </div>
   );
 };
 
 MenuContainer.propTypes = {
   options: PropTypes.object.isRequired,
-  handleOpenSearch: PropTypes.func.isRequired,
-  showSearchModal: PropTypes.bool.isRequired,
-  onSearchResultClick: PropTypes.func.isRequired,
+  onOpenSearchClick: PropTypes.func.isRequired,
 };
 
 export default MenuContainer;

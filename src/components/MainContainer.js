@@ -13,11 +13,11 @@ import useSuggestion from '../hooks/useSuggestion';
 import useNotification from '../hooks/useNotification';
 import useOptions from '../hooks/useOptions';
 
-import NotificationContainer from './NotificationContainer';
+import Notification from './Notification';
 import SourcePicker from './SourcePicker/SourcePicker';
 import CompositionContainer from './Composition/CompositionContainer';
 import MenuContainer from './Menu/MenuContainer';
-
+import SearchModal from './SearchModal/SearchModal';
 
 import { Container } from '@mui/material';
 
@@ -69,22 +69,22 @@ const MainContainer = () => {
       storage.set('userHasVisited', 'true');
     }
     if (storage.isSet('composition')) {
-      const initialComposition = JSON.parse(storage.get('composition'))
+      const initialComposition = JSON.parse(storage.get('composition'));
       composition.setContent(initialComposition.content);
       composition.setGhostWords(initialComposition.ghostWords);
     }
-  }
+  };
 
   useEffect(initFromLocalStorage, []);
 
   const updateCompositionLocalStorage = () => {
     const serializedComposition = JSON.stringify({
       content: composition.content,
-      ghostWords: composition.ghostWords
+      ghostWords: composition.ghostWords,
     });
     storage.set('composition', serializedComposition);
     console.log('Updated composition in local storage.');
-  }
+  };
 
   useEffect(updateCompositionLocalStorage, [composition.content]);
 
@@ -112,14 +112,14 @@ const MainContainer = () => {
     sources.current,
     options.suggestionAccuracy,
     options.suggestionCount,
-    options.weightedSuggestions
+    options.weightedSuggestions,
   ]);
 
   useEffect(() => {
     if (!sources.isLoading) {
-      notification.update("Ghosts loaded, ready to write!")
+      notification.update('Ghosts loaded, ready to write!');
     }
-  }, [sources.isLoading])
+  }, [sources.isLoading]);
 
   const getPredecessorTokens = (wordIndex) => {
     const predecessorWords = composition.content.slice(0, wordIndex);
@@ -138,7 +138,7 @@ const MainContainer = () => {
       amount: 1,
       weighted: options.weightedSuggestions,
       exclude: composition.content[wordIndex],
-    }
+    };
     return suggestionParams;
   };
 
@@ -147,7 +147,7 @@ const MainContainer = () => {
     if (sources.current.isLocal) {
       const suggestion = suggestionService.getSuggestionFromMachine(
         sources.getSuggestionMachine(sources.current.id),
-        getWordClickSuggestionParams(wordIndex),
+        getWordClickSuggestionParams(wordIndex)
       );
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
@@ -156,7 +156,7 @@ const MainContainer = () => {
       suggestionService
         .retrieveSuggestionFromServer(
           sources.current,
-          getWordClickSuggestionParams(wordIndex),
+          getWordClickSuggestionParams(wordIndex)
         )
         .then((suggestion) => {
           console.log('Server suggestion found: ', suggestion);
@@ -208,15 +208,20 @@ const MainContainer = () => {
       author: result.authors,
     };
 
-    notification.update(`Extracting ${newSource.title} from Project Gutenberg...`, Infinity);
+    notification.update(
+      `Extracting ${newSource.title} from Project Gutenberg...`,
+      Infinity
+    );
 
-    return bookService.getFormattedBook(newSource.gutenbergID).then((formattedBook) => {
-      notification.update(`Sublimating Ghost in alphabetic vat...`, Infinity);
-      const tokens = formattedBook.split(' ');
-      const newMachine = new SuggestionMachine(tokens);
-      sources.addLocalSourceAndMachine(newSource, newMachine);
-      notification.update('New Ghost materialized!')
-    });
+    return bookService
+      .getFormattedBook(newSource.gutenbergID)
+      .then((formattedBook) => {
+        notification.update(`Sublimating Ghost in alphabetic vat...`, Infinity);
+        const tokens = formattedBook.split(' ');
+        const newMachine = new SuggestionMachine(tokens);
+        sources.addLocalSourceAndMachine(newSource, newMachine);
+        notification.update('New Ghost materialized!');
+      });
   };
 
   const handleSearchResultClick = (result) => {
@@ -225,16 +230,17 @@ const MainContainer = () => {
     setShowSearch(false);
   };
 
+  const handleSearchClose = () => setShowSearch(false);
+
   return (
     <>
       <Container maxWidth="sm">
-        <NotificationContainer text={notification.text}/>
+        <Notification text={notification.text} />
         <SourcePicker
           value={sources.current.id}
           onChange={handleSourceSelection}
           allSources={sources.all}
         />
-
         <CompositionContainer
           composition={composition}
           suggestion={suggestion.value}
@@ -245,14 +251,15 @@ const MainContainer = () => {
           onDeleteLastWord={handleDeleteLastWord}
           onDeleteComposition={handleDeleteComposition}
         />
-
-        <MenuContainer 
+        <MenuContainer
           options={options}
-          handleOpenSearch={() => setShowSearch(!showSearch)}
-          showSearchModal={showSearch}
+          onOpenSearchClick={() => setShowSearch(true)}
+        />
+        <SearchModal
+          open={showSearch}
+          onClose={handleSearchClose}
           onSearchResultClick={handleSearchResultClick}
-        /> 
-        
+        />
       </Container>
     </>
   );
