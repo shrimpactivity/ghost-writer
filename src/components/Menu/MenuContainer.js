@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ButtonMenu from './ButtonMenu';
-import GutenbergSearch from '../SearchModal/GutenbergSearch';
 import OptionInputs from './OptionInputs';
 import theme from '../../config/colorPalette';
 
