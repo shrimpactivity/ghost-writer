@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import calculateSuggestion from '../services/calculateSuggestion';
 import suggestionService from '../services/suggestionService';
 
 const useSuggestion = () => {
@@ -10,7 +11,7 @@ const useSuggestion = () => {
    * Returns true if a suggestion request to the server is queued up.
    * @returns {boolean}
    */
-  const isSuggestionTimedOut = () => {
+  const isTimedOut = () => {
     return suggestionTimeout !== null;
   };
 
@@ -18,7 +19,7 @@ const useSuggestion = () => {
    * Times out server requests for suggestions so that any following request is made TIMEOUT_LENGTH
    * milliseconds in the future.
    */
-  const timeSuggestionOut = (duration = TIMEOUT_LENGTH) => {
+  const timeOutUpdates = (duration = TIMEOUT_LENGTH) => {
     if (!isSuggestionTimedOut) {
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
@@ -27,23 +28,28 @@ const useSuggestion = () => {
     }
   };
 
-  const updateLocalSuggestion = (suggestionMachine, params) => {
-    const suggestion = suggestionService.getSuggestionFromMachine(
+  /**
+   *
+   * @param {Object} suggestionMachine
+   * @param {*[]} params The tokens, accuracy, amount, weighted, and exclude parameters.
+   */
+  const updateFromLocalMachine = (suggestionMachine, suggestionParams) => {
+    const suggestion = calculateSuggestion(
       suggestionMachine,
-      ...params
+      suggestionParams
     );
     setSuggestion(suggestion);
     console.log('Suggestion found from local source: ', suggestion);
   };
 
-  const queueSuggestionUpdateFromServer = (
+  const queueUpdateFromServer = (
     source,
-    params,
+    suggestionParams,
     timeoutLength = TIMEOUT_LENGTH
   ) => {
-    if (!isSuggestionTimedOut()) {
+    if (!isTimedOut()) {
       suggestionService
-        .retrieveSuggestionFromServer(source, ...params)
+        .retrieveSuggestionFromServer(source, suggestionParams)
         .then((result) => {
           setSuggestion(result);
           console.log('Suggestion found for server source: ', result);
@@ -58,7 +64,7 @@ const useSuggestion = () => {
     clearTimeout(suggestionTimeout);
     const timeoutID = setTimeout(() => {
       suggestionService
-        .retrieveSuggestionFromServer(source, ...params)
+        .retrieveSuggestionFromServer(source, suggestionParams)
         .then((result) => {
           setSuggestion(result);
           console.log('Suggestion found for server source: ', result);
@@ -69,11 +75,11 @@ const useSuggestion = () => {
   };
 
   return {
-    suggestion,
-    updateLocalSuggestion,
-    queueSuggestionUpdateFromServer,
-    isSuggestionTimedOut,
-    timeSuggestionOut,
+    value: suggestion,
+    updateFromLocalMachine,
+    queueUpdateFromServer,
+    isTimedOut,
+    timeOutUpdates,
   };
 };
 

@@ -1,36 +1,6 @@
 import axios from 'axios';
 const baseURL = '/api/suggest';
 
-const getSuggestionFromMachine = (
-  suggestionMachine,
-  tokens,
-  accuracy,
-  amount,
-  weighted
-) => {
-  const relevantTokens = accuracy > 0 ? tokens.slice(-1 * accuracy) : [];
-  console.log(
-    'Retrieving suggestion using local source with tokens: ',
-    relevantTokens
-  );
-  if (amount > 1) {
-    let result = '';
-    const sequence = suggestionMachine.suggestSequenceFor(
-      relevantTokens,
-      amount,
-      accuracy,
-      weighted
-    );
-    sequence.forEach((word) => (result += word + ' '));
-    console.log('Suggestion found: ', result.trim());
-    return result.trim();
-  }
-
-  const result = suggestionMachine.suggestFor(relevantTokens, weighted);
-
-  return result;
-};
-
 const formatTokensIntoQuery = (tokens) => {
   let query = '';
   if (tokens.length) {
@@ -44,22 +14,28 @@ const formatTokensIntoQuery = (tokens) => {
 };
 
 const getRelevantTokens = (tokens, accuracy) => {
-  let result = tokens.slice(-1 * accuracy);
-  if (accuracy === 0) {
-    result = [];
-  }
+  let result = accuracy > 0 ? tokens.slice(-1 * accuracy) : [];
   return result;
-}
-
-const getRequestURL = (source, tokens, accuracy, amount, weighted) => {
-  return `${baseURL}/${
-    source.id
-  }/?${formatTokensIntoQuery(tokens)}&n=${amount}&a=${accuracy}&w=${weighted}`;
 };
 
-const retrieveSuggestionFromServer = (source, tokens, accuracy, amount, weighted) => {
+const getRequestURL = (source, suggestionParams) => {
+  const { tokens, accuracy, amount, weighted, exclude } = suggestionParams;
+  let result = `${baseURL}/${source.id}/?`;
+  result += formatTokensIntoQuery(tokens);
+  if (amount) result += `&n=${amount}`;
+  if (accuracy) result += `&a=${accuracy}`;
+  if (weighted) result += `&w=${weighted}`;
+  if (exclude) result += `&x=${exclude}`;
+  return result;
+};
+
+const retrieveSuggestionFromServer = (source, suggestionParams) => {
+  const { tokens, accuracy } = suggestionParams;
   const relevantTokens = getRelevantTokens(tokens, accuracy);
-  const url = getRequestURL(source, relevantTokens, accuracy, amount, weighted);
+  const url = getRequestURL(source, {
+    ...suggestionParams,
+    tokens: relevantTokens,
+  });
   const request = axios.get(url);
   return request
     .then((response) => response.data)
@@ -71,4 +47,4 @@ const retrieveSuggestionFromServer = (source, tokens, accuracy, amount, weighted
     });
 };
 
-export default { getSuggestionFromMachine, retrieveSuggestionFromServer };
+export default { retrieveSuggestionFromServer };

@@ -61,13 +61,7 @@ const MainContainer = () => {
   const options = useOptions();
   const composition = useComposition();
   const sources = useSources();
-  const {
-    suggestion,
-    updateLocalSuggestion,
-    queueSuggestionUpdateFromServer,
-    isSuggestionTimedOut,
-    timeSuggestionOut,
-  } = useSuggestion();
+  const suggestion = useSuggestion();
 
   const initFromLocalStorage = () => {
     if (!storage.isSet('userHasVisited')) {
@@ -96,18 +90,18 @@ const MainContainer = () => {
 
   const updateSuggestion = () => {
     if (sources.current.id) {
-      const suggestionParams = [
-        composition.getAllTokens(),
-        options.suggestionAccuracy,
-        options.suggestionCount,
-        options.weightedSuggestions,
-      ];
+      const suggestionParams = {
+        tokens: composition.getAllTokens(),
+        accuracy: options.suggestionAccuracy,
+        amount: options.suggestionCount,
+        weighted: options.weightedSuggestions,
+      };
 
       if (sources.current.isLocal) {
         const machine = sources.getSuggestionMachine(sources.current.id);
-        updateLocalSuggestion(machine, suggestionParams);
+        suggestion.updateFromLocalMachine(machine, suggestionParams);
       } else {
-        queueSuggestionUpdateFromServer(sources.current, suggestionParams);
+        suggestion.queueUpdateFromServer(sources.current, suggestionParams);
       }
     }
   };
@@ -138,11 +132,13 @@ const MainContainer = () => {
   };
 
   const getWordClickSuggestionParams = (wordIndex) => {
-    const suggestionParams = [
-      getPredecessorTokens(wordIndex),
-      options.suggestionAccuracy,
-      1,
-    ];
+    const suggestionParams = {
+      tokens: getPredecessorTokens(wordIndex),
+      accuracy: options.suggestionAccuracy,
+      amount: 1,
+      weighted: options.weightedSuggestions,
+      exclude: composition.content[wordIndex],
+    }
     return suggestionParams;
   };
 
@@ -150,24 +146,24 @@ const MainContainer = () => {
     console.groupCollapsed('Word clicked at index ', wordIndex);
     if (sources.current.isLocal) {
       const suggestion = suggestionService.getSuggestionFromMachine(
-        ...getWordClickSuggestionParams(wordIndex),
-        sources.getSuggestionMachine(sources.current.id)
+        sources.getSuggestionMachine(sources.current.id),
+        getWordClickSuggestionParams(wordIndex),
       );
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
-    } else if (!isSuggestionTimedOut()) {
+    } else if (!suggestion.isTimedOut()) {
       suggestionService
         .retrieveSuggestionFromServer(
-          ...getWordClickSuggestionParams(wordIndex),
-          sources.current
+          sources.current,
+          getWordClickSuggestionParams(wordIndex),
         )
         .then((suggestion) => {
           console.log('Server suggestion found: ', suggestion);
           console.groupEnd();
           composition.updateContentAtIndex(wordIndex, suggestion);
         });
-      timeSuggestionOut();
+      suggestion.timeOutUpdates();
     }
   };
 
@@ -178,8 +174,8 @@ const MainContainer = () => {
 
   const handleProposalSubmit = (event) => {
     event.preventDefault();
-    if (!isSuggestionTimedOut()) {
-      composition.addProposalAndSuggestion(suggestion);
+    if (!suggestion.isTimedOut()) {
+      composition.addProposalAndSuggestion(suggestion.value);
     }
   };
 
@@ -241,7 +237,7 @@ const MainContainer = () => {
 
         <CompositionContainer
           composition={composition}
-          suggestion={suggestion}
+          suggestion={suggestion.value}
           options={options}
           onProposalChange={handleProposalChange}
           onProposalSubmit={handleProposalSubmit}

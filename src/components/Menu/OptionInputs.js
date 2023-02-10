@@ -26,10 +26,10 @@ const OptionInputs = ({ options }) => {
         {...options.highlightGhostWordsField}
         label={"Highlight Ghost's contributions:"}
       />
-      <CheckboxInput
+      {/* FIXME:<CheckboxInput
         {...options.weightedSuggestionsField}
         label={"Weigh suggestions by frequency: "}
-      />
+      /> */}
     </>
   );
 };
