@@ -1,7 +1,7 @@
 .background {
-  height: 100vh;
   background: center no-repeat url("./assets/testBackground.png");
   background-size: cover;
+  background-attachment: fixed;
 }
 
 .content-word:hover {

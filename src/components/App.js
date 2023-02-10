@@ -5,7 +5,7 @@ import { CssBaseline } from '@mui/material';
 import theme from '../config/colorPalette';
 
 const backgroundStyle = {
-  width: '100vw',
+  width: '100%',
   minHeight: '100vh',
   backgroundColor: theme.darkest,
 };
@@ -20,7 +20,7 @@ const App = () => {
   return (
     <>
       <CssBaseline />
-      <div className="background" style={{}}>
+      <div className="background" style={backgroundStyle}>
         <Navbar onLoginClick={handleLogin} userLoggedIn={userLoggedIn} />
         <MainContainer />
       </div>
