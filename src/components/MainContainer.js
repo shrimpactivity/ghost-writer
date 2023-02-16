@@ -6,6 +6,7 @@ import parseIntoTokens from '../utils/parseIntoTokens';
 import bookService from '../services/bookService';
 import suggestionService from '../services/suggestionService';
 import storage from '../services/localStorage';
+import calculateSuggestion from '../services/calculateSuggestion';
 
 import useSources from '../hooks/useSources';
 import useComposition from '../hooks/useComposition';
@@ -38,8 +39,13 @@ idk at least like 20-30 options?
 
 /*
 TODO:
+- Fix bug with exclude param for clicking words with local source
+- finish styling search modal and result
 - Only allow up to 3 local sources
-- Add composition to local storage. 
+- Add delete button to current local sources
+- Find platform to host app
+- Add firebase authentication
+- Firestore for user compositions
 
 inebriated
 experimental
@@ -145,10 +151,8 @@ const MainContainer = () => {
   const handleContentClick = (wordIndex) => {
     console.groupCollapsed('Word clicked at index ', wordIndex);
     if (sources.current.isLocal) {
-      const suggestion = suggestionService.getSuggestionFromMachine(
-        sources.getSuggestionMachine(sources.current.id),
-        getWordClickSuggestionParams(wordIndex)
-      );
+      const machine = sources.getSuggestionMachine(sources.current.id);
+      const suggestion = calculateSuggestion(machine, getWordClickSuggestionParams(wordIndex));
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
@@ -219,6 +223,7 @@ const MainContainer = () => {
         notification.update(`Sublimating Ghost in alphabetic vat...`, Infinity);
         const tokens = formattedBook.split(' ');
         const newMachine = new SuggestionMachine(tokens);
+        console.log('Machine created: ', newMachine);
         sources.addLocalSourceAndMachine(newSource, newMachine);
         notification.update('New Ghost materialized!');
       });
@@ -244,6 +249,7 @@ const MainContainer = () => {
         <CompositionContainer
           composition={composition}
           suggestion={suggestion.value}
+          isSuggestionLoading={suggestion.isTimedOut()}
           options={options}
           onProposalChange={handleProposalChange}
           onProposalSubmit={handleProposalSubmit}

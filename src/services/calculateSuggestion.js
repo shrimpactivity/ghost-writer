@@ -16,6 +16,13 @@ const calculateSuggestionSequence = (machine, params) => {
 
 const calculateSuggestionExcluding = (machine, params) => {
   const possibleSuggestions = machine.getAllSuggestionsFor(params.tokens);
+
+  if (params.accuracy === 0) {
+    return possibleSuggestions[
+      Math.floor(possibleSuggestions.length * Math.random())
+    ];
+  }
+
   const filteredSuggestions = possibleSuggestions.filter(
     (word) => word !== params.exclude
   );
@@ -27,7 +34,7 @@ const calculateSuggestionExcluding = (machine, params) => {
   }
 
   params.accuracy -= 1;
-  return calculateSuggestion(params, machine);
+  return calculateSuggestion(machine, params);
 };
 
 const filterRelevantTokens = (params) => {

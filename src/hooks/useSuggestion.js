@@ -20,7 +20,7 @@ const useSuggestion = () => {
    * milliseconds in the future.
    */
   const timeOutUpdates = (duration = TIMEOUT_LENGTH) => {
-    if (!isSuggestionTimedOut) {
+    if (!isTimedOut) {
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
       }, duration);

@@ -13,7 +13,7 @@ const suggestionStyle = {
   whiteSpace: "pre"
 };
 
-const SuggestionPreview = ({ suggestion, formattedContent, formattedProposal }) => {
+const SuggestionPreview = ({ suggestion, isSuggestionLoading, formattedContent, formattedProposal }) => {
 
   if (!suggestion) suggestion = '';
 
@@ -21,6 +21,10 @@ const SuggestionPreview = ({ suggestion, formattedContent, formattedProposal }) 
   let formattedSuggestion = suggestion;
   if (!predecessorToSuggestion || endsInTerminalPunctuation(predecessorToSuggestion)) {
     formattedSuggestion = capitalize(suggestion);
+  }
+
+  if (isSuggestionLoading) {
+    formattedSuggestion = '...';
   }
 
   return (

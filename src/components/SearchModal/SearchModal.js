@@ -8,6 +8,7 @@ const modalStyle = {
   position: 'absolute',
   top: '140px',
   left: '50%',
+  minHeight: '20%',
   maxHeight: "80%",
   transform: 'translateX(-50%)',
   backgroundColor: theme.dark,

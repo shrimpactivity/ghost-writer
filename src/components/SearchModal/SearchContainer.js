@@ -4,6 +4,12 @@ import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 import catalogService from '../../services/catalogService';
 
+const containerStyle = {
+  width: '100%',
+  maxHeight: '100%',
+  overflow: 'auto',
+};
+
 const SearchContainer = ({ onSearchResultClick }) => {
   const [results, setResults] = useState([]);
 
@@ -21,7 +27,7 @@ const SearchContainer = ({ onSearchResultClick }) => {
   };
 
   return (
-    <div style={{backgroundColor: "blue", maxHeight: "100%", overflow: "auto"}}>
+    <div style={containerStyle}>
       <SearchForm onSubmit={handleBookSearchSubmit} />
       <SearchResults results={results} onResultClick={onSearchResultClick} />
     </div>

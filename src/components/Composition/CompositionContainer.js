@@ -22,6 +22,7 @@ const containerStyle = {
 const CompositionContainer = ({
   composition,
   suggestion,
+  isSuggestionLoading,
   options,
   onProposalChange,
   onProposalSubmit,
@@ -51,6 +52,7 @@ const CompositionContainer = ({
         <CompositionWords
           composition={composition}
           suggestion={suggestion}
+          isSuggestionLoading={isSuggestionLoading}
           onContentClick={onContentClick}
           options={options}
         />
@@ -63,6 +65,7 @@ const CompositionContainer = ({
 CompositionContainer.propTypes = {
   composition: PropTypes.object.isRequired,
   suggestion: PropTypes.string,
+  isSuggestionLoading: PropTypes.bool,
   options: PropTypes.object.isRequired,
   onProposalChange: PropTypes.func.isRequired,
   onProposalSubmit: PropTypes.func.isRequired,

@@ -50,13 +50,13 @@ const useSources = () => {
 
   useEffect(initializeSourcesHook, []);
 
-  const addLocalSourceAndMachine = (source, sourceSuggestionMachine) => {
+  const addLocalSourceAndMachine = (source, machine) => {
     const processedSource = { ...source, isLocal: true };
-    sourceSuggestionMachine.id = source.id;
+    machine.id = source.id;
     setSources(sources.concat(processedSource));
     setCurrent(processedSource);
-    setSuggestionMachines(suggestionMachines.concat(sourceSuggestionMachine));
-    console.log('Added local source and machine: ', processedSource.title);
+    setSuggestionMachines(suggestionMachines.concat(machine));
+    console.log('Added local source and machine: ', processedSource.title, machine);
   };
 
   const removeLocalSourceAndMachine = (sourceID) => {
@@ -77,6 +77,7 @@ const useSources = () => {
     all: sources,
     current: current,
     isLoading,
+    suggestionMachines,
     setCurrent,
     addLocalSourceAndMachine,
     removeLocalSourceAndMachine,

@@ -19,6 +19,7 @@ const containerStyle = {
 const CompositionWords = ({
   composition,
   suggestion,
+  isSuggestionLoading,
   onContentClick,
   options
 }) => {
@@ -36,6 +37,7 @@ const CompositionWords = ({
       {options.showSuggestionPreview && (
         <SuggestionPreview
           suggestion={suggestion}
+          isSuggestionLoading={isSuggestionLoading}
           formattedContent={formattedContent}
           formattedProposal={formattedProposal}
         />
