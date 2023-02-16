@@ -56,7 +56,7 @@ const useSources = () => {
     setSources(sources.concat(processedSource));
     setCurrent(processedSource);
     setSuggestionMachines(suggestionMachines.concat(machine));
-    console.log('Added local source and machine: ', processedSource.title, machine);
+    console.log('Added local source and machine: ', processedSource.title);
   };
 
   const removeLocalSourceAndMachine = (sourceID) => {

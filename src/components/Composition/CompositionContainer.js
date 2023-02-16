@@ -10,7 +10,7 @@ import { formatWordArrayIntoSentence } from '../../utils/text';
 const containerStyle = {
   display: "flex",
   flexDirection: "column",
-  minHeight: '40vh',
+  minHeight: '35vh',
   padding: '10px',
   marginTop: '20px',
   backgroundColor: theme.dark,

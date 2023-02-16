@@ -6,7 +6,6 @@ import catalogService from '../../services/catalogService';
 
 const containerStyle = {
   width: '100%',
-  maxHeight: '100%',
   overflow: 'auto',
 };
 

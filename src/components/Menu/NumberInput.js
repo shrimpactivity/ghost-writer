@@ -1,20 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import theme from '../../config/colorPalette';
+
+const containerStyle = {
+  padding: '5px'
+}
+
+const inputStyle = {
+  display: 'inline-block',
+  backgroundColor: theme.light,
+  color: theme.darkest,
+  fontSize: '18px',
+  width: '3em',
+  float: 'right'
+};
+
+const labelStyle = {
+  fontSize: '18px',
+  marginRight: '10px'
+};
 
 const NumberInput = ({ value, onChange, min, max, label }) => {
   return (
-    <div>
-      <label>
-        {label}
-        <input
-          type="number"
-          value={value}
-          onChange={onChange}
-          min={min}
-          max={max}
-          step="1"
-        />
-      </label>
+    <div style={containerStyle}>
+      <span style={labelStyle}>{label}</span>
+      <input
+        style={inputStyle}
+        type="number"
+        value={value}
+        onChange={onChange}
+        min={min}
+        max={max}
+        step="1"
+      />
     </div>
   );
 };
@@ -24,7 +42,6 @@ NumberInput.propTypes = {
   onChange: PropTypes.func,
   min: PropTypes.string,
   max: PropTypes.string,
-  label: PropTypes.string,
 };
 
 export default NumberInput;

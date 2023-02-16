@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Result from './Result';
 
 const SearchResults = ({ results, onResultClick }) => {
   return (
-    <div>
+    <div style={{overflow: 'auto', maxHeight: '600px'}}>
       {results.map((result, index) => {
-        const resultText = result.title + ' - ' + result.authors;
         return (
-          <div key={index} onClick={() => onResultClick(results[index])}>
-            {resultText}
+          <div key={result.id} style={{display: 'flex'}} onClick={() => onResultClick(result)}>
+            <Result value={result} />
           </div>
         );
       })}

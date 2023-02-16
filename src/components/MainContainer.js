@@ -18,7 +18,7 @@ import Notification from './Notification';
 import SourcePicker from './SourcePicker/SourcePicker';
 import CompositionContainer from './Composition/CompositionContainer';
 import MenuContainer from './Menu/MenuContainer';
-import SearchModal from './SearchModal/SearchModal';
+import SearchModal from './Search/SearchModal';
 
 import { Container } from '@mui/material';
 
@@ -39,7 +39,6 @@ idk at least like 20-30 options?
 
 /*
 TODO:
-- Fix bug with exclude param for clicking words with local source
 - finish styling search modal and result
 - Only allow up to 3 local sources
 - Add delete button to current local sources
@@ -223,7 +222,6 @@ const MainContainer = () => {
         notification.update(`Sublimating Ghost in alphabetic vat...`, Infinity);
         const tokens = formattedBook.split(' ');
         const newMachine = new SuggestionMachine(tokens);
-        console.log('Machine created: ', newMachine);
         sources.addLocalSourceAndMachine(newSource, newMachine);
         notification.update('New Ghost materialized!');
       });
@@ -236,6 +234,11 @@ const MainContainer = () => {
   };
 
   const handleSearchClose = () => setShowSearch(false);
+
+  const handleDeleteLocalSource = (sourceID) => {
+    notification.update(`Deleted downloaded ghost`);
+    sources.removeLocalSourceAndMachine(sourceID);
+  }
 
   return (
     <>
@@ -265,6 +268,8 @@ const MainContainer = () => {
           open={showSearch}
           onClose={handleSearchClose}
           onSearchResultClick={handleSearchResultClick}
+          localSources={sources.all.filter(s => s.isLocal)}
+          onClickDelete={handleDeleteLocalSource}
         />
       </Container>
     </>
