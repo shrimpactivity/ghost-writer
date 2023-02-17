@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AgricultureIcon from '@mui/icons-material/Agriculture';
 import theme from '../config/colorPalette';
 
 const appBarStyle = {
@@ -49,11 +48,11 @@ const Navbar = ({ onLoginClick, userLoggedIn }) => {
           <Box display="flex" justifyContent="center" flexBasis="50%">
             <Box pr="15px">
               <Typography variant="h4" component="div">
-                GhostWriter
+                <span className='app-title'>GhostWriter</span>
               </Typography>
             </Box>
             <Box display="flex">
-              <AgricultureIcon fontSize="large" />
+              <img style={{width: '80px', height: '50px'}} src="logo.png" alt="ghostwriter icon" />
             </Box>
           </Box>
           <Box style={linkContainerStyle}>

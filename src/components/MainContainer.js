@@ -39,10 +39,10 @@ idk at least like 20-30 options?
 
 /*
 TODO:
-- finish styling search modal and result
-- Only allow up to 3 local sources
-- Add delete button to current local sources
+- Fix config to use different url in production
+- Get better fonts
 - Find platform to host app
+- add default sources to server
 - Add firebase authentication
 - Firestore for user compositions
 
@@ -51,16 +51,12 @@ experimental
 intelligible
 articulate
 
-Header
-Composition
-Options
-Save / Load / Delete
-Footer
+
 */
 
 const MainContainer = () => {
   const [showWelcome, setShowWelcome] = useState(false);
-  const [showSearch, setShowSearch] = useState(true);
+  const [showSearch, setShowSearch] = useState(false);
 
   const notification = useNotification('Loading Ghosts...');
   const options = useOptions();

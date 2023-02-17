@@ -1,5 +1,14 @@
+@font-face {
+  font-family: hustlers;
+  src: url("./assets/Hustlersroughdemo-6OM1.ttf") format("ttf");
+}
+
+.app-title {
+  font-family: 'hustlers', 'serif';
+}
+
 .background {
-  background: center no-repeat url("./assets/testBackground.png");
+  background: center no-repeat url("./assets/background.png");
   background-size: cover;
   background-attachment: fixed;
 }
