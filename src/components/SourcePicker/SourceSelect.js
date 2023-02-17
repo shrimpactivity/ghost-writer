@@ -27,9 +27,6 @@ const formatSourceName = (source) => {
   } else {
     result = `${source.author} \u2015 ${source.title}`;
   }
-  if (result.length > 60) {
-    result = result.slice(0, 60) + '...';
-  }
   return result;
 };
 

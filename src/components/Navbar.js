@@ -5,15 +5,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../config/colorPalette';
 
 const appBarStyle = {
-  backgroundColor: theme.dark,
+  backgroundColor: theme.darkest,
   color: theme.light,
-  borderBottom: 'solid 1px',
-  borderColor: theme.medium,
 };
 
 const titleContainerStyle = {
   display: 'flex',
   flexWrap: 'wrap',
+  flex: '1',
   width: '100vw',
   justifyContent: 'center',
   alignItems: 'center',
@@ -21,7 +20,7 @@ const titleContainerStyle = {
 
 const linkContainerStyle = {
   display: 'flex',
-  flexGrow: 1,
+  flex: '1',
   alignItems: 'center',
   justifyContent: 'center',
 };
@@ -36,7 +35,7 @@ const buttonTheme = createTheme({
 
 const linkButtonStyle = {
   borderRadius: '5px',
-  font: '15px',
+  fontSize: '16px',
   padding: '12px',
 };
 
@@ -46,13 +45,8 @@ const Navbar = ({ onLoginClick, userLoggedIn }) => {
       <Toolbar>
         <Box style={titleContainerStyle}>
           <Box display="flex" justifyContent="center" flexBasis="50%">
-            <Box pr="15px">
-              <Typography variant="h4" component="div">
-                <span className='app-title'>GhostWriter</span>
-              </Typography>
-            </Box>
-            <Box display="flex">
-              <img style={{width: '80px', height: '50px'}} src="logo.png" alt="ghostwriter icon" />
+            <Box display="flex" justifyContent={"center"}>
+              <img style={{width: '350px'}} src="logo.png" alt="ghostwriter icon" />
             </Box>
           </Box>
           <Box style={linkContainerStyle}>

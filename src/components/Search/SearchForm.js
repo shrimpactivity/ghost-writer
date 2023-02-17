@@ -34,13 +34,11 @@ const SearchForm = ({ onSubmit }) => {
           placeholder="Try title, author, or subject..."
           style={inputStyle}
         />
-        <Tooltip title="Search">
-          <ThemeProvider theme={buttonTheme}>
-            <Button type="submit">
-              Search
-            </Button>
-          </ThemeProvider>
-        </Tooltip>
+        <ThemeProvider theme={buttonTheme}>
+          <Tooltip title="Search">
+            <Button type="submit">Search</Button>
+          </Tooltip>
+        </ThemeProvider>
       </form>
     </div>
   );

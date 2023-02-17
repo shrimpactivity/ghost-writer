@@ -14,6 +14,7 @@ const titleStyle = {
   color: theme.light,
   fontSize: '22px',
   alignSelf: 'center',
+  paddingBottom: '10px'
 }
 
 const LocalSourcesList = ({ localSources, onClickDelete }) => {

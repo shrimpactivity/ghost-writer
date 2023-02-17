@@ -11,14 +11,16 @@ const containerStyle = {
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center'
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '20px',
 };
 
 const titleStyle = {
   color: theme.light,
   fontSize: '22px',
-  alignSelf: 'center',
-}
+  textAlign: 'center'
+};
 
 const SearchContainer = ({ onSearchResultClick }) => {
   const [results, setResults] = useState([]);
@@ -32,7 +34,7 @@ const SearchContainer = ({ onSearchResultClick }) => {
       catalogService.searchCatalog(query).then((results) => {
         setResults(results);
         if (results.length === 0) {
-          notification.update(`No results found for ${query}`)
+          notification.update(`No results found for ${query}`);
         }
       });
     } else {
@@ -43,9 +45,15 @@ const SearchContainer = ({ onSearchResultClick }) => {
   return (
     <div style={containerStyle}>
       <span style={titleStyle}>Find Authors on Project Gutenberg</span>
-      <SearchForm onSubmit={handleBookSearchSubmit} />
-      {notification.text && <Notification text={notification.text} />}
-      <SearchResults results={results} onResultClick={onSearchResultClick} />
+      <div>
+        <SearchForm onSubmit={handleBookSearchSubmit} />
+      </div>
+      <div>
+        {notification.text && <Notification text={notification.text} />}
+      </div>
+      <div>
+        <SearchResults results={results} onResultClick={onSearchResultClick} />
+      </div>
     </div>
   );
 };

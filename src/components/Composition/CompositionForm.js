@@ -38,7 +38,7 @@ const CompositionForm = ({
         <div>
           <input
             type="text"
-            placeholder="Start typing here"
+            placeholder="Begin typing here..."
             onChange={onProposalChange}
             value={proposal}
             spellCheck="true"

@@ -8,7 +8,6 @@ const suggestionStyle = {
   marginLeft: '5px',
   wordWrap: 'break-word',
   color: theme.light,
-  fontFamily: 'Georgia',
   borderRadius: '3px',
   whiteSpace: "pre"
 };

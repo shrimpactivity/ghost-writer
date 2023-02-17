@@ -14,6 +14,7 @@ const containerStyle = {
   flexWrap: 'wrap',
   wordWrap: 'break-word',
   padding: '1vw',
+  font: '18px Times New Roman'
 };
 
 const CompositionWords = ({

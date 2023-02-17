@@ -6,13 +6,13 @@ import LocalSourcesList from './LocalSourcesList';
 import theme from '../../config/colorPalette';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const modalStyle = {
+const modalContainerStyle = {
   position: 'absolute',
   top: '140px',
   left: '50%',
   minHeight: '20%',
   maxHeight: '80%',
-  width: '50%',
+  width: '60%',
   transform: 'translateX(-50%)',
   backgroundColor: theme.dark,
   border: '2px solid',
@@ -20,17 +20,10 @@ const modalStyle = {
   borderRadius: '10px',
   boxShadow: 24,
   color: theme.lightest,
-  overflow: 'auto',
-};
-
-const flexContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '20px',
   overflow: 'auto',
-  width: '100%',
-  height: '100%',
 };
 
 const buttonTheme = createTheme({
@@ -50,32 +43,28 @@ const SearchModal = ({
 }) => {
   return (
     <Modal open={open}>
-      <Container maxWidth="sm" style={modalStyle}>
-        <div style={flexContainerStyle}>
-          <div>
-            {localSources.length > 0 && (
+      <div style={modalContainerStyle}>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <div style={{flex: '1'}}>
+            <SearchContainer onSearchResultClick={onSearchResultClick} />
+          </div>
+          {localSources.length > 0 && (
+            <div style={{ borderLeft: '1px solid', borderColor: theme.medium, flex: '1' }}>
               <LocalSourcesList
                 localSources={localSources}
                 onClickDelete={onClickDelete}
               />
-            )}
-          </div>
-          <div>
-            <SearchContainer onSearchResultClick={onSearchResultClick} />
-          </div>
-          <div style={{ padding: '20px' }}>
-            <ThemeProvider theme={buttonTheme}>
-              <Button
-                sx={{ justifySelf: 'flex-end', marginBottom: '-40px' }}
-                variant="outlined"
-                onClick={onClose}
-              >
-                Close
-              </Button>
-            </ThemeProvider>
-          </div>
+            </div>
+          )}
         </div>
-      </Container>
+        <div>
+          <ThemeProvider theme={buttonTheme}>
+            <Button variant="outlined" onClick={onClose}>
+              Close
+            </Button>
+          </ThemeProvider>
+        </div>
+      </div>
     </Modal>
   );
 };

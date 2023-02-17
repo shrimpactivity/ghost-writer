@@ -6,7 +6,6 @@ import { beginsWithPunctuation } from '../../utils/text';
 const getProposalStyle = (proposal) => {
   return {
     marginLeft: beginsWithPunctuation(proposal) ? '0px' : '5px',
-    fontFamily: 'Georgia',
     borderRadius: '3px',
     color: colorPalette.complement,
     overflowWrap: 'break-word',

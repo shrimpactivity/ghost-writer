@@ -20,8 +20,8 @@ const textContainerStyle = {
   padding: "9px",
   color: theme.light,
   textAlign: 'center',
+  font: '20px Times New Roman',
   fontStyle: 'italic',
-  fontSize: '17px',
 };
 
 const SourcePicker = ({ value, onChange, allSources }) => {
@@ -30,7 +30,7 @@ const SourcePicker = ({ value, onChange, allSources }) => {
   return (
     <div style={containerStyle}>
       <div style={textContainerStyle}>You're writing with</div>
-      <div style={{ maxWidth: '350px' }}>
+      <div style={{ maxWidth: '340px' }}>
         <SourceSelect value={value} onChange={onChange} allSources={allSources} />
       </div>
     </div>

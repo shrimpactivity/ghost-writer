@@ -8,7 +8,6 @@ const getWordStyle = (word, isGhostWord) => {
     marginLeft: beginsWithPunctuation(word) ? '0px' : '5px',
     cursor: 'pointer',
     color: isGhostWord ? theme.light : theme.lightest,
-    fontFamily: 'Georgia',
     borderRadius: '3px',
     display: 'inline',
     overflowWrap: 'break-word',

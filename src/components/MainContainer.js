@@ -19,6 +19,7 @@ import SourcePicker from './SourcePicker/SourcePicker';
 import CompositionContainer from './Composition/CompositionContainer';
 import MenuContainer from './Menu/MenuContainer';
 import SearchModal from './Search/SearchModal';
+import Welcome from './Welcome';
 
 import { Container } from '@mui/material';
 
@@ -40,18 +41,10 @@ idk at least like 20-30 options?
 /*
 TODO:
 - Fix config to use different url in production
-- Get better fonts
 - Find platform to host app
 - add default sources to server
 - Add firebase authentication
 - Firestore for user compositions
-
-inebriated
-experimental
-intelligible
-articulate
-
-
 */
 
 const MainContainer = () => {
@@ -67,7 +60,6 @@ const MainContainer = () => {
   const initFromLocalStorage = () => {
     if (!storage.isSet('userHasVisited')) {
       setShowWelcome(true);
-      storage.set('userHasVisited', 'true');
     }
     if (storage.isSet('composition')) {
       const initialComposition = JSON.parse(storage.get('composition'));
@@ -239,37 +231,47 @@ const MainContainer = () => {
     sources.removeLocalSourceAndMachine(sourceID);
   };
 
+  const handleWelcomeClose = () => {
+    setShowWelcome(false);
+    storage.set('userHasVisited', 'true');
+  }
+
   return (
     <>
       <Container maxWidth="sm">
         <Notification text={notification.text} />
-        <SourcePicker
-          value={sources.current.id}
-          onChange={handleSourceSelection}
-          allSources={sources.all}
-        />
-        <CompositionContainer
-          composition={composition}
-          suggestion={suggestion.value}
-          isSuggestionLoading={suggestion.isTimedOut()}
-          options={options}
-          onProposalChange={handleProposalChange}
-          onProposalSubmit={handleProposalSubmit}
-          onContentClick={handleContentClick}
-          onDeleteLastWord={handleDeleteLastWord}
-          onDeleteComposition={handleDeleteComposition}
-        />
-        <MenuContainer
-          options={options}
-          onOpenSearchClick={() => setShowSearch(true)}
-        />
-        <SearchModal
-          open={showSearch}
-          onClose={handleSearchClose}
-          onSearchResultClick={handleSearchResultClick}
-          localSources={sources.all.filter((s) => s.isLocal)}
-          onClickDelete={handleDeleteLocalSource}
-        />
+        <div style={{display: showWelcome ? 'block' : 'none'}}>
+          <Welcome onCloseClick={handleWelcomeClose}/>
+        </div>
+        <div style={{display: showWelcome ? 'none' : 'block'}}>
+          <SourcePicker
+            value={sources.current.id}
+            onChange={handleSourceSelection}
+            allSources={sources.all}
+          />
+          <CompositionContainer
+            composition={composition}
+            suggestion={suggestion.value}
+            isSuggestionLoading={suggestion.isTimedOut()}
+            options={options}
+            onProposalChange={handleProposalChange}
+            onProposalSubmit={handleProposalSubmit}
+            onContentClick={handleContentClick}
+            onDeleteLastWord={handleDeleteLastWord}
+            onDeleteComposition={handleDeleteComposition}
+          />
+          <MenuContainer
+            options={options}
+            onOpenSearchClick={() => setShowSearch(true)}
+          />
+          <SearchModal
+            open={showSearch}
+            onClose={handleSearchClose}
+            onSearchResultClick={handleSearchResultClick}
+            localSources={sources.all.filter((s) => s.isLocal)}
+            onClickDelete={handleDeleteLocalSource}
+          />
+        </div>
       </Container>
     </>
   );

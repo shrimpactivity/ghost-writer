@@ -7,6 +7,10 @@
   font-family: 'hustlers', 'serif';
 }
 
+.flip-img-vertical {
+  transform: scaleX(-1);
+}
+
 .background {
   background: center no-repeat url("./assets/background.png");
   background-size: cover;
