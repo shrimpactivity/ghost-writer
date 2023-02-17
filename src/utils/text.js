@@ -10,8 +10,8 @@ const endsInTerminalPunctuation = (word) => {
   return /[!.?]+$/.test(word);
 };
 
-const beginsInTerminalPunctuation = (word) => {
-  return /^[!.?]+/.test(word);
+const beginsWithPunctuation = (word) => {
+  return /^[!.?;:\-,]+/.test(word);
 };
 
 const removeExtraWhitespace = (text) => {
@@ -44,7 +44,7 @@ const formatStringIntoSentence = (input) => {
 module.exports = {
   capitalize,
   endsInTerminalPunctuation,
-  beginsInTerminalPunctuation,
+  beginsWithPunctuation,
   removeExtraWhitespace,
   formatWordArrayIntoSentence,
   formatStringIntoSentence,

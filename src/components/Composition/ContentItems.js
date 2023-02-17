@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import theme from '../../config/colorPalette';
-import { capitalize, endsInTerminalPunctuation, beginsInTerminalPunctuation } from '../../utils/text';
+import { capitalize, endsInTerminalPunctuation, beginsWithPunctuation } from '../../utils/text';
 
 const getWordStyle = (word, isGhostWord) => {
   return {
-    marginLeft: beginsInTerminalPunctuation(word) ? '0px' : '5px',
+    marginLeft: beginsWithPunctuation(word) ? '0px' : '5px',
     cursor: 'pointer',
     color: isGhostWord ? theme.light : theme.lightest,
     fontFamily: 'Georgia',
