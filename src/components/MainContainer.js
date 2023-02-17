@@ -60,7 +60,7 @@ Footer
 
 const MainContainer = () => {
   const [showWelcome, setShowWelcome] = useState(false);
-  const [showSearch, setShowSearch] = useState(false);
+  const [showSearch, setShowSearch] = useState(true);
 
   const notification = useNotification('Loading Ghosts...');
   const options = useOptions();
@@ -151,7 +151,10 @@ const MainContainer = () => {
     console.groupCollapsed('Word clicked at index ', wordIndex);
     if (sources.current.isLocal) {
       const machine = sources.getSuggestionMachine(sources.current.id);
-      const suggestion = calculateSuggestion(machine, getWordClickSuggestionParams(wordIndex));
+      const suggestion = calculateSuggestion(
+        machine,
+        getWordClickSuggestionParams(wordIndex)
+      );
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
       composition.updateContentAtIndex(wordIndex, suggestion);
@@ -238,7 +241,7 @@ const MainContainer = () => {
   const handleDeleteLocalSource = (sourceID) => {
     notification.update(`Deleted downloaded ghost`);
     sources.removeLocalSourceAndMachine(sourceID);
-  }
+  };
 
   return (
     <>
@@ -268,7 +271,7 @@ const MainContainer = () => {
           open={showSearch}
           onClose={handleSearchClose}
           onSearchResultClick={handleSearchResultClick}
-          localSources={sources.all.filter(s => s.isLocal)}
+          localSources={sources.all.filter((s) => s.isLocal)}
           onClickDelete={handleDeleteLocalSource}
         />
       </Container>

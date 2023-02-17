@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LocalSource from './LocalSource';
+import theme from '../../config/colorPalette';
+
+const containerStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  borderRadius: '10px',
+  padding: '20px', 
+}
+
+const titleStyle = {
+  color: theme.light,
+  fontSize: '22px',
+  alignSelf: 'center',
+}
 
 const LocalSourcesList = ({ localSources, onClickDelete }) => {
   return (
-    <div>
-      <span>Your Downloaded Ghosts</span>
+    <div style={containerStyle}>
+      <span style={titleStyle}>Downloaded Ghosts</span>
       {localSources.map((source) => {
         return (
           <LocalSource

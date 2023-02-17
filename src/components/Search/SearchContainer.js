@@ -3,14 +3,26 @@ import PropTypes from 'prop-types';
 import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 import catalogService from '../../services/catalogService';
+import theme from '../../config/colorPalette';
+import useNotification from '../../hooks/useNotification';
+import Notification from '../Notification';
 
 const containerStyle = {
   width: '100%',
-  overflow: 'auto',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center'
 };
+
+const titleStyle = {
+  color: theme.light,
+  fontSize: '22px',
+  alignSelf: 'center',
+}
 
 const SearchContainer = ({ onSearchResultClick }) => {
   const [results, setResults] = useState([]);
+  const notification = useNotification();
 
   const handleBookSearchSubmit = (event) => {
     event.preventDefault();
@@ -19,6 +31,9 @@ const SearchContainer = ({ onSearchResultClick }) => {
       console.log('Searching catalog for ', query);
       catalogService.searchCatalog(query).then((results) => {
         setResults(results);
+        if (results.length === 0) {
+          notification.update(`No results found for ${query}`)
+        }
       });
     } else {
       setResults([]);
@@ -27,7 +42,9 @@ const SearchContainer = ({ onSearchResultClick }) => {
 
   return (
     <div style={containerStyle}>
+      <span style={titleStyle}>Find Authors on Project Gutenberg</span>
       <SearchForm onSubmit={handleBookSearchSubmit} />
+      {notification.text && <Notification text={notification.text} />}
       <SearchResults results={results} onResultClick={onSearchResultClick} />
     </div>
   );

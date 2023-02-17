@@ -4,6 +4,7 @@ import { Button, Modal, Container } from '@mui/material';
 import SearchContainer from './SearchContainer';
 import LocalSourcesList from './LocalSourcesList';
 import theme from '../../config/colorPalette';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const modalStyle = {
   position: 'absolute',
@@ -19,16 +20,26 @@ const modalStyle = {
   borderRadius: '10px',
   boxShadow: 24,
   color: theme.lightest,
+  overflow: 'auto',
 };
 
 const flexContainerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '10px',
+  padding: '20px',
   overflow: 'auto',
+  width: '100%',
+  height: '100%',
 };
+
+const buttonTheme = createTheme({
+  palette: {
+    primary: {
+      main: theme.complement,
+    },
+  },
+});
 
 const SearchModal = ({
   open,
@@ -52,10 +63,16 @@ const SearchModal = ({
           <div>
             <SearchContainer onSearchResultClick={onSearchResultClick} />
           </div>
-          <div>
-            <Button variant="contained" onClick={onClose}>
-              Close
-            </Button>
+          <div style={{ padding: '20px' }}>
+            <ThemeProvider theme={buttonTheme}>
+              <Button
+                sx={{ justifySelf: 'flex-end', marginBottom: '-40px' }}
+                variant="outlined"
+                onClick={onClose}
+              >
+                Close
+              </Button>
+            </ThemeProvider>
           </div>
         </div>
       </Container>
