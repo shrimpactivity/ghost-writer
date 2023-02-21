@@ -165,8 +165,7 @@ const App = () => {
     composition.setProposal(newUserInput);
   };
 
-  const handleProposalSubmit = (event) => {
-    event.preventDefault();
+  const handleProposalSubmit = () => {
     if (!suggestion.isTimedOut()) {
       composition.addProposalAndSuggestion(suggestion.value);
     }
@@ -239,24 +238,7 @@ const App = () => {
     setUserLoggedIn(!userLoggedIn);
   };
 
-  const handleInputKeyDown = (event) => {
-
-    const code = event.code;
-    console.log(code);
-
-    if (code === "Backspace") {
-      if (composition.proposal.length === 0 && composition.content.length > 0) {
-        event.preventDefault();
-        const newProposal = composition.popLastWordOfContent();
-        composition.setProposal(newProposal);
-      }
-    }
-
-    if (code === "ControlLeft" || code === "ControlRight") {
-      event.preventDefault();
-      composition.addNewLine();
-    }
-  };
+  
 
   return (
     <>
@@ -286,7 +268,6 @@ const App = () => {
               onProposalChange={handleProposalChange}
               onProposalSubmit={handleProposalSubmit}
               onContainerClick={() => focusProposalInput()}
-              onInputKeyDown={handleInputKeyDown}
               onContentClick={handleContentClick}
               onAddNewLine={() => composition.addNewLine()}
               onDeleteComposition={handleDeleteComposition}

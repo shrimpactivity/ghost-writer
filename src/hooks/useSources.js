@@ -36,8 +36,13 @@ const useSources = () => {
           ...s,
           isLocal: false,
         }));
-        const current = getInitialSource(processedSources);
-        setSources(processedSources);
+        const sortedSources = processedSources.sort((a, b) => {
+          if (a.author < b.author) return -1;
+          if (a.author === b.author) return 0;
+          return 1;
+        });
+        const current = getInitialSource(sortedSources);
+        setSources(sortedSources);
         setCurrent(current);
         setIsLoading(false);
         console.log('Server sources found: ', processedSources);

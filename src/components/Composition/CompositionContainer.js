@@ -64,7 +64,6 @@ CompositionContainer.propTypes = {
   onProposalSubmit: PropTypes.func.isRequired,
   onContainerClick: PropTypes.func.isRequired,
   onContentClick: PropTypes.func.isRequired,
-  onInputKeyDown: PropTypes.func.isRequired,
   onDeleteComposition: PropTypes.func.isRequired,
 };
 

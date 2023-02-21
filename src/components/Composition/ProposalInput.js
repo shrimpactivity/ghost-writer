@@ -16,32 +16,48 @@ const getInputStyle = (proposalText) => {
 };
 
 const ProposalInput = (props) => {
+  const handleInputKeyDown = (event) => {
+    const code = event.code;
+    if (code === 'Backspace') {
+      if (props.composition.proposal.length === 0 && props.composition.content.length > 0) {
+        event.preventDefault();
+        const newProposal = props.composition.popLastWordOfContent();
+        props.composition.setProposal(newProposal);
+      }
+    }
+    if (code === 'Enter') {
+      event.preventDefault();
+      props.composition.addNewLine();
+    }
+    if (code === 'Tab') {
+      event.preventDefault();
+      props.onProposalSubmit();
+    }
+  };
 
   return (
     <>
-      {props.composition.lineBreaks[props.composition.content.length] ? <p></p> : null}
+      {props.composition.lineBreaks[props.composition.content.length] ? (
+        <p></p>
+      ) : null}
       <span>
-        <form onSubmit={props.onProposalSubmit} style={{ display: 'inline' }}>
-          <input
-            ref={props.inputRef}
-            className="proposal-input"
-            type="text"
-            onChange={props.onProposalChange}
-            onKeyDown={props.onInputKeyDown}
-            value={props.composition.proposal}
-            spellCheck="false"
-            autoComplete="off"
-            style={getInputStyle(props.composition.proposal)}
-          />
-          <button type="submit" style={{ display: 'none' }}></button>
-        </form>
+        <input
+          ref={props.inputRef}
+          className="proposal-input"
+          type="text"
+          onChange={props.onProposalChange}
+          onKeyDown={handleInputKeyDown}
+          value={props.composition.proposal}
+          spellCheck="false"
+          autoComplete="off"
+          style={getInputStyle(props.composition.proposal)}
+        />
       </span>
     </>
   );
 };
 
 ProposalInput.propTypes = {
-  onInputKeyDown: PropTypes.func.isRequired,
   onProposalChange: PropTypes.func.isRequired,
   composition: PropTypes.object.isRequired,
 };

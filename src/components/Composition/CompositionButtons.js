@@ -18,7 +18,7 @@ const CompositionButtons = ({ onProposalSubmit, onAddNewLine, onCopyComposition,
   return (
     <>
       <ThemeProvider theme={buttonTheme}>
-        <Tooltip title="Accept suggestion (Enter)">
+        <Tooltip title="Accept suggestion (Tab)">
           <IconButton
             aria-label="copy composition"
             variant="contained"
@@ -27,7 +27,7 @@ const CompositionButtons = ({ onProposalSubmit, onAddNewLine, onCopyComposition,
             <AddCircleOutlineIcon sx={{ color: theme.light }} fontSize="medium" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="New line (Ctrl)">
+        <Tooltip title="New line (Enter)">
           <IconButton
             aria-label="copy composition"
             variant="contained"
