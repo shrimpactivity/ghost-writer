@@ -38,18 +38,20 @@ const useComposition = () => {
     return getContentTokens().concat(getProposalTokens());
   };
 
-  const deleteLastWordOfContent = () => {
+  const popLastWordOfContent = () => {
     const newContent = [...content];
-    newContent.pop();
+    const lastWord = newContent.pop();
     setContent(newContent);
     const newGhostWords = [...ghostWords];
     newGhostWords.pop();
     setGhostWords(newGhostWords);
+    return lastWord;
   }
 
-  const clearContent = () => {
+  const clearAll = () => {
     setContent([]);
     setGhostWords([]);
+    setProposal('');
   };
 
   const updateContentAtIndex = (index, word) => {
@@ -68,8 +70,8 @@ const useComposition = () => {
     setProposal,
     setContent,
     setGhostWords,
-    clearContent,
-    deleteLastWordOfContent,
+    clearAll,
+    popLastWordOfContent,
     updateContentAtIndex,
     addProposalAndSuggestion,
     getContentTokens,

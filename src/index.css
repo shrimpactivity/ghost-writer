@@ -3,18 +3,28 @@
   src: url("./assets/Hustlersroughdemo-6OM1.ttf") format("ttf");
 }
 
-.app-title {
-  font-family: 'hustlers', 'serif';
+@font-face {
+  font-family: roboto-mono;
+  src:  url("./assets/RobotoMono-VariableFont_wght.ttf");
 }
 
 .flip-img-vertical {
   transform: scaleX(-1);
 }
 
+.text-area-input:focus {
+  outline: none;
+}
+
 .background {
   background: center no-repeat url("./assets/background.png");
   background-size: cover;
   background-attachment: fixed;
+}
+
+.proposal-input:focus {
+  border: none;
+  outline: none;
 }
 
 .content-word:hover {

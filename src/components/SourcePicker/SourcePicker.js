@@ -20,7 +20,7 @@ const textContainerStyle = {
   padding: "9px",
   color: theme.light,
   textAlign: 'center',
-  font: '20px Times New Roman',
+  font: '18px Roboto',
   fontStyle: 'italic',
 };
 

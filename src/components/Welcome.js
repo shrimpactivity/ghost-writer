@@ -30,7 +30,7 @@ const Welcome = ({ onCloseClick }) => {
   return (
     <div className="welcome" style={style}>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <img src="welcome.png" style={imageStyle} />
+        <img src="assets/welcome.png" style={imageStyle} />
       </div>
 
       <p>
@@ -44,11 +44,11 @@ const Welcome = ({ onCloseClick }) => {
         text.
       </p>
       <p>
-        Click any word in the composition, and the ghost will replace it with a
+        Click any word in your composition, and the ghost will replace it with a
         new one.
       </p>
       <p>
-        Use 'Find New Ghosts' to search{' '}
+        Click <em>Find New Ghosts</em> to search{' '}
         <a
           style={{ color: 'cyan' }}
           href="https://www.gutenberg.org/"
@@ -56,7 +56,7 @@ const Welcome = ({ onCloseClick }) => {
         >
           Project Gutenberg
         </a>
-        , an online library of public domain works. Your selection will be
+        , an online library of public domain texts. Your selection will be
         downloaded and processed into a new ghost, ready to write with you.
       </p>
       <p>

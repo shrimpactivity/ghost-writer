@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Box, Toolbar, Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../config/colorPalette';
 
@@ -39,20 +39,23 @@ const linkButtonStyle = {
   padding: '12px',
 };
 
-const Navbar = ({ onLoginClick, userLoggedIn }) => {
+const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
   return (
     <AppBar component="nav" position="static" style={appBarStyle}>
       <Toolbar>
         <Box style={titleContainerStyle}>
           <Box display="flex" justifyContent="center" flexBasis="50%">
             <Box display="flex" justifyContent={"center"}>
-              <img style={{width: '350px'}} src="logo.png" alt="ghostwriter icon" />
+              <img style={{width: '350px'}} src="assets/logo.png" alt="ghostwriter icon" />
             </Box>
           </Box>
           <Box style={linkContainerStyle}>
             <ThemeProvider theme={buttonTheme}>
               <Button onClick={onLoginClick} style={linkButtonStyle}>
                 {userLoggedIn ? 'Logout' : 'Login'}
+              </Button>
+              <Button onClick={onAboutClick} style={linkButtonStyle}>
+                {"About"}
               </Button>
               <Button
                 style={linkButtonStyle}

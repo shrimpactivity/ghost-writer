@@ -1,63 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import CompositionForm from './CompositionForm';
-import CompositionWords from './CompositionWords';
-import theme from '../../config/colorPalette';
+import ContentItems from './ContentItems';
+import SuggestionPreview from './SuggestionPreview';
+import ProposalInput from './ProposalInput';
+import CompositionButtons from './CompositionButtons';
 import { formatWordArrayIntoSentence } from '../../utils/text';
-
-// Formatted sentence (capitalize and space correctly), writing input (as is), suggestion (capitalize and space correctly)
+import theme from '../../config/colorPalette';
 
 const containerStyle = {
-  display: "flex",
-  flexDirection: "column",
-  minHeight: '35vh',
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: '30vh',
   padding: '10px',
-  marginTop: '20px',
   backgroundColor: theme.dark,
   borderRadius: '10px',
   border: '2px solid',
   borderColor: theme.medium,
+  color: theme.lightest,
+  fontFamily: 'roboto-mono',
+  fontSize: '16px',
 };
 
-const CompositionContainer = ({
-  composition,
-  suggestion,
-  isSuggestionLoading,
-  options,
-  onProposalChange,
-  onProposalSubmit,
-  onContentClick,
-  onDeleteLastWord,
-  onDeleteComposition,
-}) => {
-
+const CompositionContainer = (props) => {
   const handleCopyComposition = () => {
-    const formattedContent = formatWordArrayIntoSentence(composition.content);
+    const formattedContent = formatWordArrayIntoSentence(
+      props.composition.content
+    );
     navigator.clipboard.writeText(formattedContent);
-  }
+  };
 
   return (
-    <div style={containerStyle}>
+    <div
+      className="composition-container"
+      style={containerStyle}
+      onClick={props.onContainerClick}
+    >
       <div>
-        <CompositionForm
-          proposal={composition.proposal}
-          onProposalChange={onProposalChange}
+        <ContentItems {...props} />
+        <ProposalInput {...props} />
+        {props.composition.getAllTokens().length > 0 ? (
+          <SuggestionPreview {...props} />
+        ) : null}
+      </div>
+      <div>
+        <CompositionButtons
+          {...props}
           onCopyComposition={handleCopyComposition}
-          onDeleteLastWord={onDeleteLastWord}
-          onDeleteComposition={onDeleteComposition}
-          onSubmit={onProposalSubmit}
         />
       </div>
-      <div>
-        <CompositionWords
-          composition={composition}
-          suggestion={suggestion}
-          isSuggestionLoading={isSuggestionLoading}
-          onContentClick={onContentClick}
-          options={options}
-        />
-      </div>
-      
     </div>
   );
 };
@@ -69,8 +59,9 @@ CompositionContainer.propTypes = {
   options: PropTypes.object.isRequired,
   onProposalChange: PropTypes.func.isRequired,
   onProposalSubmit: PropTypes.func.isRequired,
+  onContainerClick: PropTypes.func.isRequired,
   onContentClick: PropTypes.func.isRequired,
-  onDeleteLastWord: PropTypes.func.isRequired,
+  onInputBackspace: PropTypes.func.isRequired,
   onDeleteComposition: PropTypes.func.isRequired,
 };
 
