@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import parseIntoTokens from '../utils/parseIntoTokens';
 import { removeExtraWhitespace } from '../utils/text';
+import { v4 as uuidv4 } from 'uuid';
 
 const useComposition = () => {
   const [content, setContent] = useState([]);
   const [proposal, setProposal] = useState('');
   const [ghostWords, setGhostWords] = useState([]);
+  const [lineBreaks, setLineBreaks] = useState({});
 
   const addProposalAndSuggestion = (suggestion) => {
     const formattedProposal = removeExtraWhitespace(proposal);
@@ -45,12 +47,18 @@ const useComposition = () => {
     const newGhostWords = [...ghostWords];
     newGhostWords.pop();
     setGhostWords(newGhostWords);
+    const newLineBreaks = {...lineBreaks}
+    if (newLineBreaks[newContent.length + 1]) {
+      newLineBreaks[newContent.length + 1] = undefined;
+      setLineBreaks(newLineBreaks);
+    }
     return lastWord;
   }
 
   const clearAll = () => {
     setContent([]);
     setGhostWords([]);
+    setLineBreaks({});
     setProposal('');
   };
 
@@ -63,13 +71,21 @@ const useComposition = () => {
     setGhostWords(newGhostWords);
   };
 
+  const addNewLine = () => {
+    const newLineBreaks = {...lineBreaks}
+    newLineBreaks[content.length] = uuidv4();
+    setLineBreaks(newLineBreaks);
+  }
+
   return {
     content,
     proposal,
     ghostWords,
+    lineBreaks,
     setProposal,
     setContent,
     setGhostWords,
+    setLineBreaks,
     clearAll,
     popLastWordOfContent,
     updateContentAtIndex,
@@ -77,6 +93,7 @@ const useComposition = () => {
     getContentTokens,
     getProposalTokens,
     getAllTokens,
+    addNewLine
   };
 };
 

@@ -10,6 +10,7 @@ import theme from '../../config/colorPalette';
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
+  justifyContent: 'space-between',
   minHeight: '30vh',
   padding: '10px',
   backgroundColor: theme.dark,
@@ -19,6 +20,7 @@ const containerStyle = {
   color: theme.lightest,
   fontFamily: 'roboto-mono',
   fontSize: '16px',
+  marginTop: '20px'
 };
 
 const CompositionContainer = (props) => {
@@ -27,6 +29,7 @@ const CompositionContainer = (props) => {
       props.composition.content
     );
     navigator.clipboard.writeText(formattedContent);
+    console.log(props.composition.getAllTokens())
   };
 
   return (
@@ -38,11 +41,11 @@ const CompositionContainer = (props) => {
       <div>
         <ContentItems {...props} />
         <ProposalInput {...props} />
-        {props.composition.getAllTokens().length > 0 ? (
+        {props.options.showSuggestionPreview ? (
           <SuggestionPreview {...props} />
         ) : null}
       </div>
-      <div>
+      <div style={{alignSelf: 'flex-end'}}>
         <CompositionButtons
           {...props}
           onCopyComposition={handleCopyComposition}
@@ -61,7 +64,7 @@ CompositionContainer.propTypes = {
   onProposalSubmit: PropTypes.func.isRequired,
   onContainerClick: PropTypes.func.isRequired,
   onContentClick: PropTypes.func.isRequired,
-  onInputBackspace: PropTypes.func.isRequired,
+  onInputKeyDown: PropTypes.func.isRequired,
   onDeleteComposition: PropTypes.func.isRequired,
 };
 

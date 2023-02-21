@@ -36,6 +36,9 @@ const App = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+
+  const proposalInputRef = useRef(null);
 
   const notification = useNotification('Loading Ghosts...');
   const options = useOptions();
@@ -50,7 +53,9 @@ const App = () => {
     if (storage.isSet('composition')) {
       const initialComposition = JSON.parse(storage.get('composition'));
       composition.setContent(initialComposition.content);
+      composition.setProposal(initialComposition.proposal);
       composition.setGhostWords(initialComposition.ghostWords);
+      composition.setLineBreaks(initialComposition.lineBreaks);
     }
   };
 
@@ -59,13 +64,15 @@ const App = () => {
   const updateCompositionLocalStorage = () => {
     const serializedComposition = JSON.stringify({
       content: composition.content,
+      proposal: composition.proposal,
       ghostWords: composition.ghostWords,
+      lineBreaks: composition.lineBreaks
     });
     storage.set('composition', serializedComposition);
     console.log('Updated composition in local storage.');
   };
 
-  useEffect(updateCompositionLocalStorage, [composition.content]);
+  useEffect(updateCompositionLocalStorage, [composition.content, composition.proposal]);
 
   const updateSuggestion = () => {
     if (sources.current.id) {
@@ -99,6 +106,12 @@ const App = () => {
       notification.update('Ghosts loaded, ready to write!');
     }
   }, [sources.isLoading]);
+
+  const focusProposalInput = () => {
+    proposalInputRef.current.focus();
+  };
+
+  useEffect(focusProposalInput, [showWelcome, showSearch, showOptions]);
 
   const getPredecessorTokens = (wordIndex) => {
     const predecessorWords = composition.content.slice(0, wordIndex);
@@ -169,10 +182,6 @@ const App = () => {
     }
   };
 
-  const handleDeleteLastWord = () => {
-    composition.deleteLastWordOfContent();
-  };
-
   const handleSourceSelection = (event) => {
     const selectedID = event.target.value;
     const selectedSource = sources.all.find((s) => s.id === selectedID);
@@ -210,7 +219,10 @@ const App = () => {
     setShowSearch(false);
   };
 
-  const handleSearchClose = () => setShowSearch(false);
+  const handleSearchClose = () => {
+    focusProposalInput();
+    setShowSearch(false);
+  };
 
   const handleDeleteLocalSource = (sourceID) => {
     notification.update(`Deleted downloaded ghost`);
@@ -218,76 +230,83 @@ const App = () => {
   };
 
   const handleWelcomeClose = () => {
+    focusProposalInput();
     setShowWelcome(false);
     storage.set('userHasVisited', 'true');
-  }
-
-  const handleAboutClick = () => {
-    setShowWelcome(true);
-  }
+  };
 
   const handleLogin = () => {
     setUserLoggedIn(!userLoggedIn);
   };
 
-  const focusProposalInput = () => {
-    document.getElementsByClassName('proposal-input')[0].focus();
-  }
-  
-  const handleCompositionContainerClick = () => {
-    focusProposalInput();
-  }
+  const handleInputKeyDown = (event) => {
 
-  const handleInputBackspace = (event) => {
-    if (composition.proposal.length === 0) {
-      event.preventDefault();
-      const newProposal = composition.popLastWordOfContent();
-      composition.setProposal(newProposal);
+    const code = event.code;
+    console.log(code);
+
+    if (code === "Backspace") {
+      if (composition.proposal.length === 0 && composition.content.length > 0) {
+        event.preventDefault();
+        const newProposal = composition.popLastWordOfContent();
+        composition.setProposal(newProposal);
+      }
     }
-  }
+
+    if (code === "ControlLeft" || code === "ControlRight") {
+      event.preventDefault();
+      composition.addNewLine();
+    }
+  };
 
   return (
     <>
       <CssBaseline />
       <div className="background" style={backgroundStyle}>
-        <Navbar onLoginClick={handleLogin} userLoggedIn={userLoggedIn} onAboutClick={handleAboutClick}/>
+        <Navbar
+          onLoginClick={handleLogin}
+          userLoggedIn={userLoggedIn}
+          onAboutClick={() => setShowWelcome(true)}
+        />
         <Container maxWidth="sm">
-        <Notification text={notification.text} />
-        <div style={{display: showWelcome ? 'block' : 'none'}}>
-          <Welcome onCloseClick={handleWelcomeClose}/>
-        </div>
-        <div style={{display: showWelcome ? 'none' : 'block'}}>
-          <SourcePicker
-            value={sources.current.id}
-            onChange={handleSourceSelection}
-            allSources={sources.all}
-          />
-          <CompositionContainer
-            composition={composition}
-            suggestion={suggestion.value}
-            isSuggestionLoading={suggestion.isTimedOut()}
-            options={options}
-            onProposalChange={handleProposalChange}
-            onProposalSubmit={handleProposalSubmit}
-            onContainerClick={handleCompositionContainerClick}
-            onInputBackspace={handleInputBackspace}
-            onContentClick={handleContentClick}
-            onDeleteLastWord={handleDeleteLastWord}
-            onDeleteComposition={handleDeleteComposition}
-          />
-          <MenuContainer
-            options={options}
-            onOpenSearchClick={() => setShowSearch(true)}
-          />
-          <SearchModal
-            open={showSearch}
-            onClose={handleSearchClose}
-            onSearchResultClick={handleSearchResultClick}
-            localSources={sources.all.filter((s) => s.isLocal)}
-            onClickDelete={handleDeleteLocalSource}
-          />
-        </div>
-      </Container>
+          <Notification text={notification.text} />
+          <div style={{ display: showWelcome ? 'block' : 'none' }}>
+            <Welcome onCloseClick={handleWelcomeClose} />
+          </div>
+          <div style={{ display: showWelcome ? 'none' : 'block' }}>
+            <SourcePicker
+              value={sources.current.id}
+              onChange={handleSourceSelection}
+              allSources={sources.all}
+            />
+            <CompositionContainer
+              composition={composition}
+              suggestion={suggestion.value}
+              isSuggestionLoading={suggestion.isTimedOut()}
+              options={options}
+              onProposalChange={handleProposalChange}
+              onProposalSubmit={handleProposalSubmit}
+              onContainerClick={() => focusProposalInput()}
+              onInputKeyDown={handleInputKeyDown}
+              onContentClick={handleContentClick}
+              onAddNewLine={() => composition.addNewLine()}
+              onDeleteComposition={handleDeleteComposition}
+              inputRef={proposalInputRef}
+            />
+            <MenuContainer
+              options={options}
+              showOptions={showOptions}
+              onOptionsClick={() => setShowOptions(!showOptions)}
+              onOpenSearchClick={() => setShowSearch(true)}
+            />
+            <SearchModal
+              open={showSearch}
+              onClose={handleSearchClose}
+              onSearchResultClick={handleSearchResultClick}
+              localSources={sources.all.filter((s) => s.isLocal)}
+              onClickDelete={handleDeleteLocalSource}
+            />
+          </div>
+        </Container>
       </div>
     </>
   );

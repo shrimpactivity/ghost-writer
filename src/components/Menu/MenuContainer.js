@@ -19,12 +19,17 @@ const containerStyle = {
 const MenuContainer = ({
   options,
   onOpenSearchClick,
+  showOptions,
+  onOptionsClick,
 }) => {
-  const [showOptions, setShowOptions] = useState(false);
   return (
     <div style={containerStyle}>
-      <ButtonMenu showOptions={showOptions} onOptionButtonClick={() => setShowOptions(!showOptions)} onSearchButtonClick={onOpenSearchClick} />
-      {showOptions && <OptionInputs options={options}/>}
+      <ButtonMenu
+        showOptions={showOptions}
+        onOptionButtonClick={onOptionsClick}
+        onSearchButtonClick={onOpenSearchClick}
+      />
+      {showOptions && <OptionInputs options={options} />}
     </div>
   );
 };

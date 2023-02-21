@@ -1,17 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import theme from '../../config/colorPalette';
-import { capitalize, endsInTerminalPunctuation, beginsWithPunctuation } from '../../utils/text';
+import {
+  capitalize,
+  endsInTerminalPunctuation,
+  beginsWithPunctuation,
+} from '../../utils/text';
 
-const getWordStyle = (word, isGhostWord) => {
+
+const getWordStyle = (word, index, composition, options) => {
+  const isGhostWord =
+    options.highlightGhostWords && composition.ghostWords[index];
   return {
     marginLeft: beginsWithPunctuation(word) ? '0px' : '0.6em',
     cursor: 'pointer',
     color: isGhostWord ? theme.light : theme.lightest,
     borderRadius: '3px',
-    display: 'inline',
+    display: 'inline-block',
     maxWidth: '100%',
-    display: 'inline-block'
   };
 };
 
@@ -31,17 +37,21 @@ const ContentItems = ({ composition, onContentClick, options }) => {
     return;
   }
   return (
+    // we have a list of word indexes, and the new line should be inserted before them.
     <>
       {composition.content.map((word, index) => {
         return (
-          <span
-            className="content-word"
-            key={index} // It's an antipattern, congrats if you've found this
-            style={getWordStyle(word, options.highlightGhostWords && composition.ghostWords[index])}
-            onClick={() => onContentClick(index)}
-          >
-            {formatContentWord(word, index, composition)}
-          </span>
+          <>
+            {composition.lineBreaks[index] ? <p key={composition.lineBreaks[index]}></p> : null}
+            <span
+              className="content-word"
+              key={index} // It's an antipattern, I know...
+              style={getWordStyle(word, index, composition, options)}
+              onClick={() => onContentClick(index)}
+            >
+              {formatContentWord(word, index, composition)}
+            </span>
+          </>
         );
       })}
     </>
@@ -52,6 +62,6 @@ ContentItems.propTypes = {
   composition: PropTypes.object.isRequired,
   onContentClick: PropTypes.func.isRequired,
   options: PropTypes.object.isRequired,
-}
+};
 
 export default ContentItems;
