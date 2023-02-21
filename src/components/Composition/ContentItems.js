@@ -7,7 +7,6 @@ import {
   beginsWithPunctuation,
 } from '../../utils/text';
 
-
 const getWordStyle = (word, index, composition, options) => {
   const isGhostWord =
     options.highlightGhostWords && composition.ghostWords[index];
@@ -32,26 +31,38 @@ const formatContentWord = (word, index, composition) => {
   return word;
 };
 
+const Word = ({ composition, onContentClick, index, word, options }) => {
+  return (
+    <>
+      {composition.lineBreaks[index] ? (
+        <p key={composition.lineBreaks[index]}></p>
+      ) : null}
+      <span
+        className="content-word"
+        style={getWordStyle(word, index, composition, options)}
+        onClick={() => onContentClick(index)}
+      >
+        {formatContentWord(word, index, composition)}
+      </span>
+    </>
+  );
+};
+
 const ContentItems = ({ composition, onContentClick, options }) => {
   if (composition.content.length === 0) {
     return;
   }
   return (
-    // we have a list of word indexes, and the new line should be inserted before them.
     <>
       {composition.content.map((word, index) => {
         return (
-          <>
-            {composition.lineBreaks[index] ? <p key={composition.lineBreaks[index]}></p> : null}
-            <span
-              className="content-word"
-              key={index} // It's an antipattern, I know...
-              style={getWordStyle(word, index, composition, options)}
-              onClick={() => onContentClick(index)}
-            >
-              {formatContentWord(word, index, composition)}
-            </span>
-          </>
+          <Word
+            key={index} // It's an antipattern, I know...
+            index={index}
+            word={word}
+            composition={composition}
+            options={options}
+          />
         );
       })}
     </>
