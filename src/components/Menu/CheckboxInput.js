@@ -7,7 +7,7 @@ const containerStyle = {
 };
 
 const labelStyle = {
-  fontSize: '18px',
+  fontSize: '16px',
   marginRight: '10px',
 };
 

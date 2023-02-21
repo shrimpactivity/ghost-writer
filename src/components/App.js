@@ -69,7 +69,6 @@ const App = () => {
       lineBreaks: composition.lineBreaks
     });
     storage.set('composition', serializedComposition);
-    console.log('Updated composition in local storage.');
   };
 
   useEffect(updateCompositionLocalStorage, [composition.content, composition.proposal]);

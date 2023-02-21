@@ -26,7 +26,7 @@ const OptionInputs = ({ options }) => {
         <NumberInput
           {...options.suggestionCountField}
           min="1"
-          max="10"
+          max="5"
           label={'Number of suggested words:'}
         />
         <CheckboxInput

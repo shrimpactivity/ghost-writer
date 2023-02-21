@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import theme from '../../config/colorPalette';
 
 const selectStyle = {
-  width: '150px',
+  width: '130px',
   height: '30px',
   color: 'black',
   backgroundColor: theme.light,
   borderColor: theme.darkest,
   borderRadius: '5px',
-  font: '18px Roboto',
+  font: '16px Roboto',
   textOverflow: 'ellipsis',
   overflow: 'hidden',
   float: 'right'
@@ -26,7 +26,7 @@ const containerStyle = {
 };
 
 const labelStyle = {
-  fontSize: '18px',
+  fontSize: '16px',
   marginRight: '10px',
 };
 

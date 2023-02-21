@@ -10,13 +10,13 @@ const inputStyle = {
   display: 'inline-block',
   backgroundColor: theme.light,
   color: theme.darkest,
-  fontSize: '18px',
+  fontSize: '16px',
   width: '3em',
   float: 'right'
 };
 
 const labelStyle = {
-  fontSize: '18px',
+  fontSize: '16px',
   marginRight: '10px'
 };
 
