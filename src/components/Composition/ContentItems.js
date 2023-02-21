@@ -62,6 +62,7 @@ const ContentItems = ({ composition, onContentClick, options }) => {
             word={word}
             composition={composition}
             options={options}
+            onContentClick={onContentClick}
           />
         );
       })}
