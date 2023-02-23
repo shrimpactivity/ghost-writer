@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { AppBar, Box, Toolbar, Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../config/colorPalette';
+import LogoImg from '../assets/logo.png';
 
 const appBarStyle = {
   backgroundColor: theme.darkest,
@@ -39,36 +40,54 @@ const linkButtonStyle = {
   padding: '12px',
 };
 
+const navbarContainerStyle = {
+
+  width: '100vw',
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
   return (
-    <AppBar component="nav" position="static" style={appBarStyle}>
-      <Toolbar>
-        <Box style={titleContainerStyle}>
-          <Box display="flex" justifyContent="center" flexBasis="50%">
-            <Box display="flex" justifyContent={"center"}>
-              <img style={{width: '350px'}} src="assets/logo.png" alt="ghostwriter icon" />
-            </Box>
-          </Box>
-          <Box style={linkContainerStyle}>
-            <ThemeProvider theme={buttonTheme}>
-              <Button onClick={onLoginClick} style={linkButtonStyle}>
+    <div style={navbarContainerStyle}>
+      <div style={{marginRight: '100px', marginLeft: '100px'}}>
+        <img style={{ width: '350px' }} src={LogoImg} alt="ghostwriter icon" />
+      </div>
+      <div style={{marginRight: '100px', marginLeft: '100px'}}>
+        <ThemeProvider theme={buttonTheme}>
+          {/* TODO: <Button onClick={onLoginClick} style={linkButtonStyle}>
                 {userLoggedIn ? 'Logout' : 'Login'}
-              </Button>
-              <Button onClick={onAboutClick} style={linkButtonStyle}>
-                {"About"}
-              </Button>
-              <Button
-                style={linkButtonStyle}
-                href="https://github.com/shrampi/ghostwriter-web"
-                target="_blank"
-              >
-                GitHub
-              </Button>
-            </ThemeProvider>
-          </Box>
-        </Box>
-      </Toolbar>
-    </AppBar>
+              </Button> */}
+          <Button onClick={onAboutClick} style={linkButtonStyle}>
+            {'About'}
+          </Button>
+          <Button
+            style={linkButtonStyle}
+            href="https://github.com/shrampi/ghostwriter-web"
+            target="_blank"
+          >
+            GitHub
+          </Button>
+        </ThemeProvider>
+      </div>
+    </div>
+    // <AppBar component="nav" position="static" style={appBarStyle}>
+    //   <Toolbar>
+    //     <Box style={titleContainerStyle}>
+    //       <Box display="flex" justifyContent="center" flexBasis="50%">
+    //         <Box display="flex" justifyContent={"center"}>
+    //           <img style={{width: '350px'}} src={LogoImg} alt="ghostwriter icon" />
+    //         </Box>
+    //         <Box style={linkContainerStyle}>
+
+    //       </Box>
+    //       </Box>
+
+    //     </Box>
+    //   </Toolbar>
+    // </AppBar>
   );
 };
 

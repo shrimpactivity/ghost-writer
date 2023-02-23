@@ -7,7 +7,7 @@ const containerStyle = {
   justifyContent: 'center', 
   alignItems: 'center',
   color: theme.complement,
-  height: '80px',
+  height: '50px',
   textAlign: 'center',
 };
 
@@ -16,13 +16,14 @@ const textStyle = {
   padding: '5px',
   paddingLeft: '10px',
   paddingRight: '10px',
+  marginBottom: '10px',
   borderRadius: '10px',
   border: '1px solid'
 };
 
 const Notification = ({ text }) => {
   return (
-    <div style={containerStyle}>
+    <div className="notification-container" style={containerStyle}>
       <span className="notification-container" style={{ ...textStyle, display: text ? 'inline' : 'none' }}>
         {text}
       </span>

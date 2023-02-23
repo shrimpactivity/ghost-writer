@@ -18,7 +18,7 @@ const selectStyle = {
 const optionStyle = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  fontSize: '14px',
+  font: '14px Roboto',
 };
 
 const containerStyle = {

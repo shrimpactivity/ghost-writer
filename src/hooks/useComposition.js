@@ -12,7 +12,7 @@ const useComposition = () => {
   const addProposalAndSuggestion = (suggestion) => {
     const formattedProposal = removeExtraWhitespace(proposal);
     const proposalItems = formattedProposal ? formattedProposal.split(' ') : [];
-    const suggestionItems = suggestion.split(' ');
+    const suggestionItems = suggestion.trim() ? suggestion.split(' ') : [];
     const newContent = content
       .concat(proposalItems)
       .concat(suggestionItems);

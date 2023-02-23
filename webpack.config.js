@@ -4,17 +4,17 @@ const path = require('path');
 const config = {
   entry: './src/index.js',
   output: {
-    path: path.join(__dirname, '/public'),
+    path: path.join(__dirname, '/dist'),
     filename: 'main.js'
   },
   devServer: {
-    static: path.join(__dirname, '/public'),
+    static: path.join(__dirname, '/dist'),
     compress: true,
-    port: 3001,
+    port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
-        router: () => 'http://localhost:3000',
+        target: 'http://localhost:3000',
+        router: () => 'http://localhost:3005',
       }
     }
   },
@@ -36,7 +36,11 @@ const config = {
       {
         test: /\.json$/,
         type: 'json'
-      }
+      },
+      {
+        test: /\.png/,
+        type: 'asset/resource'
+      },
     ]
   },
   plugins: [

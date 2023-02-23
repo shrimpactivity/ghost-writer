@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../config/colorPalette';
+import WelcomeImg from '../assets/Welcome.png';
 
 const style = {
   padding: '20px',
@@ -36,7 +37,7 @@ const Welcome = ({ onCloseClick }) => {
           alignItems: 'center',
         }}
       >
-        <img src="assets/welcome.png" style={imageStyle} />
+        <img src={WelcomeImg} style={imageStyle} />
       </div>
 
       <p style={{borderBottom: '3px dotted', borderColor: theme.medium, paddingBottom: '15px'}}>
