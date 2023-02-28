@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import sourcesService from '../services/sourcesService';
+import sourcesService from '../services/sources';
 
 const useSources = () => {
   const [sources, setSources] = useState([]);

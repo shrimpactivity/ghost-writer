@@ -16,7 +16,9 @@
   outline: none;
 }
 
-.background {
+body {
+  padding: 0px;
+  margin: 0px;
   background: center no-repeat url("./assets/background.png");
   background-size: cover;
   background-attachment: fixed;

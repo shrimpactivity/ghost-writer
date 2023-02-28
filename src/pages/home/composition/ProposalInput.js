@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../config/colorPalette';
+import theme from '../../../config/colorPalette';
 
 const getInputStyle = (proposalText) => {
   return {
@@ -16,36 +16,46 @@ const getInputStyle = (proposalText) => {
 };
 
 const ProposalInput = (props) => {
+  const handleProposalChange = (event) => {
+    const newUserInput = event.target.value;
+    props.composition.setProposal(newUserInput);
+  };
+
   const handleInputKeyDown = (event) => {
-    const code = event.code;
-    if (code === 'Backspace') {
-      if (props.composition.proposal.length === 0 && props.composition.content.length > 0) {
+    switch (event.code) {
+      case 'Backspace':
+        if (
+          props.composition.proposal.length === 0 &&
+          props.composition.content.length > 0
+        ) {
+          event.preventDefault();
+          const newProposal = props.composition.popLastWordOfContent();
+          props.composition.setProposal(newProposal === '\n' ? '' : newProposal);
+        }
+        break;
+
+      case 'Tab':
+          event.preventDefault();
+          props.onProposalSubmit();
+          break;
+
+      case 'Enter':
+        // Add proposal to composition. Don't add suggestion.
+        // Pressing enter multiple times should create more than one new line.
         event.preventDefault();
-        const newProposal = props.composition.popLastWordOfContent();
-        props.composition.setProposal(newProposal);
-      }
-    }
-    if (code === 'Enter') {
-      event.preventDefault();
-      props.composition.addNewLine();
-    }
-    if (code === 'Tab') {
-      event.preventDefault();
-      props.onProposalSubmit();
+        props.composition.addNewLine();
+        break;
     }
   };
 
   return (
     <>
-      {props.composition.lineBreaks[props.composition.content.length] ? (
-        <p></p>
-      ) : null}
       <span>
         <input
           ref={props.inputRef}
           className="proposal-input"
           type="text"
-          onChange={props.onProposalChange}
+          onChange={handleProposalChange}
           onKeyDown={handleInputKeyDown}
           value={props.composition.proposal}
           spellCheck="false"
@@ -58,7 +68,6 @@ const ProposalInput = (props) => {
 };
 
 ProposalInput.propTypes = {
-  onProposalChange: PropTypes.func.isRequired,
   composition: PropTypes.object.isRequired,
 };
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../config/colorPalette';
+import theme from '../../../config/colorPalette';
 
 const selectStyle = {
-  width: '100%',
   height: '30px',
+  width: '100%',
+  maxWidth: '420px',
   color: 'black',
   backgroundColor: theme.light,
   borderColor: theme.darkest,
@@ -15,8 +16,6 @@ const selectStyle = {
 };
 
 const optionStyle = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
   fontSize: '14px',
 };
 

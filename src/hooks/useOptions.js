@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import storage from '../services/localStorage';
 
 const useOptions = () => {
 

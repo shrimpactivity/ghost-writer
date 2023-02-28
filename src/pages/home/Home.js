@@ -2,37 +2,29 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import SuggestionMachine from 'suggestion-machine';
-import parseIntoTokens from '../utils/parseIntoTokens';
-import bookService from '../services/bookService';
-import suggestionService from '../services/suggestionService';
-import storage from '../services/localStorage';
-import calculateSuggestion from '../services/calculateSuggestion';
 
-import useSources from '../hooks/useSources';
-import useComposition from '../hooks/useComposition';
-import useSuggestion from '../hooks/useSuggestion';
-import useNotification from '../hooks/useNotification';
-import useOptions from '../hooks/useOptions';
+import parseIntoTokens from '../../utils/parseIntoTokens';
+import bookService from '../../services/gutenbergBook';
+import suggestionService from '../../services/suggestion';
+import storage from '../../services/localStorage';
+import calculateSuggestion from '../../services/calculateSuggestion';
 
-import Notification from './Notification';
-import SourcePicker from './SourcePicker/SourcePicker';
-import CompositionContainer from './Composition/CompositionContainer';
-import MenuContainer from './Menu/MenuContainer';
-import SearchModal from './Search/SearchModal';
-import Welcome from './Welcome';
-import Navbar from './Navbar';
+import useSources from '../../hooks/useSources';
+import useComposition from '../../hooks/useComposition';
+import useSuggestion from '../../hooks/useSuggestion';
+import useNotification from '../../hooks/useNotification';
+import useOptions from '../../hooks/useOptions';
 
-import { Container, CssBaseline } from '@mui/material';
+import Notification from '../../components/Notification';
+import Navbar from '../../components/Navbar';
+import SourcePicker from './sourceSelection/SourcePicker';
+import CompositionContainer from './composition/CompositionContainer';
+import MenuContainer from './menu/MenuContainer';
 
-import theme from '../config/colorPalette';
+import theme from '../../config/colorPalette';
+import { CssBaseline } from '@mui/material';
 
-const backgroundStyle = {
-  minHeight: '100vh',
-  backgroundColor: theme.darkest,
-  paddingBottom: '50px',
-};
-
-const App = () => {
+const Home = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -54,8 +46,6 @@ const App = () => {
       const initialComposition = JSON.parse(storage.get('composition'));
       composition.setContent(initialComposition.content);
       composition.setProposal(initialComposition.proposal);
-      composition.setGhostWords(initialComposition.ghostWords);
-      composition.setLineBreaks(initialComposition.lineBreaks);
     }
   };
 
@@ -65,13 +55,14 @@ const App = () => {
     const serializedComposition = JSON.stringify({
       content: composition.content,
       proposal: composition.proposal,
-      ghostWords: composition.ghostWords,
-      lineBreaks: composition.lineBreaks
     });
     storage.set('composition', serializedComposition);
   };
 
-  useEffect(updateCompositionLocalStorage, [composition.content, composition.proposal]);
+  useEffect(updateCompositionLocalStorage, [
+    composition.content,
+    composition.proposal,
+  ]);
 
   const updateSuggestion = () => {
     if (sources.current.id) {
@@ -110,25 +101,15 @@ const App = () => {
     proposalInputRef.current.focus();
   };
 
-  useEffect(focusProposalInput, [showWelcome, showSearch, showOptions]);
-
-  const getPredecessorTokens = (wordIndex) => {
-    const predecessorWords = composition.content.slice(0, wordIndex);
-    const predecessorTokens = parseIntoTokens(
-      predecessorWords.reduce((accum, word) => {
-        return accum + ' ' + word;
-      }, '')
-    );
-    return predecessorTokens;
-  };
+  useEffect(focusProposalInput, [showWelcome, showSearch]);
 
   const getWordClickSuggestionParams = (wordIndex) => {
     const suggestionParams = {
-      tokens: getPredecessorTokens(wordIndex),
+      tokens: composition.getTokensPreceding(wordIndex),
       accuracy: options.suggestionAccuracy,
       amount: 1,
       weighted: options.weightedSuggestions,
-      exclude: composition.content[wordIndex],
+      exclude: composition.content[wordIndex].word,
     };
     return suggestionParams;
   };
@@ -157,11 +138,6 @@ const App = () => {
         });
       suggestion.timeOutUpdates();
     }
-  };
-
-  const handleProposalChange = (event) => {
-    const newUserInput = event.target.value;
-    composition.setProposal(newUserInput);
   };
 
   const handleProposalSubmit = () => {
@@ -217,79 +193,64 @@ const App = () => {
     setShowSearch(false);
   };
 
-  const handleSearchClose = () => {
-    focusProposalInput();
-    setShowSearch(false);
-  };
-
   const handleDeleteLocalSource = (sourceID) => {
     notification.update(`Deleted downloaded ghost`);
     sources.removeLocalSourceAndMachine(sourceID);
-  };
-
-  const handleWelcomeClose = () => {
-    focusProposalInput();
-    setShowWelcome(false);
-    storage.set('userHasVisited', 'true');
   };
 
   const handleLogin = () => {
     setUserLoggedIn(!userLoggedIn);
   };
 
-  
-
   return (
     <>
       <CssBaseline />
-      <div className="background" style={backgroundStyle}>
-        <Navbar
-          onLoginClick={handleLogin}
-          userLoggedIn={userLoggedIn}
-          onAboutClick={() => setShowWelcome(true)}
-        />
-        <Container maxWidth="sm">
+      <Navbar
+        onLoginClick={handleLogin}
+        userLoggedIn={userLoggedIn}
+        onAboutClick={() => setShowWelcome(true)}
+      />
+        <div className="home-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Notification text={notification.text} />
-          <div style={{ display: showWelcome ? 'block' : 'none' }}>
+          <SourcePicker
+            value={sources.current.id}
+            onChange={handleSourceSelection}
+            allSources={sources.all}
+          />
+          <CompositionContainer
+            composition={composition}
+            suggestion={suggestion.value}
+            isSuggestionLoading={suggestion.isTimedOut()}
+            options={options}
+            onProposalSubmit={handleProposalSubmit}
+            onContainerClick={() => focusProposalInput()}
+            onContentClick={handleContentClick}
+            onAddNewLine={() => composition.addNewLine()}
+            onDeleteComposition={handleDeleteComposition}
+            inputRef={proposalInputRef}
+          />
+          <MenuContainer
+            options={options}
+            showOptions={showOptions}
+            onOptionsClick={() => setShowOptions(!showOptions)}
+            onOpenSearchClick={() => setShowSearch(true)}
+          />
+        </div>
+
+
+      {/* <div style={{ display: showWelcome ? 'block' : 'none' }}>
             <Welcome onCloseClick={handleWelcomeClose} />
-          </div>
-          <div style={{ display: showWelcome ? 'none' : 'block' }}>
-            <SourcePicker
-              value={sources.current.id}
-              onChange={handleSourceSelection}
-              allSources={sources.all}
-            />
-            <CompositionContainer
-              composition={composition}
-              suggestion={suggestion.value}
-              isSuggestionLoading={suggestion.isTimedOut()}
-              options={options}
-              onProposalChange={handleProposalChange}
-              onProposalSubmit={handleProposalSubmit}
-              onContainerClick={() => focusProposalInput()}
-              onContentClick={handleContentClick}
-              onAddNewLine={() => composition.addNewLine()}
-              onDeleteComposition={handleDeleteComposition}
-              inputRef={proposalInputRef}
-            />
-            <MenuContainer
-              options={options}
-              showOptions={showOptions}
-              onOptionsClick={() => setShowOptions(!showOptions)}
-              onOpenSearchClick={() => setShowSearch(true)}
-            />
-            <SearchModal
+          </div> */}
+
+      {/* <SearchModal
               open={showSearch}
               onClose={handleSearchClose}
               onSearchResultClick={handleSearchResultClick}
               localSources={sources.all.filter((s) => s.isLocal)}
               onClickDelete={handleDeleteLocalSource}
-            />
-          </div>
-        </Container>
-      </div>
+            /> */}
     </>
   );
 };
 
-export default App;
+export default Home;

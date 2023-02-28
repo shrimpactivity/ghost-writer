@@ -4,9 +4,9 @@ import {
   endsInTerminalPunctuation,
   formatWordArrayIntoSentence,
   removeExtraWhitespace,
-} from '../../utils/text';
+} from '../../../utils/text';
 import { capitalize } from '@mui/material';
-import theme from '../../config/colorPalette';
+import theme from '../../../config/colorPalette';
 
 const suggestionStyle = {
   marginLeft: '5px',

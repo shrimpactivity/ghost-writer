@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import theme from '../../config/colorPalette';
+import theme from '../../../config/colorPalette';
 
 const buttonContainerStyle = {
   display: 'flex',

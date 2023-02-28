@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SourceSelect from './SourceSelect';
-import theme from '../../config/colorPalette';
+import theme from '../../../config/colorPalette';
 
 const containerStyle = {
   display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
   justifyContent: 'center',
   alignItems: 'center',
+  flexWrap: 'wrap',
+  width: '95%',
+  maxWidth: '700px',
   padding: '15px',
+  margin: '10px',
   backgroundColor: theme.dark,
   borderRadius: '10px',
   border: '2px solid',
@@ -17,7 +19,8 @@ const containerStyle = {
 };
 
 const textContainerStyle = {
-  padding: "9px",
+  padding: "10px",
+  paddingRight: "15px",
   color: theme.light,
   textAlign: 'center',
   font: '18px Roboto',
@@ -28,9 +31,9 @@ const SourcePicker = ({ value, onChange, allSources }) => {
   if (allSources.length === 0) value = '';
 
   return (
-    <div style={containerStyle}>
+    <div className="source-select-container" style={containerStyle}>
       <div style={textContainerStyle}>You're writing with</div>
-      <div style={{ maxWidth: '340px' }}>
+      <div>
         <SourceSelect value={value} onChange={onChange} allSources={allSources} />
       </div>
     </div>

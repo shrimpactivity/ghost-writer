@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import calculateSuggestion from '../services/calculateSuggestion';
-import suggestionService from '../services/suggestionService';
+import suggestionService from '../services/suggestion';
 
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
@@ -39,7 +39,6 @@ const useSuggestion = () => {
       suggestionParams
     );
     setSuggestion(suggestion);
-    console.log('Suggestion found from local source: ', suggestion);
   };
 
   const queueUpdateFromServer = (
@@ -52,7 +51,6 @@ const useSuggestion = () => {
         .retrieveSuggestionFromServer(source, suggestionParams)
         .then((result) => {
           setSuggestion(result);
-          console.log('Suggestion found for server source: ', result);
         });
       const timeoutID = setTimeout(() => {
         setSuggestionTimeout(null);
@@ -67,7 +65,6 @@ const useSuggestion = () => {
         .retrieveSuggestionFromServer(source, suggestionParams)
         .then((result) => {
           setSuggestion(result);
-          console.log('Suggestion found for server source: ', result);
         });
       setSuggestionTimeout(null);
     }, timeoutLength);

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import theme from '../config/colorPalette';
-import WelcomeImg from '../assets/Welcome.png';
+import theme from '../../config/colorPalette';
+import WelcomeImg from '../../assets/Welcome.png';
 
 const style = {
   padding: '20px',

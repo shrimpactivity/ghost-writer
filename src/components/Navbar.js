@@ -1,30 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Box, Toolbar, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../config/colorPalette';
 import LogoImg from '../assets/logo.png';
-
-const appBarStyle = {
-  backgroundColor: theme.darkest,
-  color: theme.light,
-};
-
-const titleContainerStyle = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  flex: '1',
-  width: '100vw',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const linkContainerStyle = {
-  display: 'flex',
-  flex: '1',
-  alignItems: 'center',
-  justifyContent: 'center',
-};
 
 const buttonTheme = createTheme({
   palette: {
@@ -41,21 +20,20 @@ const linkButtonStyle = {
 };
 
 const navbarContainerStyle = {
-
-  width: '100vw',
+  width: '100%',
   display: 'flex',
   flexWrap: 'wrap',
-  justifyContent: 'center',
+  justifyContent: 'space-around',
   alignItems: 'center',
 };
 
 const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
   return (
     <div style={navbarContainerStyle}>
-      <div style={{marginRight: '100px', marginLeft: '100px'}}>
+      <div >
         <img style={{ width: '350px' }} src={LogoImg} alt="ghostwriter icon" />
       </div>
-      <div style={{marginRight: '100px', marginLeft: '100px'}}>
+      <div >
         <ThemeProvider theme={buttonTheme}>
           {/* TODO: <Button onClick={onLoginClick} style={linkButtonStyle}>
                 {userLoggedIn ? 'Logout' : 'Login'}
@@ -73,21 +51,6 @@ const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
         </ThemeProvider>
       </div>
     </div>
-    // <AppBar component="nav" position="static" style={appBarStyle}>
-    //   <Toolbar>
-    //     <Box style={titleContainerStyle}>
-    //       <Box display="flex" justifyContent="center" flexBasis="50%">
-    //         <Box display="flex" justifyContent={"center"}>
-    //           <img style={{width: '350px'}} src={LogoImg} alt="ghostwriter icon" />
-    //         </Box>
-    //         <Box style={linkContainerStyle}>
-
-    //       </Box>
-    //       </Box>
-
-    //     </Box>
-    //   </Toolbar>
-    // </AppBar>
   );
 };
 
