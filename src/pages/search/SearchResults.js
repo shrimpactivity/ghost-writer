@@ -4,7 +4,7 @@ import Result from './Result';
 
 const SearchResults = ({ results, onResultClick }) => {
   return (
-    <div style={{overflow: 'auto', maxHeight: '500px'}}>
+    <div>
       {results.map((result, index) => {
         return (
           <div key={result.id} style={{display: 'flex'}} onClick={() => onResultClick(result)}>

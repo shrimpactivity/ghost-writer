@@ -7,6 +7,7 @@ const containerStyle = {
   padding: '10px',
   cursor: 'pointer',
   borderTop: '2px solid',
+  borderColor: theme.darker,
 };
 
 const Result = ({ value }) => {

@@ -7,6 +7,12 @@ import CompositionContainer from './composition/CompositionContainer';
 import MenuContainer from './menu/MenuContainer';
 import { CssBaseline } from '@mui/material';
 
+const style = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+};
+
 const Home = (props) => {
   return (
     <>
@@ -16,32 +22,32 @@ const Home = (props) => {
         userLoggedIn={props.userLoggedIn}
         onAboutClick={props.onAboutClick}
       />
-        <div className="home-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Notification text={props.notification.text} />
-          <SourcePicker
-            value={props.sources.current.id}
-            onChange={props.onSourceSelectionChange}
-            allSources={props.sources.all}
-          />
-          <CompositionContainer
-            composition={props.composition}
-            suggestion={props.suggestion.value}
-            isSuggestionLoading={props.suggestion.isTimedOut()}
-            options={props.options}
-            onProposalSubmit={props.onProposalSubmit}
-            onContainerClick={props.onCompositionContainerClick}
-            onContentClick={props.onContentWordClick}
-            onAddNewLine={() => composition.addNewLine()}
-            onDeleteComposition={props.onDeleteComposition}
-            inputRef={props.inputRef}
-          />
-          <MenuContainer
-            options={props.options}
-            showOptions={props.showOptions}
-            onOptionsClick={props.onOptionsClick}
-            onOpenSearchClick={props.onOpenSearchClick}
-          />
-        </div>
+      <div className="home-container" style={style}>
+        <Notification text={props.notification.text} />
+        <SourcePicker
+          value={props.sources.current.id}
+          onChange={props.onSourceSelectionChange}
+          allSources={props.sources.all}
+        />
+        <CompositionContainer
+          composition={props.composition}
+          suggestion={props.suggestion.value}
+          isSuggestionLoading={props.suggestion.isTimedOut()}
+          options={props.options}
+          onProposalSubmit={props.onProposalSubmit}
+          onContainerClick={props.onCompositionContainerClick}
+          onContentClick={props.onContentWordClick}
+          onAddNewLine={() => composition.addNewLine()}
+          onDeleteComposition={props.onDeleteComposition}
+          inputRef={props.inputRef}
+        />
+        <MenuContainer
+          options={props.options}
+          showOptions={props.showOptions}
+          onOptionsClick={props.onOptionsClick}
+          onOpenSearchClick={props.onOpenSearchClick}
+        />
+      </div>
     </>
   );
 };
@@ -64,8 +70,6 @@ Home.propTypes = {
   showOptions: PropTypes.bool.isRequired,
   onOptionsClick: PropTypes.func.isRequired,
   onOpenSearchClick: PropTypes.func.isRequired,
-}
-
-
+};
 
 export default Home;

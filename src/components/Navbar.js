@@ -30,14 +30,14 @@ const navbarContainerStyle = {
 const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
   return (
     <div style={navbarContainerStyle}>
-      <div >
+      <div>
         <img style={{ width: '350px' }} src={LogoImg} alt="ghostwriter icon" />
       </div>
-      <div >
+      <div>
         <ThemeProvider theme={buttonTheme}>
-          {/* TODO: <Button onClick={onLoginClick} style={linkButtonStyle}>
-                {userLoggedIn ? 'Logout' : 'Login'}
-              </Button> */}
+          <Button onClick={onLoginClick} style={linkButtonStyle}>
+            {userLoggedIn ? 'Logout' : 'Login'}
+          </Button>
           <Button onClick={onAboutClick} style={linkButtonStyle}>
             {'About'}
           </Button>

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { capitalize } from '@mui/material';
 import theme from '../../../config/colorPalette';
 
 const suggestionStyle = {
@@ -13,7 +12,6 @@ const suggestionStyle = {
 };
 
 const SuggestionPreview = ({
-  composition,
   suggestion,
   isSuggestionLoading,
 }) => {
@@ -41,7 +39,6 @@ const SuggestionPreview = ({
 SuggestionPreview.propTypes = {
   suggestion: PropTypes.string,
   isSuggestionLoading: PropTypes.bool,
-  composition: PropTypes.object.isRequired,
 };
 
 export default SuggestionPreview;

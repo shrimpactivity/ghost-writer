@@ -11,7 +11,9 @@ const LocalSource = ({ source, onClickDelete }) => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderTop: '1px solid'
+        borderTop: '2px solid',
+        borderColor: theme.darker,
+        padding: '5px'
       }}
     >
       <div>

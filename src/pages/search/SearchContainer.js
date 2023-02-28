@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
-import catalogService from '../../services/catalogService';
+import catalogService from '../../services/catalog';
 import theme from '../../config/colorPalette';
-import useNotification from '../../hooks/useNotification';
-import Notification from '../Notification';
 
 const containerStyle = {
-  width: '100%',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  padding: '20px',
 };
 
 const titleStyle = {
@@ -22,9 +18,8 @@ const titleStyle = {
   textAlign: 'center'
 };
 
-const SearchContainer = ({ onSearchResultClick }) => {
+const SearchContainer = ({ notification, onSearchResultClick }) => {
   const [results, setResults] = useState([]);
-  const notification = useNotification();
 
   const handleBookSearchSubmit = (event) => {
     event.preventDefault();
@@ -35,6 +30,8 @@ const SearchContainer = ({ onSearchResultClick }) => {
         setResults(results);
         if (results.length === 0) {
           notification.update(`No results found for ${query}`);
+        } else {
+          notification.update(`${results.length} results found`);
         }
       });
     } else {
@@ -49,9 +46,6 @@ const SearchContainer = ({ onSearchResultClick }) => {
         <SearchForm onSubmit={handleBookSearchSubmit} />
       </div>
       <div>
-        {notification.text && <Notification text={notification.text} />}
-      </div>
-      <div>
         <SearchResults results={results} onResultClick={onSearchResultClick} />
       </div>
     </div>
@@ -59,6 +53,7 @@ const SearchContainer = ({ onSearchResultClick }) => {
 };
 
 SearchContainer.propTypes = {
+  notification: PropTypes.object.isRequired,
   onSearchResultClick: PropTypes.func.isRequired,
 };
 

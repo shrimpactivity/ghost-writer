@@ -6,6 +6,7 @@ import SuggestionMachine from 'suggestion-machine';
 
 import HomePage from './pages/home/Home';
 import AboutPage from './pages/about/About';
+import SearchPage from './pages/search/Search';
 import ErrorPage from './pages/error/Error';
 
 import bookService from './services/gutenbergBook';
@@ -19,10 +20,7 @@ import useSuggestion from './hooks/useSuggestion';
 import useNotification from './hooks/useNotification';
 import useOptions from './hooks/useOptions';
 
-import {
-  endsInTerminalPunctuation,
-  removeExtraWhitespace,
-} from './utils/text';
+import { endsInTerminalPunctuation, removeExtraWhitespace } from './utils/text';
 import { capitalize } from '@mui/material';
 
 const App = () => {
@@ -51,7 +49,9 @@ const App = () => {
   useEffect(redirectToWelcomePage, []);
 
   const isSuggestionCapitalized = () => {
-    const contentWords = composition.content.map((item) => item.word).reduce((accum, current) => (accum + ' ' + current), '');
+    const contentWords = composition.content
+      .map((item) => item.word)
+      .reduce((accum, current) => accum + ' ' + current, '');
     const formattedProposal = removeExtraWhitespace(composition.proposal);
     const predecessorToSuggestion = contentWords + formattedProposal;
     return (
@@ -138,10 +138,7 @@ const App = () => {
     const suggestionParams = getWordClickSuggestionParams(wordIndex);
     if (sources.current.isLocal) {
       const machine = sources.getSuggestionMachine(sources.current.id);
-      let suggestion = calculateSuggestion(
-        machine,
-        suggestionParams
-      );
+      let suggestion = calculateSuggestion(machine, suggestionParams);
       console.log('Local suggestion found: ', suggestion);
       console.groupEnd();
       if (suggestionParams.capitalize) {
@@ -150,10 +147,7 @@ const App = () => {
       composition.updateContentAtIndex(wordIndex, suggestion);
     } else if (!suggestion.isTimedOut()) {
       suggestionService
-        .retrieveSuggestionFromServer(
-          sources.current,
-          suggestionParams
-        )
+        .retrieveSuggestionFromServer(sources.current, suggestionParams)
         .then((suggestion) => {
           console.log('Server suggestion found: ', suggestion);
           console.groupEnd();
@@ -245,11 +239,13 @@ const App = () => {
    * @param {string} sourceID The id of the source to delete.
    */
   const handleDeleteLocalSource = (sourceID) => {
-    notification.update(`Deleted downloaded ghost`);
+    notification.update(
+      `Deleted ghost: ${
+        sources.all.find((source) => source.id === sourceID).author
+      }`
+    );
     sources.removeLocalSourceAndMachine(sourceID);
   };
-
-  const handleOptionsClick = () => {};
 
   /**
    * TODO:
@@ -276,19 +272,25 @@ const App = () => {
     storage.set('userHasVisited', 'true');
   };
 
+  const navBarProps = {
+    onLoginClick: handleLogin,
+    userLoggedIn: userLoggedIn,
+    onAboutClick: () => nav('/about'),
+  };
+
   return (
     <Routes>
       <Route
         path="/about"
-        element={<AboutPage onCloseClick={handleWelcomeClose} />}
+        element={
+          <AboutPage {...navBarProps} onCloseClick={handleWelcomeClose} />
+        }
       />
       <Route
         path="/"
         element={
           <HomePage
-            onLoginClick={handleLogin}
-            userLoggedIn={userLoggedIn}
-            onAboutClick={() => nav('/about')}
+            {...navBarProps}
             notification={notification}
             sources={sources}
             onSourceSelectionChange={handleSourceSelection}
@@ -303,6 +305,19 @@ const App = () => {
             showOptions={showOptions}
             onOptionsClick={() => setShowOptions(!showOptions)}
             onOpenSearchClick={() => nav('/search')}
+          />
+        }
+      />
+      <Route
+        path="/search"
+        element={
+          <SearchPage
+            {...navBarProps}
+            notification={notification}
+            onClose={handleSearchClose}
+            onSearchResultClick={handleSearchResultClick}
+            localSources={sources.all.filter((source) => source.isLocal)}
+            onClickDelete={handleDeleteLocalSource}
           />
         }
       />
