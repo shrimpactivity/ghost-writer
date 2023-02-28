@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import parseIntoTokens from '../utils/parseIntoTokens';
 import { removeExtraWhitespace } from '../utils/text';
+import storage from '../services/localStorage';
 
 /**
  * Converts an array of words into an array of objects to be stored in the content state.
@@ -19,8 +20,24 @@ const convertWordsToContentObjects = (words, addedByGhost) => {
 };
 
 const useComposition = () => {
-  const [content, setContent] = useState([]);
-  const [proposal, setProposal] = useState('');
+  const [content, setContent] = useState(() => {
+    const initial = JSON.parse(storage.get('content'));
+    return initial || [];
+  });
+  const [proposal, setProposal] = useState(() => {
+    const initial = JSON.parse(storage.get('proposal'));
+    return initial || '';
+  });
+
+  /**
+   * Effect for updating the composition in local storage when changes are made.
+   */
+  const updateLocalStorage = () => {
+    storage.set('content', JSON.stringify(content));
+    storage.set('proposal', JSON.stringify(proposal));
+  };
+
+  useEffect(updateLocalStorage, [content, proposal]);
 
   /**
    * Formats the current proposal and suggestion argument, then adds them to the content state.

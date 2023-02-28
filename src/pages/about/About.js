@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import PropTypes from 'prop-types';
 import theme from '../../config/colorPalette';
 import WelcomeImg from '../../assets/Welcome.png';
 
@@ -27,7 +28,7 @@ const buttonTheme = createTheme({
   },
 });
 
-const Welcome = ({ onCloseClick }) => {
+const About = ({ onCloseClick }) => {
   return (
     <div className="welcome" style={style}>
       <div
@@ -94,4 +95,8 @@ const Welcome = ({ onCloseClick }) => {
   );
 };
 
-export default Welcome;
+About.propTypes = {
+  onCloseClick: PropTypes.func.isRequired
+}
+
+export default About;

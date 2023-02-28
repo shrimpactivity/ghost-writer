@@ -16,7 +16,8 @@ const config = {
         target: 'http://localhost:3000',
         router: () => 'http://localhost:3005',
       }
-    }
+    },
+    historyApiFallback: true,
   },
   devtool: 'source-map',
   module: {

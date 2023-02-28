@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import calculateSuggestion from '../services/calculateSuggestion';
 import suggestionService from '../services/suggestion';
+import { capitalize } from '../utils/text';
 
 const useSuggestion = () => {
   const [suggestion, setSuggestion] = useState('');
@@ -29,18 +30,28 @@ const useSuggestion = () => {
   };
 
   /**
-   *
+   * Updates the suggestion state using the provided suggestion machine and parameters.
    * @param {Object} suggestionMachine
-   * @param {*[]} params The tokens, accuracy, amount, weighted, and exclude parameters.
+   * @param {*[]} params The tokens, accuracy, amount, weighted, exclude, and capitalize parameters.
    */
   const updateFromLocalMachine = (suggestionMachine, suggestionParams) => {
-    const suggestion = calculateSuggestion(
+    let suggestion = calculateSuggestion(
       suggestionMachine,
       suggestionParams
     );
+    if (suggestionParams.capitalize) {
+      suggestion = capitalize(suggestion);
+    }
     setSuggestion(suggestion);
   };
 
+  /**
+   * 
+   * @param {*} source 
+   * @param {*} suggestionParams 
+   * @param {*} timeoutLength 
+   * @returns 
+   */
   const queueUpdateFromServer = (
     source,
     suggestionParams,
@@ -50,6 +61,9 @@ const useSuggestion = () => {
       suggestionService
         .retrieveSuggestionFromServer(source, suggestionParams)
         .then((result) => {
+          if (suggestionParams.capitalize) {
+            result = capitalize(result);
+          }
           setSuggestion(result);
         });
       const timeoutID = setTimeout(() => {
@@ -64,6 +78,9 @@ const useSuggestion = () => {
       suggestionService
         .retrieveSuggestionFromServer(source, suggestionParams)
         .then((result) => {
+          if (suggestionParams.capitalize) {
+            result = capitalize(result);
+          }
           setSuggestion(result);
         });
       setSuggestionTimeout(null);
