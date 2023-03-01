@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../../config/colorPalette';
+
+import textUtils from '../../../utils/text';
+import palette from '../../../theme/palette';
 
 const getInputStyle = (proposalText) => {
   return {
-    marginLeft: '0.5em',
+    marginLeft: textUtils.beginsWithPunctuation(proposalText) ? '0em' : '0.5em',
     color: 'cyan',
-    backgroundColor: proposalText.length > 0 ? theme.darker : theme.dark,
+    backgroundColor: proposalText.length > 0 ? palette.darker : palette.dark,
     width: `${proposalText.length * 0.6 + 0.6}em`,
     maxWidth: '100%',
     font: '16px roboto-mono',

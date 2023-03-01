@@ -22,6 +22,7 @@ import useOptions from './hooks/useOptions';
 
 import { endsInTerminalPunctuation, removeExtraWhitespace } from './utils/text';
 import { capitalize } from '@mui/material';
+import Signup from './pages/login/Signup';
 
 const App = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -88,7 +89,6 @@ const App = () => {
     sources.current,
     options.suggestionAccuracy,
     options.suggestionCount,
-    options.weightedSuggestions,
   ]);
 
   /**
@@ -276,6 +276,7 @@ const App = () => {
     onLoginClick: handleLogin,
     userLoggedIn: userLoggedIn,
     onAboutClick: () => nav('/about'),
+    onLogoClick: () => nav('/')
   };
 
   return (
@@ -321,6 +322,7 @@ const App = () => {
           />
         }
       />
+      <Route path='/signup' element={<Signup />} />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );

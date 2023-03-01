@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../../config/colorPalette';
+import palette from '../../../theme/palette';
 
 const selectStyle = {
   width: '130px',
   height: '30px',
   color: 'black',
-  backgroundColor: theme.light,
-  borderColor: theme.darkest,
+  backgroundColor: palette.light,
+  borderColor: palette.darkest,
   borderRadius: '5px',
   font: '16px Roboto',
   textOverflow: 'ellipsis',

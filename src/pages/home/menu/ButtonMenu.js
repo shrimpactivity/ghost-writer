@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import theme from '../../../config/colorPalette';
+
+import palette from '../../../theme/palette';
 
 const buttonContainerStyle = {
   display: 'flex',
@@ -15,7 +17,7 @@ const buttonContainerStyle = {
 const buttonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.complement,
+      main: palette.complement,
     },
   },
 });
@@ -23,7 +25,7 @@ const buttonTheme = createTheme({
 const searchButtonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.light,
+      main: palette.light,
     },
   },
 });

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import theme from '../../../config/colorPalette';
+import palette from '../../../theme/palette';
 
 const suggestionStyle = {
   marginLeft: '5px',
   wordWrap: 'break-word',
-  color: theme.light,
+  color: palette.light,
   borderRadius: '3px',
   whiteSpace: 'pre',
 };

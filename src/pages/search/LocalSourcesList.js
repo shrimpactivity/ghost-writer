@@ -1,26 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LocalSource from './LocalSource';
-import theme from '../../config/colorPalette';
+import palette from '../../theme/palette';
 
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  borderRadius: '10px',
-  padding: '20px', 
-}
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: '10px'
+};
 
 const titleStyle = {
-  color: theme.light,
-  fontSize: '22px',
-  alignSelf: 'center',
-  paddingBottom: '10px'
-}
+  color: palette.light,
+  backgroundColor: palette.dark,
+  borderRadius: '10px',
+  padding: '5px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+  fontSize: '20px',
+};
 
 const LocalSourcesList = ({ localSources, onClickDelete }) => {
   return (
     <div style={containerStyle}>
       <span style={titleStyle}>Downloaded Ghosts</span>
+      <div style={{maxHeight: '40vh', overflow: 'auto'}}>
       {localSources.map((source) => {
         return (
           <LocalSource
@@ -30,6 +35,7 @@ const LocalSourcesList = ({ localSources, onClickDelete }) => {
           />
         );
       })}
+      </div>
     </div>
   );
 };

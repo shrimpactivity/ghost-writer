@@ -1,11 +1,20 @@
-@font-face {
-  font-family: hustlers;
-  src: url("./assets/Hustlersroughdemo-6OM1.ttf") format("ttf");
+body {
+  padding: 0px;
+  margin: 0px;
+  background: center no-repeat url("./assets/background.png");
+  background-size: cover;
+  background-attachment: fixed;
 }
 
-@font-face {
-  font-family: roboto-mono;
-  src:  url("./assets/RobotoMono-VariableFont_wght.ttf");
+.basic-container {
+  padding: 20px;
+  margin: 10px;
+  width: 95%;
+  max-width: 700px;
+  color: var(--theme-light);
+  background-color: var(--theme-darker);
+  border: 2px solid var(--theme-darkest);
+  border-radius: 10px;
 }
 
 .flip-img-vertical {
@@ -16,27 +25,22 @@
   outline: none;
 }
 
-body {
-  padding: 0px;
-  margin: 0px;
-  background: center no-repeat url("./assets/background.png");
-  background-size: cover;
-  background-attachment: fixed;
-}
-
 .proposal-input:focus {
   border: none;
   outline: none;
 }
 
 .content-word:hover {
-  color: black;
   background-color: #750023;
   animation: fadeCycle 1s infinite;
 }
 
+.notification-container {
+  animation: fadeCycle 1s infinite;
+}
+
 .search-result:hover {
-  background-color: #212121;
+  background-color: var(--theme-dark);
 }
 
 .suggestion-preview {
@@ -49,6 +53,7 @@ body {
   animation: wave 1.6s infinite;
   animation-delay: calc(.2s * var(--i));
 }
+
 @keyframes wave {
   0%, 100% {
     transform: translateY(-2px);
@@ -65,10 +70,6 @@ body {
   }
 }
 
-.notification-container {
-  animation: fadeCycle 1s infinite;
-}
-
 @keyframes fadeCycle {
   0%, 100% {
     opacity: 0.7;
@@ -76,4 +77,14 @@ body {
   50% {
     opacity: 1;
   }
+}
+
+@font-face {
+  font-family: hustlers;
+  src: url("./assets/Hustlersroughdemo-6OM1.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: roboto-mono;
+  src:  url("./assets/RobotoMono-VariableFont_wght.ttf");
 }

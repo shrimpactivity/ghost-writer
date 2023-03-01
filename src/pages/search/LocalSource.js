@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@mui/material';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import theme from '../../config/colorPalette';
+import theme from '../../theme/palette';
 
 const LocalSource = ({ source, onClickDelete }) => {
   return (
@@ -13,13 +13,9 @@ const LocalSource = ({ source, onClickDelete }) => {
         alignItems: 'center',
         borderTop: '2px solid',
         borderColor: theme.darker,
-        padding: '5px'
+        padding: '5px',
       }}
     >
-      <div>
-        <div>{source.author}</div>
-        <div style={{ fontSize: '12px' }}>{source.title}</div>
-      </div>
       <div>
         <Tooltip title="Delete Ghost">
           <IconButton
@@ -34,6 +30,11 @@ const LocalSource = ({ source, onClickDelete }) => {
           </IconButton>
         </Tooltip>
       </div>
+      <div>
+        <div style={{ color: theme.light }}>{source.author}</div>
+        <div style={{ fontSize: '12px' }}>{source.title}</div>
+      </div>
+      
     </div>
   );
 };

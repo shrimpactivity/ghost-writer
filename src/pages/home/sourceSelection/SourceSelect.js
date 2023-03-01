@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../../config/colorPalette';
+import theme from '../../../theme/palette';
 
 const selectStyle = {
   height: '30px',

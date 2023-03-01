@@ -3,18 +3,24 @@ import PropTypes from 'prop-types';
 import SearchForm from './SearchForm';
 import SearchResults from './SearchResults';
 import catalogService from '../../services/catalog';
-import theme from '../../config/colorPalette';
+import palette from '../../theme/palette';
 
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: '10px'
 };
 
 const titleStyle = {
-  color: theme.light,
-  fontSize: '22px',
+  color: palette.light,
+  backgroundColor: palette.dark,
+  borderRadius: '10px',
+  padding: '5px',
+  paddingLeft: '10px',
+  paddingRight: '10px',
+  fontSize: '20px',
   textAlign: 'center'
 };
 
@@ -41,11 +47,11 @@ const SearchContainer = ({ notification, onSearchResultClick }) => {
 
   return (
     <div style={containerStyle}>
-      <span style={titleStyle}>Find Authors on Project Gutenberg</span>
+      <span style={titleStyle}>Search Project Gutenberg</span>
       <div>
         <SearchForm onSubmit={handleBookSearchSubmit} />
       </div>
-      <div>
+      <div style={{maxHeight: '40vh', overflow: 'auto'}}>
         <SearchResults results={results} onResultClick={onSearchResultClick} />
       </div>
     </div>

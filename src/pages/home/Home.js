@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Notification from '../../components/Notification';
 import Navbar from '../../components/Navbar';
-import SourcePicker from './sourceSelection/SourcePicker';
+import SourceSelectionContainer from './sourceSelection/SourceSelectionContainer';
 import CompositionContainer from './composition/CompositionContainer';
 import MenuContainer from './menu/MenuContainer';
 import { CssBaseline } from '@mui/material';
@@ -21,10 +21,11 @@ const Home = (props) => {
         onLoginClick={props.onLoginClick}
         userLoggedIn={props.userLoggedIn}
         onAboutClick={props.onAboutClick}
+        onLogoClick={props.onLogoClick}
       />
       <div className="home-container" style={style}>
         <Notification text={props.notification.text} />
-        <SourcePicker
+        <SourceSelectionContainer
           value={props.sources.current.id}
           onChange={props.onSourceSelectionChange}
           allSources={props.sources.all}

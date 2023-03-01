@@ -5,7 +5,7 @@ import Result from './Result';
 const SearchResults = ({ results, onResultClick }) => {
   return (
     <div>
-      {results.map((result, index) => {
+      {results.map((result) => {
         return (
           <div key={result.id} style={{display: 'flex'}} onClick={() => onResultClick(result)}>
             <Result value={result} />

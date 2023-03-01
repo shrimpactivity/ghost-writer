@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import theme from '../config/colorPalette';
+import theme from '../theme/palette';
 import LogoImg from '../assets/logo.png';
 
 const buttonTheme = createTheme({
@@ -27,11 +27,11 @@ const navbarContainerStyle = {
   alignItems: 'center',
 };
 
-const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
+const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick, onLogoClick }) => {
   return (
     <div style={navbarContainerStyle}>
       <div>
-        <img style={{ width: '350px' }} src={LogoImg} alt="ghostwriter icon" />
+        <img style={{ width: '350px', cursor: 'pointer' }} src={LogoImg} alt="ghostwriter icon" onClick={onLogoClick}/>
       </div>
       <div>
         <ThemeProvider theme={buttonTheme}>
@@ -57,6 +57,8 @@ const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick }) => {
 Navbar.propTypes = {
   onLoginClick: PropTypes.func,
   userLoggedIn: PropTypes.bool,
+  onAboutClick: PropTypes.func.isRequired,
+  onLogoClick: PropTypes.func.isRequired,
 };
 
 export default Navbar;

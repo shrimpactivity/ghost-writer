@@ -3,30 +3,26 @@ import PropTypes from 'prop-types';
 import { Button, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import SearchContainer from './SearchContainer';
+import SearchFormContainer from './SearchFormContainer';
 import LocalSourcesList from './LocalSourcesList';
 import Navbar from '../../components/Navbar';
 import Notification from '../../components/Notification';
-import theme from '../../config/colorPalette';
+
+import palette from '../../theme/palette';
 
 const containerStyle = {
-  backgroundColor: theme.dark,
-  border: '2px solid',
-  borderColor: theme.medium,
-  borderRadius: '10px',
-  color: theme.lightest,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '10px',
-  maxWidth: '90%',
-  marginBottom: '30px'
+  color: palette.lightest,
+  maxWidth: '1000px',
+  maxHeight: '700px'
 };
 
 const buttonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.complement,
+      main: palette.complement,
     },
   },
 });
@@ -39,35 +35,48 @@ const Search = (props) => {
         onLoginClick={props.onLoginClick}
         userLoggedIn={props.userLoggedIn}
         onAboutClick={props.onAboutClick}
+        onLogoClick={props.onLogoClick}
       />
       <Notification text={props.notification.text} />
       <div
         className="page-container"
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <div className="content-container" style={containerStyle}>
-          <div style={{margin: '10px'}}>
+        <div
+          className="basic-container"
+          style={containerStyle}
+        >
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              width: '100%',
+            }}
+          >
+            <div style={{ maxWidth: '480px'}}>
+              {props.localSources.length > 0 ? (
+                <div>
+                  <LocalSourcesList
+                    localSources={props.localSources}
+                    onClickDelete={props.onClickDelete}
+                  />
+                </div>
+              ) : null}
+            </div>
+            <div style={{ maxWidth: '480px'}}>
+              <SearchFormContainer
+                notification={props.notification}
+                onSearchResultClick={props.onSearchResultClick}
+              />
+            </div>
+          </div>
+          <div style={{ marginTop: '20px' }}>
             <ThemeProvider theme={buttonTheme}>
               <Button variant="outlined" onClick={props.onClose}>
                 Done
               </Button>
             </ThemeProvider>
-          </div>
-          <div>
-            {props.localSources.length > 0 ? (
-              <div>
-                <LocalSourcesList
-                  localSources={props.localSources}
-                  onClickDelete={props.onClickDelete}
-                />
-              </div>
-            ) : null}
-          </div>
-          <div>
-            <SearchContainer
-              notification={props.notification}
-              onSearchResultClick={props.onSearchResultClick}
-            />
           </div>
         </div>
       </div>

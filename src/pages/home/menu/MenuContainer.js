@@ -1,21 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+
 import ButtonMenu from './ButtonMenu';
 import OptionInputs from './OptionInputs';
-import theme from '../../../config/colorPalette';
 
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  padding: '10px',
-  margin: '10px',
-  width: '95%',
-  maxWidth: '700px',
-  backgroundColor: theme.dark,
-  borderRadius: '10px',
-  border: '2px solid',
-  borderColor: theme.medium,
-  color: theme.light,
+  padding: '10px'
 };
 
 const MenuContainer = ({
@@ -25,7 +17,7 @@ const MenuContainer = ({
   onOptionsClick,
 }) => {
   return (
-    <div className="home-content-container" style={containerStyle}>
+    <div className="home-content-container basic-container" style={containerStyle}>
       <ButtonMenu
         showOptions={showOptions}
         onOptionButtonClick={onOptionsClick}

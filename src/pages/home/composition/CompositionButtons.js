@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../../config/colorPalette';
+
 import { IconButton, Tooltip } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+
+import theme from '../../../theme/palette';
 
 const buttonTheme = createTheme({
   palette: {

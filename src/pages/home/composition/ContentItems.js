@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../../config/colorPalette';
+
+import palette from '../../../theme/palette';
 import { beginsWithPunctuation } from '../../../utils/text';
 
 const getWordStyle = (contentItem, options) => {
@@ -8,7 +9,7 @@ const getWordStyle = (contentItem, options) => {
   return {
     marginLeft: beginsWithPunctuation(contentItem.word) ? '0px' : '0.6em',
     cursor: 'pointer',
-    color: highlightWord ? theme.light : theme.lightest,
+    color: highlightWord ? palette.light : palette.lightest,
     borderRadius: '3px',
     display: 'inline-block',
     maxWidth: '100%',

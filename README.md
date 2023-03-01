@@ -1,11 +1,28 @@
 ![GhostWriter Logo](./src/assets/readme-logo.png)
 
-Text suggestion from beyond the grave. GhostWriter provides a simple browser interface for co-writing with public domain authors. Suggestions are computed from the selected body of text and the user's input.
+GhostWriter provides a simple browser interface for co-writing with public domain authors. While writing, the app continuously provides text suggestion sourced from the selected author's work. 
 
-Additional texts (or *ghosts*, as they're referred to in the app) can be searched and downloaded from [Project Gutenberg](https://www.gutenberg.org/), an online library of free e-books. The text is then processed into a usable abstract data structure with my [suggestion-machine](https://github.com/shrimpactivity/suggestion-machine) node module. 
+Additional texts (or *ghosts*, as they're referred to in the app) can be searched and downloaded from [Project Gutenberg](https://www.gutenberg.org/), an online library of free e-books. The text is then processed into a usable abstract data structure with my [suggestion-machine](https://github.com/shrimpactivity/suggestion-machine) Node.js package. 
 
 This is a front-end application built with React.js. For the backend api, see https://github.com/shrimpactivity/ghostwriter-api
 
+## Features
+
+- real-time text suggestion computed from a seed text and the user's writing
+- custom browser text editor
+- Express.js backend
+  - suggestion api for texts located on server
+  - api for searching/retrieving texts from Project Gutenberg
+  - and more!
+- custom JWT user authentication
+- save/load user compositions with MongoDB integration
+- client side routing with [React Router](https://reactrouter.com/en/main)
+- local storage state persistence
+- Goober, the ghost mascot
+
+## Planned Features
+- more advanced suggestion algorithm for better coherence
+- better text parser to allow non-alphabetic characters in suggestions 
 
 ## Suggestion Algorithm
 

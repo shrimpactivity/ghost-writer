@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import theme from '../../../config/colorPalette';
+
+import palette from '../../../theme/palette';
 
 const containerStyle = {
   padding: '5px',
@@ -15,7 +16,7 @@ const inputStyle = {
   width: '1rem', 
   height: '1rem',
   cursor: 'pointer',
-  backgroundColor: theme.light,
+  backgroundColor: palette.light,
   float: 'right'
 }
 

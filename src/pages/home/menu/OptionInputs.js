@@ -8,8 +8,7 @@ const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  marginTop: '20px',
-  marginBottom: '20px',
+  marginTop: '10px'
 };
 
 const borderStyle = {
