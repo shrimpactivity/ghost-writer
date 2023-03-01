@@ -54,7 +54,8 @@ const ProposalInput = (props) => {
     <>
       <span>
         <input
-          ref={props.inputRef}
+          autoFocus
+          ref={props.proposalInputRef}
           className="proposal-input"
           type="text"
           onChange={handleProposalChange}

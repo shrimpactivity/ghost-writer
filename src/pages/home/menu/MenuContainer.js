@@ -7,7 +7,8 @@ import OptionInputs from './OptionInputs';
 const containerStyle = {
   display: 'flex',
   flexDirection: 'column',
-  padding: '10px'
+  padding: '10px',
+  marginBottom: '30px'
 };
 
 const MenuContainer = ({

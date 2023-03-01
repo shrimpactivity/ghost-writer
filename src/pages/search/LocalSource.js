@@ -9,7 +9,6 @@ const LocalSource = ({ source, onClickDelete }) => {
     <div
       style={{
         display: 'flex',
-        justifyContent: 'space-between',
         alignItems: 'center',
         borderTop: '2px solid',
         borderColor: theme.darker,

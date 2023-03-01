@@ -16,7 +16,6 @@ const containerStyle = {
   alignItems: 'center',
   color: palette.lightest,
   maxWidth: '1000px',
-  maxHeight: '700px'
 };
 
 const buttonTheme = createTheme({
@@ -54,7 +53,7 @@ const Search = (props) => {
               width: '100%',
             }}
           >
-            <div style={{ maxWidth: '480px'}}>
+            <div style={{ maxWidth: '450px'}}>
               {props.localSources.length > 0 ? (
                 <div>
                   <LocalSourcesList
@@ -64,7 +63,7 @@ const Search = (props) => {
                 </div>
               ) : null}
             </div>
-            <div style={{ maxWidth: '480px'}}>
+            <div style={{ maxWidth: '450px'}}>
               <SearchFormContainer
                 notification={props.notification}
                 onSearchResultClick={props.onSearchResultClick}

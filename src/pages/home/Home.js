@@ -40,7 +40,7 @@ const Home = (props) => {
           onContentClick={props.onContentWordClick}
           onAddNewLine={() => composition.addNewLine()}
           onDeleteComposition={props.onDeleteComposition}
-          inputRef={props.inputRef}
+          proposalInputRef={props.proposalInputRef}
         />
         <MenuContainer
           options={props.options}
@@ -67,7 +67,7 @@ Home.propTypes = {
   onCompositionContainerClick: PropTypes.func.isRequired,
   onContentWordClick: PropTypes.func.isRequired,
   onDeleteComposition: PropTypes.func.isRequired,
-  inputRef: PropTypes.object,
+  proposalInputRef: PropTypes.object,
   showOptions: PropTypes.bool.isRequired,
   onOptionsClick: PropTypes.func.isRequired,
   onOpenSearchClick: PropTypes.func.isRequired,

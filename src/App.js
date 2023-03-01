@@ -100,13 +100,13 @@ const App = () => {
     }
   }, [sources.isLoading]);
 
-  const focusProposalInput = () => {
-    if (proposalInputRef.current) proposalInputRef.current.focus();
-  };
-
   /**
    * Effect for focusing the text input box when component mounts.
    */
+  const focusProposalInput = () => {
+    proposalInputRef.current.focus();
+  };
+
   useEffect(focusProposalInput, []);
 
   /**
@@ -191,6 +191,7 @@ const App = () => {
     const selectedSource = sources.all.find((s) => s.id === selectedID);
     console.log('Source selected: ', selectedSource.title);
     sources.setCurrent(selectedSource);
+    focusProposalInput();
   };
 
   /**
@@ -267,8 +268,8 @@ const App = () => {
    * FIXME:
    */
   const handleWelcomeClose = () => {
-    focusProposalInput();
     nav('/');
+    focusProposalInput();
     storage.set('userHasVisited', 'true');
   };
 
@@ -302,7 +303,7 @@ const App = () => {
             onCompositionContainerClick={() => focusProposalInput()}
             onContentWordClick={handleContentClick}
             onDeleteComposition={handleDeleteComposition}
-            inputRef={proposalInputRef}
+            proposalInputRef={proposalInputRef}
             showOptions={showOptions}
             onOptionsClick={() => setShowOptions(!showOptions)}
             onOpenSearchClick={() => nav('/search')}
