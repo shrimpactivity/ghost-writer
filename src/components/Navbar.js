@@ -35,9 +35,9 @@ const Navbar = ({ onLoginClick, userLoggedIn, onAboutClick, onLogoClick }) => {
       </div>
       <div>
         <ThemeProvider theme={buttonTheme}>
-          <Button onClick={onLoginClick} style={linkButtonStyle}>
+          {/* TODO: <Button onClick={onLoginClick} style={linkButtonStyle}>
             {userLoggedIn ? 'Logout' : 'Login'}
-          </Button>
+          </Button> */}
           <Button onClick={onAboutClick} style={linkButtonStyle}>
             {'About'}
           </Button>

@@ -49,16 +49,39 @@ const App = () => {
 
   useEffect(redirectToWelcomePage, []);
 
+  /**
+   * Effect for notifying the user that server ghost info is downloaded and ready to use.
+   */
+  useEffect(() => {
+    if (!sources.isLoading) {
+      notification.update('Ghosts loaded, ready to write!');
+    }
+  }, [sources.isLoading]);
+
+  /**
+   * Effect for focusing the text input box when component mounts.
+   */
+  const focusProposalInput = () => {
+    proposalInputRef.current.focus();
+  };
+
+  useEffect(focusProposalInput, []);
+
+  /**
+   * Returns true if the current suggestion needs to be capitalized based on proposal input 
+   * and previous content.
+   * @returns {boolean}
+   */
   const isSuggestionCapitalized = () => {
     const contentWords = composition.content
       .map((item) => item.word)
       .reduce((accum, current) => accum + ' ' + current, '');
-    const formattedProposal = removeExtraWhitespace(composition.proposal);
-    const predecessorToSuggestion = contentWords + formattedProposal;
-    return (
-      endsInTerminalPunctuation(predecessorToSuggestion) ||
-      composition.content.length === 0
-    );
+    const predecessorToSuggestion = removeExtraWhitespace(contentWords + composition.proposal);
+    console.log('predecessor: ', predecessorToSuggestion)
+    if (predecessorToSuggestion === '' || endsInTerminalPunctuation(predecessorToSuggestion)) {
+      return true;
+    }
+    return false;
   };
 
   /**
@@ -90,24 +113,6 @@ const App = () => {
     options.suggestionAccuracy,
     options.suggestionCount,
   ]);
-
-  /**
-   * Effect for notifying the user that server ghost info is downloaded and ready to use.
-   */
-  useEffect(() => {
-    if (!sources.isLoading) {
-      notification.update('Ghosts loaded, ready to write!');
-    }
-  }, [sources.isLoading]);
-
-  /**
-   * Effect for focusing the text input box when component mounts.
-   */
-  const focusProposalInput = () => {
-    proposalInputRef.current.focus();
-  };
-
-  useEffect(focusProposalInput, []);
 
   /**
    * Returns a parameters object usable with the suggestion service for providing
@@ -248,25 +253,15 @@ const App = () => {
     sources.removeLocalSourceAndMachine(sourceID);
   };
 
-  /**
-   * TODO:
-   * Handles the user logging in.
-   */
   const handleLogin = () => {
     setUserLoggedIn(!userLoggedIn);
   };
 
-  /**
-   * FIXME:
-   */
   const handleSearchClose = () => {
     nav('/');
     focusProposalInput();
   };
 
-  /**
-   * FIXME:
-   */
   const handleWelcomeClose = () => {
     nav('/');
     focusProposalInput();
