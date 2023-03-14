@@ -42,12 +42,6 @@ const useSources = () => {
           return 1;
         });
         const current = getInitialSource(sortedSources);
-        setSources(sortedSources.concat({
-          title: 'dog book', 
-          author: 'the dog with the really long name that just keeps going and going and going',
-          isLocal: true,
-          id: '123647896'
-        }));
         setCurrent(current);
         setIsLoading(false);
         console.log('Server sources found: ', processedSources);
