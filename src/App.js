@@ -8,6 +8,7 @@ import HomePage from './pages/home/Home';
 import AboutPage from './pages/about/About';
 import SearchPage from './pages/search/Search';
 import ErrorPage from './pages/error/Error';
+import SignupPage from './pages/login/Signup';
 
 import bookService from './services/gutenbergBook';
 import suggestionService from './services/suggestion';
@@ -22,7 +23,7 @@ import useOptions from './hooks/useOptions';
 
 import { endsInTerminalPunctuation, removeExtraWhitespace } from './utils/text';
 import { capitalize } from '@mui/material';
-import Signup from './pages/login/Signup';
+
 
 const App = () => {
   const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -62,7 +63,9 @@ const App = () => {
    * Effect for focusing the text input box when component mounts.
    */
   const focusProposalInput = () => {
-    proposalInputRef.current.focus();
+    if (proposalInputRef.current) {
+      proposalInputRef.current.focus();
+    }
   };
 
   useEffect(focusProposalInput, []);
@@ -77,7 +80,6 @@ const App = () => {
       .map((item) => item.word)
       .reduce((accum, current) => accum + ' ' + current, '');
     const predecessorToSuggestion = removeExtraWhitespace(contentWords + composition.proposal);
-    console.log('predecessor: ', predecessorToSuggestion)
     if (predecessorToSuggestion === '' || endsInTerminalPunctuation(predecessorToSuggestion)) {
       return true;
     }
@@ -237,7 +239,6 @@ const App = () => {
   const handleSearchResultClick = (result) => {
     console.log('Search result selected: ', result);
     createSourceAndMachine(result);
-    setShowSearch(false);
   };
 
   /**
@@ -318,7 +319,7 @@ const App = () => {
           />
         }
       />
-      <Route path='/signup' element={<Signup />} />
+      <Route path='/signup' element={<SignupPage />} />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );

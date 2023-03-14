@@ -12,7 +12,7 @@ const containerStyle = {
   flexDirection: 'column',
   justifyContent: 'space-between',
   minHeight: '30vh',
-  fontFamily: 'roboto-mono',
+  fontFamily: 'roboto-mono, lucida console, monospace',
   fontSize: '16px',
 };
 

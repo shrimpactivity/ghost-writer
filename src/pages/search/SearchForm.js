@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import theme from '../../theme/palette';
-import { Button, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const inputStyle = {
@@ -36,7 +37,14 @@ const SearchForm = ({ onSubmit }) => {
         />
         <ThemeProvider theme={buttonTheme}>
           <Tooltip title="Search">
-            <Button type="submit">Search</Button>
+          
+          <IconButton
+            aria-label="search"
+            variant="contained"
+            onClick={onSubmit}
+          >
+            <SearchIcon sx={{ color: theme.light }} fontSize="medium" />
+          </IconButton>
           </Tooltip>
         </ThemeProvider>
       </form>

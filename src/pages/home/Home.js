@@ -26,9 +26,8 @@ const Home = (props) => {
       <div className="home-container" style={style}>
         <Notification text={props.notification.text} />
         <SourceSelectionContainer
-          value={props.sources.current.id}
+          sources={props.sources}
           onChange={props.onSourceSelectionChange}
-          allSources={props.sources.all}
         />
         <CompositionContainer
           composition={props.composition}

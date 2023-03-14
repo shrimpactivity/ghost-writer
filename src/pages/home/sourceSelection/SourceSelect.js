@@ -29,8 +29,8 @@ const formatSourceName = (source) => {
   return result;
 };
 
-const localSourcesOptionsGroup = (sources) => {
-  const localSources = sources.filter((s) => s.isLocal);
+const localSourcesOptionsGroup = (allSources) => {
+  const localSources = allSources.filter((s) => s.isLocal);
   if (localSources.length === 0) {
     return;
   }
@@ -45,8 +45,8 @@ const localSourcesOptionsGroup = (sources) => {
   );
 };
 
-const serverSourcesOptionsGroup = (sources) => {
-  const serverSources = sources.filter((s) => !s.isLocal);
+const serverSourcesOptionsGroup = (allSources) => {
+  const serverSources = allSources.filter((s) => !s.isLocal);
   return (
     <optgroup style={optionStyle} label="Ghosts">
       {serverSources.map((source) => (
@@ -58,19 +58,18 @@ const serverSourcesOptionsGroup = (sources) => {
   );
 };
 
-const SourceSelect = ({ value, onChange, allSources }) => {
+const SourceSelect = ({ sources, onChange }) => {
   return (
-    <select style={selectStyle} value={value} onChange={onChange}>
-      {localSourcesOptionsGroup(allSources)}
-      {serverSourcesOptionsGroup(allSources)}
+    <select style={selectStyle} value={sources.current.id} onChange={onChange}>
+      {localSourcesOptionsGroup(sources.all)}
+      {serverSourcesOptionsGroup(sources.all)}
     </select>
   );
 };
 
 SourceSelect.propTypes = {
-  value: PropTypes.string,
+  sources: PropTypes.object,
   onChange: PropTypes.func,
-  allSources: PropTypes.array,
 };
 
 export default SourceSelect;

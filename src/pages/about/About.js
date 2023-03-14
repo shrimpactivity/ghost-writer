@@ -1,22 +1,21 @@
 import React from 'react';
 import { Button, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import PropTypes from 'prop-types';
 
 import Navbar from '../../components/Navbar';
 import theme from '../../theme/palette';
 import WelcomeImg from '../../assets/Welcome.png';
+import Tutorial from './Tutorial';
 
 const containerStyle = {
   width: '95%',
   maxWidth: '700px',
-  marginTop: '50px',
+  marginTop: '10px',
 };
 
 const imageStyle = {
   display: 'inline',
-  margin: '20px',
   width: '400px',
 };
 
@@ -54,43 +53,17 @@ const About = (props) => {
             style={{
               borderBottom: '3px dotted',
               borderColor: theme.medium,
-              paddingBottom: '15px',
+              paddingBottom: '20px',
+              marginBottom: '0px',
+              textAlign: 'center',
             }}
           >
-            Write with your favorite authors from beyond the grave! Whether it
-            be a sonnet with Shakespeare, a novel with Jane Austen, or an angry
-            internet comment with Martin Luther - the only limit is you (and the
+            Write with your favorite authors from beyond the grave! Be it 
+            a sonnet with Shakespeare, a novel with Jane Austen, or an angry
+            internet comment with Homer - the only limit is you (and the
             ghost's) imagination.
           </p>
-          <div>
-            <div style={{ textAlign: 'center', fontSize: '20px' }}>
-              <em>How To</em>
-            </div>
-            <ul>
-              <li>
-                Add the ghost's suggestion to your work with the{' '}
-                <AddCircleOutlineIcon fontSize="string" /> button or{' '}
-                <em>Tab</em> key
-              </li>
-              <li>
-                The ghost can replace words you've already written - simply
-                click the word.{' '}
-              </li>
-              <li>
-                Click <em>Find New Ghosts</em> to search{' '}
-                <a
-                  style={{ color: 'cyan' }}
-                  href="https://www.gutenberg.org/"
-                  target="_blank"
-                >
-                  Project Gutenberg
-                </a>
-                , a free online library of public domain texts. Your selection
-                will be downloaded and processed into a new ghost, ready to
-                write with you.
-              </li>
-            </ul>
-          </div>
+          <Tutorial/>
           <p>
             <span style={{ color: theme.complement }}>
               <b>Warning:</b> The texts have not been filtered in any way.

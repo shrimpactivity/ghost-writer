@@ -20,23 +20,20 @@ const textContainerStyle = {
   fontStyle: 'italic',
 };
 
-const SourceSelectionContainer = ({ value, onChange, allSources }) => {
-  if (allSources.length === 0) value = '';
-
+const SourceSelectionContainer = ({ sources, onChange }) => {
   return (
     <div className="source-select-container basic-container" style={containerStyle}>
       <div style={textContainerStyle}>You're writing with</div>
       <div>
-        <SourceSelect value={value} onChange={onChange} allSources={allSources} />
+        <SourceSelect sources={sources} onChange={onChange}/>
       </div>
     </div>
   );
 };
 
 SourceSelectionContainer.propTypes = {
-  value: PropTypes.string,
+  sources: PropTypes.object,
   onChange: PropTypes.func,
-  allSources: PropTypes.array,
 };
 
 export default SourceSelectionContainer;

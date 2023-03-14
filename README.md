@@ -7,8 +7,8 @@ Additional texts can be searched and downloaded from [Project Gutenberg](https:/
 This is a front-end application built with React.js. For the backend api, see [ghostwriter-api](https://github.com/shrimpactivity/ghostwriter-api)
 
 ## Features
-- real-time text suggestion computed from a seed text and the user's previous input
 - custom browser text editor
+- text suggestion computed from a seed text and the user's previous input
 - Express.js backend
   - suggestion api for texts located on server
   - api for searching/retrieving texts from Project Gutenberg

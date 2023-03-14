@@ -44,7 +44,8 @@ const useSources = () => {
         const current = getInitialSource(sortedSources);
         setCurrent(current);
         setIsLoading(false);
-        console.log('Server sources found: ', processedSources);
+        setSources(sortedSources);
+        console.log('Server sources found: ', sortedSources);
         console.log('Current source set to: ', current.title);
       })
       .catch((error) => {

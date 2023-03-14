@@ -80,11 +80,6 @@ body {
 }
 
 @font-face {
-  font-family: hustlers;
-  src: url("./assets/Hustlersroughdemo-6OM1.ttf") format("ttf");
-}
-
-@font-face {
   font-family: roboto-mono;
-  src:  url("./assets/RobotoMono-VariableFont_wght.ttf");
+  src:  url("./assets/fonts/RobotoMono-VariableFont_wght.ttf");
 }
