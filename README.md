@@ -4,7 +4,7 @@ GhostWriter provides a simple browser interface for co-writing with public domai
 
 Additional texts can be searched and downloaded from [Project Gutenberg](https://www.gutenberg.org/), an online library of free e-books. The text is then processed into an efficient graph abstraction with my [suggestion-machine](https://github.com/shrimpactivity/suggestion-machine) package. 
 
-This is a front-end application built with React.js. For the backend api, see https://github.com/shrimpactivity/ghostwriter-api
+This is a front-end application built with React.js. For the backend api, see [ghostwriter-api](https://github.com/shrimpactivity/ghostwriter-api)
 
 ## Features
 - real-time text suggestion computed from a seed text and the user's previous input
