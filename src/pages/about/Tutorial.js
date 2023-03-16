@@ -46,7 +46,7 @@ const labelStyle = {
 
 const imageStyle = {
   border: '2px solid',
-  borderColor: palette.lightest,
+  borderColor: palette.dark,
   borderRadius: '20px'
 }
 
@@ -68,7 +68,7 @@ const getCurrentLabel = (currentIndex) => {
     </span>,
     <span>
       Press Tab or click the <AddCircleOutlineIcon fontSize="string" /> button
-      to accept the ghost's suggestion and add both of your contributions.
+      to accept the suggestion and add your contributions.
     </span>,
     <span>
       Click a word you or the ghost already contributed, and the ghost will replace it
@@ -95,14 +95,12 @@ const Tutorial = (props) => {
 
   return (
     <div className="tutorial-container" style={containerStyle}>
-      <h3>A Brief Tutorial</h3>
+      <h3 style={{margin: '10px 0px 0px 0px'}}>Tutorial</h3>
       <span style={labelStyle}>{getCurrentLabel(currentIndex)}</span>
       <div className="tutorial-image-container">
         {getCurrentImage(currentIndex)}
       </div>
-
       
-
       <div className="tutorial-menu" style={menuStyle}>
         <ThemeProvider theme={buttonTheme}>
           <Button

@@ -12,6 +12,8 @@ const containerStyle = {
   width: '95%',
   maxWidth: '700px',
   marginTop: '10px',
+  paddingLeft: '30px',
+  paddingRight: '30px',
 };
 
 const imageStyle = {
@@ -49,15 +51,7 @@ const About = (props) => {
             <img src={WelcomeImg} style={imageStyle} />
           </div>
 
-          <p
-            style={{
-              borderBottom: '3px dotted',
-              borderColor: theme.medium,
-              paddingBottom: '20px',
-              marginBottom: '0px',
-              textAlign: 'center',
-            }}
-          >
+          <p>
             Write with your favorite authors from beyond the grave! Be it 
             a sonnet with Shakespeare, a novel with Jane Austen, or an angry
             internet comment with Homer - the only limit is you (and the

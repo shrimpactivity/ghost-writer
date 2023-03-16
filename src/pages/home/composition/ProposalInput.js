@@ -9,7 +9,7 @@ const getInputStyle = (proposalText) => {
     marginLeft: textUtils.beginsWithPunctuation(proposalText) ? '0em' : '0.5em',
     color: 'cyan',
     backgroundColor: proposalText.length > 0 ? palette.darker : palette.dark,
-    width: `${proposalText.length * 0.6 + 0.6}em`,
+    width: proposalText.length === 0 ? '50px' : `${proposalText.length * 0.6 + 0.6}em`,
     maxWidth: '100%',
     font: '16px roboto-mono',
     border: 'none',
