@@ -25,7 +25,7 @@ This is a front-end application built with React.js. For the backend api, see [g
 ## Suggestion Algorithm
 First, texts are processed into a sequence of word tokens. Non-alphabetic characters and extra whitespace are removed for the sake of simplicity due to the inconsistent formatting and characters in Project Gutenberg documents.
 
-Using [suggestion-machine](https://github.com/shrimpactivity/suggestion-machine), the tokens are used to create a graph with two edge types: strong and weak. The below image visualizes an example graph for the seed sequence: `[the, dog, and, the, cat, are, the, best, friends, and, how]`
+Under the hood of [suggestion-machine](https://github.com/shrimpactivity/suggestion-machine), tokens are processed into a directed acyclic graph with two edge types: strong and weak. The below image visualizes an example graph for the seed sequence: `[the, dog, and, the, cat, are, the, best, friends, and, how]`
 
 ![Graph visualization](/src/assets/algo.png)
 
