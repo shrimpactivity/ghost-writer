@@ -24,7 +24,7 @@ const Home = (props) => {
         onLogoClick={props.onLogoClick}
       />
       <div className="home-container" style={style}>
-        <Notification text={props.notification.text} />
+        <Notification>{props.notification.value}</Notification>
         <SourceSelectionContainer
           sources={props.sources}
           onChange={props.onSourceSelectionChange}

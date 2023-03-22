@@ -5,21 +5,25 @@ import { Button } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../../theme/palette';
 import WelcomeImg from '../../assets/Welcome.png';
+import { useNavigate } from 'react-router-dom';
 
 const imageStyle = {
   display: 'inline',
-  width: '400px',
+  width: '100px',
 };
 
 const buttonTheme = createTheme({
   palette: {
     primary: {
-      main: theme.alternate,
+      main: theme.complement,
     },
   },
 });
 
 const Content = (props) => {
+
+  const nav = useNavigate();
+
   return (
     <div>
       <div
@@ -43,8 +47,8 @@ const Content = (props) => {
         <span>
           <ThemeProvider theme={buttonTheme}>
             <Button
-              onClick={props.onShowTutorial}
-              variant="outlined"
+              onClick={() => nav('/tutorial')}
+              variant="text"
               sx={{ padding: '3px 5px 2px 5px', marginLeft: '6px' }}
             >
               tutorial

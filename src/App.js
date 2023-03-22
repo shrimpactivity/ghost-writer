@@ -9,6 +9,7 @@ import AboutPage from './pages/about/About';
 import SearchPage from './pages/search/Search';
 import ErrorPage from './pages/error/Error';
 import SignupPage from './pages/login/Signup';
+import TutorialPage from './pages/tutorial/Tutorial';
 
 import bookService from './services/gutenbergBook';
 import suggestionService from './services/suggestion';
@@ -40,24 +41,26 @@ const App = () => {
   const nav = useNavigate();
 
   /**
-   * Effect that navigates the user to the welcome page if they haven't visited the site before.
-   */
-  const redirectToWelcomePage = () => {
-    if (!storage.isSet('userHasVisited')) {
-      nav('/about');
-    }
-  };
-
-  useEffect(redirectToWelcomePage, []);
-
-  /**
-   * Effect for notifying the user that server ghost info is downloaded and ready to use.
+   * Effect that runs when initial sources are loaded.
    */
   useEffect(() => {
     if (!sources.isLoading) {
       notification.update('Ghosts loaded, ready to write!');
+
+
     }
   }, [sources.isLoading]);
+
+  /**
+   * Effect for showing first time users the tutorial notification?.
+   */
+  const navigateFirstTimeUsers = () => {
+    if (!storage.isSet('visited')) {
+      nav('/about');
+    }
+  };
+
+  useEffect(navigateFirstTimeUsers, []);
 
   /**
    * Effect for focusing the text input box when component mounts.
@@ -266,7 +269,7 @@ const App = () => {
   const handleWelcomeClose = () => {
     nav('/');
     focusProposalInput();
-    storage.set('userHasVisited', 'true');
+    storage.set('visited', true);
   };
 
   const navBarProps = {
@@ -319,6 +322,7 @@ const App = () => {
           />
         }
       />
+      <Route path='/tutorial' element={<TutorialPage {...navBarProps}/>} />
       <Route path='/signup' element={<SignupPage />} />
       <Route path="*" element={<ErrorPage />} />
     </Routes>

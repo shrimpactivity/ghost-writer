@@ -21,18 +21,14 @@ const textStyle = {
   border: '1px solid'
 };
 
-const Notification = ({ text }) => {
+const Notification = (props) => {
   return (
     <div className="notification-container" style={containerStyle}>
-      <span className="notification-container" style={{ ...textStyle, display: text ? 'inline' : 'none' }}>
-        {text}
+      <span className="notification-container" style={{ ...textStyle, display: props.children ? 'inline' : 'none' }}>
+        {props.children}
       </span>
     </div>
   );
-};
-
-Notification.propTypes = {
-  text: PropTypes.string,
 };
 
 export default Notification;

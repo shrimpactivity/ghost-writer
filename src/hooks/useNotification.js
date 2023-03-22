@@ -1,33 +1,37 @@
 import { useState } from 'react';
 
-const useNotification = (initialText='') => {
-  const [text, setText] = useState(initialText);
+const useNotification = () => {
+  const [value, setValue] = useState(null);
   const [notificationTimeout, setNotificationTimeout] = useState(null);
+  console.log("toop level", notificationTimeout);
 
   /**
    * Sets the notification to the specified text, which returns to being empty after they specified delay.
    * Previous update calls will be overridden.
-   * @param {string} text the notification text
+   * @param {string|ReactElement} content the notification content
    * @param {number|Infinity} [duration=4000] the amount of time the notification text will be set in milliseconds
    */
-  const update = (notificationText, duration = 4000) => {
-    if (notificationTimeout) {
+  const update = (content, duration = 4000) => {
+    console.log("Content", content);
+    console.log("TimeoutID", notificationTimeout);
+    if (notificationTimeout !== null) {
+      console.log('clearing');
       clearTimeout(notificationTimeout);
     }
 
-    setText(notificationText);
+    setValue(content);
 
     if (duration !== Infinity) {
       const newTimeout = setTimeout(() => {
-        setText('');
-        setText(null);
+        setValue(null);
+        setNotificationTimeout(null);
       }, duration);
-
+      console.log(newTimeout);
       setNotificationTimeout(newTimeout);
     }
   };
 
-  return { text, update };
+  return { value, update };
 };
 
 export default useNotification;

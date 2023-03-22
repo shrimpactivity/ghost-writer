@@ -3,14 +3,13 @@ import { Button, CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import Navbar from '../../components/Navbar';
-import Tutorial from './Tutorial';
 import Content from './Content';
 import theme from '../../theme/palette';
 
 const containerStyle = {
   width: '95%',
   maxWidth: '700px',
-  marginTop: '10px',
+  marginTop: '60px',
   paddingLeft: '30px',
   paddingRight: '30px',
 };

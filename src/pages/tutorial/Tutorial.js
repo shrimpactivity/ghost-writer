@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@mui/material';
+import { Button, CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Navbar from '../../components/Navbar';
+import theme from '../../theme/palette';
 
 import palette from '../../theme/palette';
 
@@ -10,6 +12,7 @@ import tut1 from '../../assets/tutorial/1.png';
 import tut2 from '../../assets/tutorial/2.png';
 import tut3 from '../../assets/tutorial/3.png';
 import tut4 from '../../assets/tutorial/4.png';
+import { useNavigate } from 'react-router-dom';
 
 const buttonTheme = createTheme({
   palette: {
@@ -21,7 +24,7 @@ const buttonTheme = createTheme({
 
 const buttonStyle = {
   margin: '0px 10px 0px 10px',
-  width: '100px'
+  width: '100px',
 };
 
 const containerStyle = {
@@ -47,8 +50,8 @@ const labelStyle = {
 const imageStyle = {
   border: '2px solid',
   borderColor: palette.dark,
-  borderRadius: '20px'
-}
+  borderRadius: '20px',
+};
 
 const getCurrentImage = (currentIndex) => {
   const images = [
@@ -71,7 +74,8 @@ const getCurrentLabel = (currentIndex) => {
       to accept the suggestion and add your contributions.
     </span>,
     <span>
-      Click a word you or the ghost already contributed, and the ghost will replace it
+      Click a word you or the ghost already contributed, and the ghost will
+      replace it
     </span>,
   ];
   return labels[currentIndex];
@@ -81,9 +85,14 @@ const Tutorial = (props) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const MAX_INDEX = 3;
 
+  const nav = useNavigate();
+
   const handleNext = () => {
     if (currentIndex < MAX_INDEX) {
       setCurrentIndex(currentIndex + 1);
+    }
+    if (currentIndex === MAX_INDEX) {
+      nav('/');
     }
   };
 
@@ -94,35 +103,43 @@ const Tutorial = (props) => {
   };
 
   return (
-    <div className="tutorial-container" style={containerStyle}>
-      <h3 style={{margin: '10px 0px 0px 0px'}}>Tutorial</h3>
-      <span style={labelStyle}>{getCurrentLabel(currentIndex)}</span>
-      <div className="tutorial-image-container">
-        {getCurrentImage(currentIndex)}
+    <>
+      <CssBaseline />
+      <Navbar
+        onLoginClick={props.onLoginClick}
+        userLoggedIn={props.userLoggedIn}
+        onAboutClick={props.onAboutClick}
+        onLogoClick={props.onLogoClick}
+      />
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="welcome basic-container" style={containerStyle}>
+            <span style={labelStyle}>{getCurrentLabel(currentIndex)}</span>
+            <div className="tutorial-menu" style={menuStyle}>
+              <ThemeProvider theme={buttonTheme}>
+                <Button
+                  variant="text"
+                  onClick={handlePrevious}
+                  disabled={currentIndex === 0}
+                  sx={buttonStyle}
+                >
+                  Previous
+                </Button>
+                <span>{`(${currentIndex + 1} / ${MAX_INDEX + 1})`}</span>
+                <Button
+                  variant="text"
+                  onClick={handleNext}
+                  sx={buttonStyle}
+                >
+                  {currentIndex !== MAX_INDEX ? "Next" : "Let's go!"}
+                </Button>
+              </ThemeProvider>
+            </div>
+            <div className="tutorial-image-container">
+              {getCurrentImage(currentIndex)}
+            </div>
+          </div>
       </div>
-      
-      <div className="tutorial-menu" style={menuStyle}>
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            variant="text"
-            onClick={handlePrevious}
-            disabled={currentIndex === 0}
-            sx={buttonStyle}
-          >
-            Previous
-          </Button>
-          <span>{`(${currentIndex + 1} / ${MAX_INDEX + 1})`}</span>
-          <Button
-            variant="text"
-            onClick={handleNext}
-            disabled={currentIndex === MAX_INDEX}
-            sx={buttonStyle}
-          >
-            Next
-          </Button>
-        </ThemeProvider>
-      </div>
-    </div>
+    </>
   );
 };
 
