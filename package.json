@@ -1,9 +1,11 @@
 {
   "name": "ghost-writer",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Text suggestion from beyond the grave.",
   "main": "index.js",
   "scripts": {
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspaces",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
