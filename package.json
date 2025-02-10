@@ -4,16 +4,31 @@
   "description": "Text suggestion from beyond the grave.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shrimpactivity/ghost-writer.git"
   },
   "author": "Carson Crow",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/shrimpactivity/ghost-writer/issues"
   },
-  "homepage": "https://github.com/shrimpactivity/ghost-writer#readme"
+  "homepage": "https://github.com/shrimpactivity/ghost-writer#readme",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
+    "prettier": "^3.5.0",
+    "typescript-eslint": "^8.24.0"
+  }
 }
