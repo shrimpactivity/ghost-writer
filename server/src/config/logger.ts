@@ -1,7 +1,7 @@
 import { createLogger, transports, format } from "winston";
 import { NODE_ENV } from "./server";
 
-const log = createLogger({
+const logger = createLogger({
   transports: [
     new transports.Console(),
     new transports.File({
@@ -18,4 +18,4 @@ const log = createLogger({
   ),
 });
 
-export { log }
+export { logger }
