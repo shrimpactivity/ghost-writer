@@ -2,22 +2,22 @@ import request from "supertest";
 import app from "../src/app";
 
 describe("Gutenberg API", () => {
-  describe("/search", () => {
+  describe("/ query search", () => {
     test("retrieves correct results", async () => {
       const res = await request(app)
-        .get(`/gutenberg?query=${encodeURIComponent("Moby Dick")}`)
+        .get(`/gutenberg?search=${encodeURIComponent("Moby Dick")}`)
         .expect(200)
         .expect("content-type", "application/json; charset=utf-8");
       const books = res.body;
       expect(books).toHaveLength(5);
       expect(
-        books.filter((book: { id: number }) => book.id === 15),
+        books.filter((book: any) => book.id === 15),
       ).toHaveLength(1);
     });
 
     test("retrieves empty list for no results", async () => {
       const res = await request(app)
-        .get(`/gutenberg?query=ljkfsdeiweiojfwehiugw`)
+        .get(`/gutenberg?search=ljkfsdeiweiojfwehiugw`)
         .expect(200)
         .expect("content-type", "application/json; charset=utf-8");
       const books = res.body;
@@ -30,10 +30,18 @@ describe("Gutenberg API", () => {
       const res = await request(app)
         .get(`/gutenberg/15`)
         .expect(200)
-        .expect("content-type", "application/json");
+        .expect("content-type", "application/json; charset=utf-8");
       const book = res.body;
       expect(book.title).toBe("Moby-Dick; or, The Whale");
       expect(book.authors[0]).toBe("Melville, Herman");
     });
+
+    test("returns 404 for fake id", async () => {
+      await request(app).get(`/gutenberg/5469865151354`).expect(404);
+    });
+
+    test("returns 400 for non-integer id", async () => {
+      await request(app).get("/gutenberg/text_id").expect(400);
+    })
   });
 });
