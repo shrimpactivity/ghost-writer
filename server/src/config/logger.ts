@@ -1,12 +1,16 @@
+import "dotenv/config";
 import { createLogger, transports, format } from "winston";
 import { NODE_ENV } from "./server";
+
+const log_level = process.env.LOG_LEVEL || "info";
 
 const logger = createLogger({
   transports: [
     new transports.Console(),
     new transports.File({
       dirname: "logs",
-      filename: `${NODE_ENV}.log`
+      filename: `${NODE_ENV}.log`,
+      level: log_level
     })
   ],
   format: format.combine(

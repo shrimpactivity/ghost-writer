@@ -6,7 +6,7 @@
     "build": "tsc --build",
     "start": "node dist/index.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=test LOG_LEVEL=error jest",
     "format": "prettier --write **/*.ts"
   },
   "author": "Carson Crow",
@@ -24,9 +24,14 @@
   "devDependencies": {
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.1.0",
+    "@types/supertest": "^6.0.3",
     "cross-env": "^10.0.0",
+    "jest": "^30.0.5",
     "nodemon": "^3.1.10",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.3"

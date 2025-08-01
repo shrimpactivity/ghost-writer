@@ -8,6 +8,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { unknownEndpoint } from "./middleware/unknownEndpoint";
 
 const app = express();
+app.use(express.json());
 
 if (process.env.NODE_ENV === "production") {
   app.use(helmet())
@@ -16,11 +17,10 @@ if (process.env.NODE_ENV === "production") {
   app.use(requestLogger);
 }
 
-app.use(express.static("dist"));
-app.use(express.json());
+app.use(express.static("public"));
 
-app.use(GhostRouter);
-app.use(GutenbergRouter);
+app.use("/ghosts", GhostRouter);
+app.use("/gutenberg", GutenbergRouter);
 
 app.use(unknownEndpoint);
 app.use(errorHandler);
