@@ -1,30 +1,38 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { GutenbergService } from "../services/GutenbergService";
 
 const gutenbergService = new GutenbergService();
 
 export class GutenbergController {
   
-  async search(req: Request, res: Response) {
+  async search(req: Request, res: Response, next: NextFunction) {
     const query = req.query.search as string;
     if (!query) {
       return res.status(200).json([]);
     }
-    const results = await gutenbergService.search(query);
-    return res.status(200).json(results);
+    try {
+      const results = await gutenbergService.search(query);
+      return res.status(200).json(results);
+    } catch (err) {
+      next(err);
+    }
   }
 
-  async findById(req: Request, res: Response) {
+  async findById(req: Request, res: Response, next: NextFunction) {
     const id = Number(req.params.id);
     if (isNaN(id)) {
       return res.status(400).send("Id must be a number");
     }
 
-    const book = await gutenbergService.findById(id);
-    if (book === null) {
-      return res.status(404).send(`Gutenberg book with id ${id} does not exist`);
+    try {
+      const book = await gutenbergService.findById(id);
+      if (book === null) {
+        return res.status(404).send(`Gutenberg book with id ${id} does not exist`);
+      }
+  
+      return res.status(200).json(book);
+    } catch (err) {
+      next(err);
     }
-
-    return res.status(200).json(book);
   }
 }
