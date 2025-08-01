@@ -35,4 +35,22 @@ export class GutenbergController {
       next(err);
     }
   }
+
+  async findGhostById(req: Request, res: Response, next: NextFunction) {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      return res.status(400).send("Id must be a number");
+    }
+
+    try {
+      const ghost = await gutenbergService.findGhostById(id);
+      if (ghost === null) {
+        return res.status(404).send(`Unable to create ghost: Gutenberg book with id ${id} does not exist`);
+      }
+  
+      return res.status(200).json(ghost);
+    } catch (err) {
+      next(err);
+    }
+  }
 }

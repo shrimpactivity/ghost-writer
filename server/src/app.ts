@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
-import GhostRouter from "./routers/GhostRouter"
+import GhostsRouter from "./routers/GhostsRouter"
 import GutenbergRouter from "./routers/GutenbergRouter"
 import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler } from "./middleware/errorHandler";
@@ -19,7 +19,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use(express.static("public"));
 
-app.use("/ghosts", GhostRouter);
+app.use("/ghosts", GhostsRouter);
 app.use("/gutenberg", GutenbergRouter);
 
 app.use(unknownEndpoint);
