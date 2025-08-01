@@ -9,4 +9,9 @@ export class GhostController {
   async findById() {
   
   }
+
+  // Create new ghost from gutenberg id
+  async create() {
+
+  }
 }
