@@ -45,3 +45,9 @@ describe("Gutenberg API", () => {
     })
   });
 });
+
+describe("Bad url", () => {
+  test("returns 404", async () => {
+    await request(app).get("/strange-page").expect(404);
+  })
+})

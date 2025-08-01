@@ -24,4 +24,5 @@ export interface Book {
   title: string;
   authors: string[];
   url?: string;
+  text?: string;
 }

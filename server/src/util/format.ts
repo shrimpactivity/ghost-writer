@@ -12,9 +12,9 @@ export const removeGutenbergLabels = (text: string) => {
 
 export const formatGutenbergText = (text: string) => {
   return removeGutenbergLabels(text)
-    .replace(/[-.?!]+/g, " ")
-    .replace(/[^A-Za-z\s]+/g, "")
-    .replace(/[\s]+/g, " ")
     .toLowerCase()
+    .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")  // Normalize unicode apostrophes
+    .replace(/[^a-z\s']/g, '')  
+    .replace(/\s+/g, ' ')    
     .trim();
 };
