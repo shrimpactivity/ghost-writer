@@ -5,7 +5,7 @@ import { BookService } from "../services/BookService";
 import { MarkovCoil } from "markov-coil";
 
 interface GhostsContextType {
-  ghost: Ghost;
+  ghost: Ghost | undefined;
   books: Book[];
   addBook: (book: Book) => void;
   search: (query: string) => Promise<Book[]>;
@@ -38,30 +38,56 @@ export function GhostsProvider({ children}: PropsWithChildren) {
   const { notify } = useNotification();
   const [books, setBooks] = useState<Book[]>([]);
   const [settings, setSettings] = useState(defaultSettings);
-  const [ghost, setGhost] = useState();
+  const [ghost, setGhost] = useState<Ghost>();
   const [isLoading, setIsLoading] = useState(true);
+  const [userTokens, setUserTokens] = useState<string[]>([]);
 
 
-  useEffect(() => loadInitData(), []);
+  useEffect(() => fetchInitData(), []);
   useEffect(() => loadLocalStorage(), []);
+  useEffect(() => updateLocalStorage(), [settings, userTokens]);
 
-  function loadInitData() {
+  function fetchInitData() {
     setIsLoading(true);
     bookService.getInit().then((data) => {
-      notify("")
+      notify("Initializing cemetery abstraction...")
       const books = data.books;
       setBooks(books);
+      notify("Summoning ghost through data ritual...")
       const tokens = data.defaultText.split(" ");
       const markov = new MarkovCoil(tokens);
-
+      const defaultBookId = 2701; // Moby Dick
+      const defaultBook = books.find(book => book.id === defaultBookId);
+      if (defaultBook === undefined) {
+        throw new Error("Default book not available");
+      }
+      setGhost({ book: defaultBook, markov });
+      notify("Ritual completed, proceed with spectral collaboration", 3000);
     }).catch(err => {
-      notify(err.message);
+      notify(err.message, 10000);
       setIsLoading(false);
     }) 
   }
 
+  function loadLocalStorage() {
+    const settingsJSON = localStorage.getItem("settings");
+    if (settingsJSON) {
+      setSettings(JSON.parse(settingsJSON));
+    }
+
+    const userTokensJSON = localStorage.getItem("userTokens");
+    if (userTokensJSON) {
+      setUserTokens(JSON.parse(userTokensJSON));
+    }
+  }
+
+  function updateLocalStorage() {
+    localStorage.setItem("settings", JSON.stringify(settings));
+    localStorage.setItem("userTokens", JSON.stringify(userTokens));
+  }
+
   return (
-    <GhostsContext.Provider value={}>
+    <GhostsContext.Provider value={{ ghost, books, }}>
       {children}
     </GhostsContext.Provider>
   )
