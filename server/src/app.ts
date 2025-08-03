@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import cors from "cors";
 import { readFileSync } from "fs";
-import { GutenbergService } from "./services/GutenbergService";
+import { GutendexService } from "./services/GutendexService";
 import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler } from "./middleware/errorHandler";
 import { unknownEndpoint } from "./middleware/unknownEndpoint";
@@ -10,7 +10,7 @@ import defaultBooks from "./data/defaultBooks.json";
 import { formatGutenbergText } from "./util/format";
 
 const app = express();
-const gutenbergService = new GutenbergService();
+const gutendexService = new GutendexService();
 
 app.use(express.json());
 
@@ -36,7 +36,7 @@ app.get(
       return res.status(200).json([]);
     }
     try {
-      const results = await gutenbergService.search(query);
+      const results = await gutendexService.search(query);
       return res.status(200).json(results);
     } catch (err) {
       next(err);
@@ -53,7 +53,7 @@ app.get(
     }
 
     try {
-      const book = await gutenbergService.findById(id);
+      const book = await gutendexService.findById(id);
       if (book === null) {
         return res
           .status(404)

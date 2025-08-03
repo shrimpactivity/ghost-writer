@@ -2,7 +2,7 @@ import { logger } from "../config/logger";
 import { Book, FullBook, GutendexResponse } from "../types/gutenberg";
 import { formatGutenbergText } from "../util/format";
 
-export class GutenbergService {
+export class GutendexService {
   private baseURL = "https://gutendex.com/books";
 
   async findById(id: number): Promise<Book | null> {
