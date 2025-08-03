@@ -1,3 +1,5 @@
+import { MarkovCoil } from "markov-coil";
+
 export interface FullBook {
   id: number;
   title: string;
@@ -18,6 +20,16 @@ export interface Book {
   authors: string[];
   url?: string;
   text?: string;
+}
+
+export interface Ghost {
+  book: Book;
+  markov: MarkovCoil;
+}
+
+export interface GhostSettings {
+  predictionLength: number;
+  predictionDepth: 0 | 1 | 2 | 3;
 }
 
 export interface InitData {
