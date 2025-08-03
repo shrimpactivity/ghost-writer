@@ -4,11 +4,11 @@ import { Book, FullBook, GutendexResponse } from "../types/gutenberg";
 import { formatGutenbergText } from "../util/format";
 
 export class GutendexService {
-  private baseURL = GUTENDEX_BASE_URI;
+  private static readonly BASE_URL = GUTENDEX_BASE_URI;
 
   async findById(id: number): Promise<Book | null> {
     try {
-      const response = await fetch(`${this.baseURL}/${id}`);
+      const response = await fetch(`${GutendexService.BASE_URL}/${id}`);
       const fullBook = (await response.json()) as FullBook;
       if (fullBook.id === undefined) {
         return null;
@@ -29,7 +29,7 @@ export class GutendexService {
   async search(query: string): Promise<Book[]> {
     try {
       const response = await fetch(
-        `${this.baseURL}?search=${encodeURIComponent(query)}`,
+        `${GutendexService.BASE_URL}?search=${encodeURIComponent(query)}`,
       );
       const data = (await response.json()) as GutendexResponse;
       const fullBooks = data.results;
