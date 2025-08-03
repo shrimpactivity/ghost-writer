@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { createLogger, transports, format } from "winston";
-import { NODE_ENV } from "./server";
+import { NODE_ENV } from "./env";
 
 const log_level = process.env.LOG_LEVEL || "info";
 

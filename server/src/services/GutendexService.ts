@@ -1,9 +1,10 @@
+import { GUTENDEX_BASE_URI } from "../config/env";
 import { logger } from "../config/logger";
 import { Book, FullBook, GutendexResponse } from "../types/gutenberg";
 import { formatGutenbergText } from "../util/format";
 
 export class GutendexService {
-  private baseURL = "https://gutendex.com/books";
+  private baseURL = GUTENDEX_BASE_URI;
 
   async findById(id: number): Promise<Book | null> {
     try {

@@ -1,6 +1,6 @@
 import app from "./app";
 import { logger } from "./config/logger";
-import { NODE_ENV } from "./config/server";
+import { NODE_ENV } from "./config/env";
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
