@@ -12,12 +12,13 @@ export const useNotification = () => {
   if (!context) {
     throw new Error("useNotification must be used within NotificationProvider");
   }
+  return context;
 }
 
 export function NotificationProvider({ children }: PropsWithChildren) {
   const [ notification, setNotification ] = useState("");
 
-  const notify = (text: string, timeout=3000) => {
+  const notify = (text: string, timeout?: number) => {
     setNotification(text);
     if (timeout) {
       setTimeout(() => setNotification(""), timeout);
