@@ -45,7 +45,7 @@ app.get(
 );
 
 app.get(
-  "/gutenberg/id",
+  "/gutenberg/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     const id = Number(req.params.id);
     if (isNaN(id)) {
