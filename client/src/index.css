@@ -4,11 +4,11 @@
   font-family: 'Fira Code', monospace;
 
   --fontColor: #daffd7;
-  --primary: white;
-  --secondary: green;
-  --tertiary: cyan;
+  --primary: #80fcbc;
+  --secondary: #00F0F0;
+  --tertiary: #fc719b;
   --background: #181818;
-  --backgroundLight: #912e2e;
+  --backgroundLight: #272727;
 
   color: var(--fontColor);
 
@@ -46,9 +46,9 @@ body {
 
 @keyframes fadeCycle {
   0%, 100% {
-    opacity: 0.7;
+    opacity: 1;
   }
   50% {
-    opacity: 1;
+    opacity: 0.7;
   }
 }

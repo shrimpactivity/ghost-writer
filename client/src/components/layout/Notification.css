@@ -1,4 +1,6 @@
 .notification {
   padding: 1em;
-  border-radius: 5px;
+  color: var(--secondary);
+  animation: fadeCycle 1s infinite;
+  animation-timing-function: linear;
 }

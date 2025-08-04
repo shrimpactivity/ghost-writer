@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Book } from "../types";
 import { BookService } from "../services/BookService";
 import { useNotification } from "../context/Notification";
-import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { useGhosts } from "../context/Ghosts";
 import { useNavigate } from "react-router";
+import CenterHorizontal from "../components/layout/CenterHorizontal";
+import { Book } from "../types";
 
 const bookService = new BookService();
 
@@ -70,7 +70,7 @@ function Search() {
   return (
     <CenterHorizontal>
       <div>
-        <h1>Search Texts on Project Gutenberg</h1>
+        <h1>Search Project Gutenberg</h1>
         <div>
           <form onSubmit={(e) => handleFormSubmit(e)}>
             <input

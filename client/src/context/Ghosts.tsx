@@ -34,7 +34,7 @@ export function useGhosts() {
 const defaultSettings: GhostSettings = {
   predictionLength: 1,
   predictionDepth: 3,
-  weighted: false
+  weighted: false,
 };
 
 const bookService = new BookService();
@@ -57,10 +57,7 @@ export function GhostsProvider({ children }: PropsWithChildren) {
         const markov = new MarkovCoil(bookWithText.text.split(" "));
         setGhost({ book: { ...bookWithText, text: undefined }, markov });
         setIsLoading(false);
-        notify(
-          `Data initialization ritual completed, now collaborating with ${formatAuthorName(bookWithText.authors[0])}`,
-          5000,
-        );
+        notify(`Data initialization ritual completed`, 5000);
       })
       .catch((err) => {
         notify(err.message, 10000);
@@ -134,7 +131,11 @@ export function GhostsProvider({ children }: PropsWithChildren) {
   function getPrediction(tokens: string[]) {
     const tokensToUse = tokens.slice(-1 * settings.predictionDepth);
     if (ghost) {
-      const prediction = ghost.markov.predictSequence(tokensToUse, settings.predictionLength, settings.weighted);
+      const prediction = ghost.markov.predictSequence(
+        tokensToUse,
+        settings.predictionLength,
+        settings.weighted,
+      );
       return prediction;
     }
     return [];
@@ -149,7 +150,7 @@ export function GhostsProvider({ children }: PropsWithChildren) {
         setSettings: updateSettings,
         isLoading,
         setCurrentBook,
-        getPrediction
+        getPrediction,
       }}
     >
       {children}
