@@ -3,12 +3,22 @@
   display: flex;
   justify-content: center;
   gap: 1em;
+  margin: 1em 0;
 }
 
-.nav-item {
-  border: 1px solid green;
-  border-radius: 5px;
+.nav-link {
+  border: 2px solid var(--secondary);
+  color: var(--fontColor);
+  border-radius: 8px;
   padding: 0.5em;
-  color: black;
   text-decoration: none;
+}
+
+.nav-link.active {
+  color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.nav-link:hover {
+  background-color: red;
 }

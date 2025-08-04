@@ -1,18 +1,21 @@
 
 
 :root {
-  font-family: Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  font-family: 'Fira Code', monospace;
 
-  color: rgb(218, 255, 215);
+  --fontColor: #daffd7;
   --primary: white;
   --secondary: green;
   --tertiary: cyan;
+  --background: #181818;
+  --backgroundLight: #912e2e;
+
+  color: var(--fontColor);
+
   background: center no-repeat url("./assets/background.png");
   background-size: cover;
   background-attachment: fixed;
-  background-color: rgb(24, 24, 24);
+  background-color: var(--background);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,4 +26,29 @@
 body {
   padding: 0px;
   margin: 0px;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(-2px);
+  }
+  30% {
+    transform: translateY(1px);
+    color: cyan;
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+  75% {
+    transform: translateY(2px);
+  }
+}
+
+@keyframes fadeCycle {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
 }

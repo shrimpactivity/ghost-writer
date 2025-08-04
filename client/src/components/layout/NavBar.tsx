@@ -1,20 +1,35 @@
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import "./NavBar.css";
 
 export default function NavBar() {
   return (
     <nav className="nav-bar">
-      <Link className="nav-item" to="/">
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
+        to="/"
+      >
         Home
-      </Link>
-      <Link className="nav-item" to="/search">
+      </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
+        to="/search"
+      >
         Find Ghosts
-      </Link>
-      <Link className="nav-item" to="/settings">
+      </NavLink>
+      <NavLink
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
+        to="/settings"
+      >
         Settings
-      </Link>
+      </NavLink>
       <a
-        className="nav-item"
+        className="nav-link"
         href="https://github.com/shrimpactivity/ghost-writer"
         target="_blank"
       >
