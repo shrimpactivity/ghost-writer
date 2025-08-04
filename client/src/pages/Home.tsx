@@ -29,6 +29,28 @@ function Home() {
     }
   }
 
+  function handleInputKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    switch (e.code) {
+      case "Backspace":
+        if (composition.input.length === 0) {
+          e.preventDefault();
+          composition.moveInputBack();
+        }
+        break;
+      case "Tab":
+        e.preventDefault();
+        composition.concatPrediction();
+        break;
+
+      case "Enter":
+        // Add proposal to composition. Don't add suggestion.
+        // Pressing enter multiple times should create more than one new line.
+        e.preventDefault();
+        composition.addNewLine();
+        break;
+    }
+  }
+
   if (isLoading) {
     return (
       <CenterHorizontal>
@@ -56,7 +78,10 @@ function Home() {
             ))}
           </select>
         </div>
-        <div className="editor" style={{ display: "flex", gap: "0.5em", flexWrap: "wrap" }}>
+        <div
+          className="editor"
+          style={{ display: "flex", gap: "0.5em", flexWrap: "wrap" }}
+        >
           {rawTokens.map((token, i) => (
             <span key={i}>{token}</span>
           ))}
@@ -65,8 +90,11 @@ function Home() {
             className="composition-input"
             value={composition.input}
             onChange={(e) => handleCompositionInputChange(e)}
+            onKeyDown={(e) => handleInputKey(e)}
           />
-          <span className="prediction" style={{color: "red"}}>{composition.prediction.join(" ")}</span>
+          <span className="prediction" style={{ color: "red" }}>
+            {composition.prediction.join(" ")}
+          </span>
         </div>
       </div>
     </CenterHorizontal>

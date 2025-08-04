@@ -133,10 +133,8 @@ export function GhostsProvider({ children }: PropsWithChildren) {
 
   function getPrediction(tokens: string[]) {
     const tokensToUse = tokens.slice(-1 * settings.predictionDepth);
-    console.log("Predicting for:", tokensToUse);
     if (ghost) {
       const prediction = ghost.markov.predictSequence(tokensToUse, settings.predictionLength, settings.weighted);
-      console.log("Prediction:", prediction)
       return prediction;
     }
     return [];
