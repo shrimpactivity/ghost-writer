@@ -5,13 +5,16 @@ import CenterHorizontal from "../components/layout/CenterHorizontal";
 export default function Settings() {
   const { settings, setSettings } = useGhosts();
 
+  if (settings.predictionLength > 1000)
+    setSettings({ ...settings, predictionLength: 1000 });
+
   return (
     <CenterHorizontal>
       <div>
         <h1>Settings</h1>
         <div className="form-group">
           <label>
-            Ghost Mood
+            Ghost Mood (prediction search depth)
             <select
               id="mood"
               value={settings.predictionDepth}
@@ -22,10 +25,10 @@ export default function Settings() {
                 })
               }
             >
-              <option value="3">Articulate</option>
-              <option value="2">Intelligible</option>
-              <option value="1">Experimental</option>
-              <option value="0">Inebriated</option>
+              <option value="3">Articulate (3)</option>
+              <option value="2">Intelligible (2)</option>
+              <option value="1">Experimental (1)</option>
+              <option value="0">Inebriated (0)</option>
             </select>
           </label>
         </div>
@@ -34,6 +37,8 @@ export default function Settings() {
             Prediction Length
             <input
               type="number"
+              min="1"
+              max="1000"
               value={settings.predictionLength}
               onChange={(e) =>
                 setSettings({

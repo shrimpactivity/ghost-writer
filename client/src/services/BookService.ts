@@ -1,7 +1,7 @@
 import { Book, InitData } from "../types";
 
 export class BookService {
-  private static readonly BASE_URL = import.meta.env.VITE_API_URL || "";
+  private static readonly BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   async getInit() {
     const response = await fetch(`${BookService.BASE_URL}/init`);
@@ -33,6 +33,7 @@ export class BookService {
   private async handleError(response: Response) {
     const body = await response.text();
     const errorMessage = `${response.status} - ${body}`;
+    console.error(errorMessage);
     throw new Error(errorMessage);
   }
 }
