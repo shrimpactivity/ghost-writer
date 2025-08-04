@@ -5,16 +5,16 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Book, Ghost, GhostSettings } from "../types";
-import { useNotification } from "./Notification";
-import { BookService } from "../services/BookService";
 import { MarkovCoil } from "markov-coil";
+import { BookService } from "../services/BookService";
+import { useNotification } from "./Notification";
 import { formatAuthorName } from "../utils/format";
+import { Book, BookWithText, Ghost, GhostSettings } from "../types";
 
 interface GhostsContextType {
   ghost: Ghost | undefined;
   books: Book[];
-  addBook: (book: Book) => void;
+  setCurrentBook: (book: Book) => void;
   settings: GhostSettings;
   setSettings: (settings: GhostSettings) => void;
   isLoading: boolean;
@@ -46,26 +46,18 @@ export function GhostsProvider({ children }: PropsWithChildren) {
 
   useEffect(() => fetchInitData(), []);
   useEffect(() => loadLocalStorage(), []);
-  useEffect(() => updateLocalStorage(), [settings, books]);
 
   function fetchInitData() {
     setIsLoading(true);
     notify("Initializing cemetery abstraction...");
-    bookService
-      .getInit()
-      .then((data) => {
-        const books = data.books;
-        setBooks(books);
-        notify("Summoning ghost through data ritual...");
-        const tokens = data.defaultText.split(" ");
-        const markov = new MarkovCoil(tokens);
-        const defaultBookId = 2701; // Moby Dick
-        const defaultBook = books.find((book) => book.id === defaultBookId);
-        if (defaultBook === undefined) {
-          throw new Error("Default book not available");
-        }
-        setGhost({ book: defaultBook, markov });
-        notify("Data initialization ritual completed, proceed with spectral collaboration", 3000);
+    loadBooks()
+      .then((bookWithText) => {
+        const markov = new MarkovCoil(bookWithText.text.split(" "));
+        setGhost({ book: { ...bookWithText, text: undefined }, markov });
+        notify(
+          `Data initialization ritual completed, now collaborating with ${formatAuthorName(bookWithText.authors[0])}`,
+          5000,
+        );
       })
       .catch((err) => {
         notify(err.message, 10000);
@@ -73,47 +65,79 @@ export function GhostsProvider({ children }: PropsWithChildren) {
       });
   }
 
+  function loadBooks(): Promise<BookWithText> {
+    return bookService.getInit().then((data) => {
+      const storedBooksJSON = localStorage.getItem("books");
+      const storedBooks = storedBooksJSON ? JSON.parse(storedBooksJSON) : [];
+      const books: Book[] = storedBooks.length > 0 ? storedBooks : data.books;
+      setBooks(books);
+      notify("Summoning ghost through data ritual...");
+      const defaultBookId = 2701; // Moby Dick
+      const defaultBook = books.find((book) => book.id === defaultBookId);
+      if (defaultBook === undefined) {
+        throw new Error(`Default book with id ${defaultBookId} not available`);
+      }
+      return { ...defaultBook, text: data.defaultText } as BookWithText;
+    });
+  }
+
   function loadLocalStorage() {
     const settingsJSON = localStorage.getItem("settings");
     if (settingsJSON) {
       setSettings(JSON.parse(settingsJSON));
     }
-
-    const booksJSON = localStorage.getItem("books");
-    if (booksJSON) {
-      setBooks(JSON.parse(booksJSON));
-    }
   }
 
-  function updateLocalStorage() {
+  function updateSettings(settings: GhostSettings) {
     localStorage.setItem("settings", JSON.stringify(settings));
-    localStorage.setItem("books", JSON.stringify(books));
+    setSettings(settings);
   }
 
-  function addBook(book: Book) {
+  function setCurrentBook(book: Book) {
     setIsLoading(true);
-    notify(`Resurrecting ${formatAuthorName(book.authors[0])}...`);
-    bookService.getById(book.id).then(bookWithText => {
-      const { text } = bookWithText;
-      if (!text) {
-        notify("Unable to locate book text on Project Gutenberg");
-        return;
-      }
-      setBooks([...books, book]);
-      notify("Parsing ecto-language...");
-      const markov = new MarkovCoil(text.split(" "))
-      setGhost({ book, markov })
-      setIsLoading(false);
-      notify("Summoning completed, proceed with spectral collaboration", 3000);
-    }).catch(err => {
-      console.error(err);
-      notify(err.message);
-    })
+    notify(
+      `Resurrecting ${formatAuthorName(book.authors[0])} (${book.title})...`,
+    );
+    bookService
+      .getById(book.id)
+      .then((bookWithText) => {
+        const { text } = bookWithText;
+        if (!text) {
+          notify("Unable to locate book text on Project Gutenberg");
+          return;
+        }
+
+        // Add to books stored list if not already there
+        if (books.find((b) => b.id === book.id) === undefined) {
+          setBooks([...books, book]);
+          localStorage.setItem("books", JSON.stringify([...books, book]));
+        }
+
+        notify("Parsing ecto-language...");
+        const markov = new MarkovCoil(text.split(" "));
+        setGhost({ book, markov });
+        setIsLoading(false);
+        notify(
+          `Summoning completed, now collaborating with ${formatAuthorName(book.authors[0])}`,
+          5000,
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+        notify(err.message);
+      });
   }
 
   return (
     <GhostsContext.Provider
-      value={{ ghost, books, settings, setSettings, isLoading, addBook }}
+      value={{
+        ghost,
+        books,
+        settings,
+        setSettings: updateSettings,
+        isLoading,
+        setCurrentBook,
+      }}
     >
       {children}
     </GhostsContext.Provider>

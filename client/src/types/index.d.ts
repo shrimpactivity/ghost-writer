@@ -22,6 +22,10 @@ export interface Book {
   text?: string;
 }
 
+export interface BookWithText extends Book {
+  text: string;
+}
+
 export interface Ghost {
   book: Book;
   markov: MarkovCoil;

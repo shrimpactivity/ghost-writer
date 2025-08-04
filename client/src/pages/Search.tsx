@@ -4,6 +4,7 @@ import { BookService } from "../services/BookService";
 import { useNotification } from "../context/Notification";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { useGhosts } from "../context/Ghosts";
+import { useNavigate } from "react-router";
 
 const bookService = new BookService();
 
@@ -38,8 +39,9 @@ function BookTable({ books, onRowClick }: BookTableProps) {
 }
 
 function Search() {
+  const navigate = useNavigate();
   const { notify } = useNotification();
-  const { addBook } = useGhosts();
+  const { setCurrentBook } = useGhosts();
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<Book[]>([]);
   const [query, setQuery] = useState("");
@@ -53,6 +55,7 @@ function Search() {
     bookService.search(query).then(results => {
       setSearchResults(results);
       setIsLoading(false);
+      notify("");
     }).catch(err => {
       notify(err.message);
       setIsLoading(false);
@@ -60,7 +63,8 @@ function Search() {
   };
 
   const handleRowClick = (book: Book) => {
-    addBook(book);
+    setCurrentBook(book);
+    navigate("/")
   };
 
   return (
