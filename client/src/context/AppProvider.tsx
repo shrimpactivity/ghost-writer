@@ -1,10 +1,11 @@
 import { PropsWithChildren } from "react";
 import { NotificationProvider } from "./Notification";
+import { GhostsProvider } from "./Ghosts";
 
-export function AppProvider({ children}: PropsWithChildren) {
+export function AppProvider({ children }: PropsWithChildren) {
   return (
     <NotificationProvider>
-      {children}
+      <GhostsProvider>{children}</GhostsProvider>
     </NotificationProvider>
-  )
+  );
 }
