@@ -3,7 +3,7 @@ import { useGhosts } from "../context/Ghosts";
 import { tokenize } from "../utils/tokenize";
 
 export function useComposition() {
-  const { getPrediction } = useGhosts();
+  const { getPrediction, ghost } = useGhosts();
   const [composition, setComposition] = useState("");
   const [compositionInput, setCompositionInput] = useState("");
   const [prediction, setPrediction] = useState<string[]>([]);
@@ -11,11 +11,11 @@ export function useComposition() {
   useEffect(() => {
     const tokens = tokenize(composition);
     setPrediction(getPrediction(tokens));
-  }, [composition]);
+  }, [composition, ghost]);
 
   function addInputToComposition() {
     // TODO: consider punctuation
-    setComposition(composition.concat(" ", compositionInput));
+    setComposition(composition.concat(" ", compositionInput.trim()));
     setCompositionInput("");
   }
 
@@ -24,12 +24,12 @@ export function useComposition() {
   }
 
   return {
-    composition,
-    setComposition,
-    compositionInput,
-    setCompositionInput,
-    addInputToComposition,
+    text: composition,
+    setText: setComposition,
+    input: compositionInput,
+    setInput: setCompositionInput,
     prediction,
-    addPredictionToComposition
+    concatInput: addInputToComposition,
+    concatPrediction: addPredictionToComposition
   };
 }
