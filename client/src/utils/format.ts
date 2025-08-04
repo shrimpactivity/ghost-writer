@@ -12,3 +12,20 @@ export const formatAuthorName = (author: string) => {
   const first = author.slice(author.indexOf(',') + 1);
   return `${first} ${last}`;
 }
+
+export const capitalize = (text: string) => {
+  if (text.trim().length === 0) {
+    return text;
+  }
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export const endsWithTerminalPunctuation = (text: string) => {
+  if (!text || text.length === 0) {
+    return false;
+  }
+
+  const terminalRegex = /[.!?]$/;
+
+  return terminalRegex.test(text);
+}

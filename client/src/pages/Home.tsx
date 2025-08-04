@@ -59,8 +59,6 @@ function Home() {
     );
   }
 
-  const rawTokens = composition.text.trim().split(" ");
-
   return (
     <CenterHorizontal>
       <div>
@@ -80,11 +78,13 @@ function Home() {
         </div>
         <div
           className="editor"
-          style={{ display: "flex", gap: "0.5em", flexWrap: "wrap" }}
         >
-          {rawTokens.map((token, i) => (
-            <span key={i}>{token}</span>
-          ))}
+          {composition.tokens.map((token, i) => {
+            if (token === "\n") {
+              return <br key={i}/>;
+            }
+            return <span key={i}>{token}</span>;
+          })}
           <input
             type="text"
             className="composition-input"
