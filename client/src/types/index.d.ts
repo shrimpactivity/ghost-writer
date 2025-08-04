@@ -29,7 +29,7 @@ export interface Ghost {
 
 export interface GhostSettings {
   predictionLength: number;
-  predictionDepth: 0 | 1 | 2 | 3;
+  predictionDepth: number;
 }
 
 export interface InitData {

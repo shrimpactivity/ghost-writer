@@ -1,4 +1,10 @@
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Book, Ghost, GhostSettings } from "../types";
 import { useNotification } from "./Notification";
 import { BookService } from "../services/BookService";
@@ -8,12 +14,8 @@ interface GhostsContextType {
   ghost: Ghost | undefined;
   books: Book[];
   addBook: (book: Book) => void;
-  search: (query: string) => Promise<Book[]>;
-  results: Book[];
   settings: GhostSettings;
   setSettings: (settings: GhostSettings) => void;
-  userTokens: string[];
-  prediction: string;
   isLoading: boolean;
 }
 
@@ -29,44 +31,45 @@ export function useGhosts() {
 
 const defaultSettings: GhostSettings = {
   predictionLength: 1,
-  predictionDepth: 3
-}
+  predictionDepth: 3,
+};
 
 const bookService = new BookService();
 
-export function GhostsProvider({ children}: PropsWithChildren) {
+export function GhostsProvider({ children }: PropsWithChildren) {
   const { notify } = useNotification();
   const [books, setBooks] = useState<Book[]>([]);
   const [settings, setSettings] = useState(defaultSettings);
   const [ghost, setGhost] = useState<Ghost>();
   const [isLoading, setIsLoading] = useState(true);
-  const [userTokens, setUserTokens] = useState<string[]>([]);
-
 
   useEffect(() => fetchInitData(), []);
   useEffect(() => loadLocalStorage(), []);
-  useEffect(() => updateLocalStorage(), [settings, userTokens]);
+  useEffect(() => updateLocalStorage(), [settings]);
 
   function fetchInitData() {
     setIsLoading(true);
-    bookService.getInit().then((data) => {
-      notify("Initializing cemetery abstraction...")
-      const books = data.books;
-      setBooks(books);
-      notify("Summoning ghost through data ritual...")
-      const tokens = data.defaultText.split(" ");
-      const markov = new MarkovCoil(tokens);
-      const defaultBookId = 2701; // Moby Dick
-      const defaultBook = books.find(book => book.id === defaultBookId);
-      if (defaultBook === undefined) {
-        throw new Error("Default book not available");
-      }
-      setGhost({ book: defaultBook, markov });
-      notify("Ritual completed, proceed with spectral collaboration", 3000);
-    }).catch(err => {
-      notify(err.message, 10000);
-      setIsLoading(false);
-    }) 
+    bookService
+      .getInit()
+      .then((data) => {
+        notify("Initializing cemetery abstraction...");
+        const books = data.books;
+        setBooks(books);
+        notify("Summoning ghost through data ritual...");
+        const tokens = data.defaultText.split(" ");
+        const markov = new MarkovCoil(tokens);
+        const defaultBookId = 2701; // Moby Dick
+        const defaultBook = books.find((book) => book.id === defaultBookId);
+        if (defaultBook === undefined) {
+          throw new Error("Default book not available");
+        }
+        setGhost({ book: defaultBook, markov });
+        notify("Ritual completed, proceed with spectral collaboration", 3000);
+      })
+      .catch((err) => {
+        notify(err.message, 10000);
+        setIsLoading(false);
+      });
   }
 
   function loadLocalStorage() {
@@ -74,22 +77,20 @@ export function GhostsProvider({ children}: PropsWithChildren) {
     if (settingsJSON) {
       setSettings(JSON.parse(settingsJSON));
     }
-
-    const userTokensJSON = localStorage.getItem("userTokens");
-    if (userTokensJSON) {
-      setUserTokens(JSON.parse(userTokensJSON));
-    }
   }
 
   function updateLocalStorage() {
     localStorage.setItem("settings", JSON.stringify(settings));
-    localStorage.setItem("userTokens", JSON.stringify(userTokens));
   }
 
+  // TODO:
+  function addBook() {}
+
   return (
-    <GhostsContext.Provider value={{ ghost, books, }}>
+    <GhostsContext.Provider
+      value={{ ghost, books, settings, setSettings, isLoading, addBook }}
+    >
       {children}
     </GhostsContext.Provider>
-  )
+  );
 }
-
