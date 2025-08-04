@@ -34,6 +34,7 @@ export interface Ghost {
 export interface GhostSettings {
   predictionLength: number;
   predictionDepth: number;
+  weighted: boolean;
 }
 
 export interface InitData {

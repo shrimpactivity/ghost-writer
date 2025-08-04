@@ -49,6 +49,12 @@ export default function Settings() {
             />
           </label>
         </div>
+        <div className="form-group">
+          <label>
+            Weighted Predictions (if true, selects prediction with highest probability)
+            <input type="checkbox" checked={settings.weighted} onChange={e => setSettings({...settings, weighted: e.target.checked})}/>
+          </label>
+        </div>
         <div>
           <Link to="/">Done</Link>
         </div>
