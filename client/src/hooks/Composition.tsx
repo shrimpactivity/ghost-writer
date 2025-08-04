@@ -50,7 +50,7 @@ export function useComposition() {
   }
 
   function normalizedCompositionTokens() {
-    return tokenize(tokens.join(" "));
+    return tokenize(tokens.concat(input).join(" "));
   }
 
   function formatPrediction(predictionTokens: string[]) {
