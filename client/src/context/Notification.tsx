@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import { createContext, PropsWithChildren, useContext, useRef, useState } from "react";
 
 interface NotificationContextType {
   notification: string;
@@ -17,11 +17,16 @@ export const useNotification = () => {
 
 export function NotificationProvider({ children }: PropsWithChildren) {
   const [ notification, setNotification ] = useState("");
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined)
 
-  const notify = (text: string, timeout?: number) => {
+  const notify = (text: string, duration?: number) => {
     setNotification(text);
-    if (timeout) {
-      setTimeout(() => setNotification(""), timeout);
+    if (duration) {
+      const newTimeout = setTimeout(() => setNotification(""), duration);
+      if (timeoutRef) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = newTimeout;
     }
   }
 
