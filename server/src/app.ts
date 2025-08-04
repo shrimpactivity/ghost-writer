@@ -1,24 +1,24 @@
+import { readFileSync } from "fs";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import cors from "cors";
-import { readFileSync } from "fs";
 import { GutendexService } from "./services/GutendexService";
 import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler } from "./middleware/errorHandler";
 import { unknownEndpoint } from "./middleware/unknownEndpoint";
-import defaultBooks from "./data/defaultBooks.json";
 import { formatGutenbergText } from "./util/format";
+import defaultBooks from "./data/defaultBooks.json";
 
 const app = express();
 const gutendexService = new GutendexService();
 
 app.use(express.json());
+app.use(requestLogger);
 
 if (process.env.NODE_ENV === "production") {
   app.use(helmet());
 } else {
   app.use(cors());
-  app.use(requestLogger);
 }
 
 app.use(express.static("public"));
