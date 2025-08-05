@@ -39,7 +39,7 @@ export interface GhostSettings {
 
 export interface InitData {
   books: Book[];
-  defaultText: string;
+  default: Book;
 }
 
 export interface RequestError {

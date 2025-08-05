@@ -1,10 +1,10 @@
 import { Book, InitData } from "../types";
 
+const BASE_URL = import.meta.env.PROD ? '/api' : 'http://localhost:3000/api';
+
 export class BookService {
-  private static readonly BASE_URL = import.meta.env.VITE_API_URL || "/api";
-  
   async getInit() {
-    const response = await fetch(`${BookService.BASE_URL}/init`);
+    const response = await fetch(`${BASE_URL}/init`);
     if (!response.ok) {
       await this.handleError(response);
     }
@@ -13,7 +13,7 @@ export class BookService {
   }
 
   async search(query: string) {
-    const response = await fetch(`${BookService.BASE_URL}/gutenberg?search=${encodeURIComponent(query)}`);
+    const response = await fetch(`${BASE_URL}/gutenberg?search=${encodeURIComponent(query)}`);
     if (!response.ok) {
       await this.handleError(response);
     }
@@ -22,7 +22,7 @@ export class BookService {
   }
 
   async getById(id: number) {
-    const response = await fetch(`${BookService.BASE_URL}/gutenberg/${id}`);
+    const response = await fetch(`${BASE_URL}/gutenberg/${id}`);
     if (!response.ok) {
       await this.handleError(response);
     }

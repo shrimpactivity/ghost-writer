@@ -68,15 +68,9 @@ export function GhostsProvider({ children }: PropsWithChildren) {
 
   function loadBooks(): Promise<BookWithText> {
     return bookService.getInit().then((data) => {
-      const books = data.books;
-      setBooks(books);
+      setBooks(data.books);
       notify("Summoning ghost through data ritual...");
-      const defaultBookId = 2701; // Moby Dick
-      const defaultBook = books.find((book) => book.id === defaultBookId);
-      if (defaultBook === undefined) {
-        throw new Error(`Default book with id ${defaultBookId} not available`);
-      }
-      return { ...defaultBook, text: data.defaultText } as BookWithText;
+      return data.default as BookWithText;
     });
   }
 

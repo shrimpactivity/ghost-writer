@@ -1,5 +1,4 @@
 import path from "path";
-import { readFileSync, existsSync } from "fs";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -7,9 +6,8 @@ import { GutendexService } from "./services/GutendexService";
 import { requestLogger } from "./middleware/requestLogger";
 import { errorHandler } from "./middleware/errorHandler";
 import { unknownEndpoint } from "./middleware/unknownEndpoint";
-import { formatGutenbergText } from "./util/format";
-import defaultBooks from "./data/defaultBooks.json";
-import { logger } from "./config/logger";
+import defaultBooks from "./data/books.json";
+import defaultBook from "./data/defaultBook.json"
 
 const app = express();
 const gutendexService = new GutendexService();
@@ -23,16 +21,8 @@ if (process.env.NODE_ENV === "production") {
   app.use(cors());
 }
 
-const CLIENT_DIR = path.join(__dirname, "../public");
-if (existsSync(CLIENT_DIR)) {
-  app.use("/static", express.static(CLIENT_DIR));
-} else {
-  logger.warn(`Client directory not found at ${CLIENT_DIR}.\nUse Vite client dev server.`);
-}
-
 app.get("/api/init", async (_req: Request, res: Response) => {
-  const mobyDick = readFileSync("./src/data/moby_dick.txt").toString();
-  res.status(200).json({ books: defaultBooks, defaultText: formatGutenbergText(mobyDick) });
+  res.status(200).json({ books: defaultBooks, default: defaultBook });
 });
 
 app.get(
@@ -55,20 +45,14 @@ app.get(
   "/api/gutenberg/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     const id = Number(req.params.id);
-    const excludeText = Boolean(req.query.notext);
     if (isNaN(id)) {
       return res.status(400).send("Id must be a number");
     }
-
+    
+    const excludeText = Boolean(req.query.notext);
     try {
-      const mobyDickId = 2107;
-      if (id === mobyDickId) {
-        const mobyDick = readFileSync("./src/data/moby_dick.txt").toString();
-        const book = defaultBooks.find(book => book.id === mobyDickId);
-        if (!book) {
-          throw new Error("Unable to locate default stored book");
-        }
-        return res.status(200).json({...book, text: mobyDick});
+      if (id === defaultBook.id) {
+        return res.status(200).json(defaultBook);
       }
 
       const book = await gutendexService.findById(id, excludeText);
@@ -84,6 +68,13 @@ app.get(
     }
   },
 );
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Catch-all for react-router
+app.get('*', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.use(unknownEndpoint);
 app.use(errorHandler);
