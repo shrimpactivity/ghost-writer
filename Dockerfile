@@ -1,24 +1,25 @@
-# Build React client
-FROM node:current-alpine AS client-builder
-
-WORKDIR /app/client
-
-COPY client .
-RUN npm install
-RUN npm run build
-
-# Build Express server
 FROM node:current-alpine
 
 WORKDIR /app
 
-COPY server/package*.json ./
-RUN npm install
-RUN npm run build
+COPY package*.json ./
+COPY client/package*.json ./client/
+COPY server/package*.json ./server/
+COPY . .
 
-COPY server/dist ./
-COPY --from=client-builder /app/client/dist ./public
+RUN npm ci
+WORKDIR /app/client
+RUN npm ci && npm run build
+
+WORKDIR /app/server
+RUN npm ci && npm run build
+
+RUN cp -r /app/client/dist /app/server/dist/public
+
+WORKDIR /app
+RUN npm prune --production && npm cache clean --force
 
 EXPOSE 3000
 
+WORKDIR /app/server
 CMD ["node", "dist/index.js"]

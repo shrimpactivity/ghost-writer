@@ -1,6 +1,6 @@
 services:
   server:
-    container_name: ghost-writer
+    container_name: ghost-writer-server
     restart: always
     build:
       context: .

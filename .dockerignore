@@ -1,8 +1,10 @@
-npm-debug.log
 node_modules
-dist
-Dockerfile
-.dockerignore
+npm-debug.log
 .git
 .gitignore
-.env*
+README.md
+.env
+coverage
+.vscode
+client/dist
+server/dist
