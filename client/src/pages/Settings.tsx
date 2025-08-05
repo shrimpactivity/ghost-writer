@@ -6,8 +6,14 @@ import "./Settings.css";
 export default function Settings() {
   const { settings, setSettings } = useGhosts();
 
-  if (settings.predictionLength > 1000)
-    setSettings({ ...settings, predictionLength: 1000 });
+  function handleDepthChange(e: React.ChangeEvent<HTMLInputElement>) {
+    let depth = Number(e.target.value);
+    depth = Math.min(10, Math.max(1, depth));
+    setSettings({
+      ...settings,
+      predictionLength: depth,
+    })
+  }
 
   return (
     <CenterHorizontal>
@@ -37,15 +43,8 @@ export default function Settings() {
             Prediction Length
             <input
               type="number"
-              min="1"
-              max="1000"
               value={settings.predictionLength}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  predictionLength: Number(e.target.value),
-                })
-              }
+              onChange={(e) => handleDepthChange(e)}
             />
           </label>
         </div>
