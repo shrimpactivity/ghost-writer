@@ -1,4 +1,5 @@
-import { readFileSync } from "fs";
+import path from "path";
+import { readFileSync, existsSync } from "fs";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -8,6 +9,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import { unknownEndpoint } from "./middleware/unknownEndpoint";
 import { formatGutenbergText } from "./util/format";
 import defaultBooks from "./data/defaultBooks.json";
+import { logger } from "./config/logger";
 
 const app = express();
 const gutendexService = new GutendexService();
@@ -21,15 +23,20 @@ if (process.env.NODE_ENV === "production") {
   app.use(cors());
 }
 
-app.use(express.static("public"));
+const CLIENT_DIR = path.join(__dirname, "../public");
+if (existsSync(CLIENT_DIR)) {
+  app.use("/static", express.static(CLIENT_DIR));
+} else {
+  logger.warn(`Client directory not found at ${CLIENT_DIR}.\nUse Vite client dev server.`);
+}
 
-app.get("/init", async (_req: Request, res: Response) => {
+app.get("/api/init", async (_req: Request, res: Response) => {
   const mobyDick = readFileSync("./src/data/moby_dick.txt").toString();
   res.status(200).json({ books: defaultBooks, defaultText: formatGutenbergText(mobyDick) });
 });
 
 app.get(
-  "/gutenberg",
+  "/api/gutenberg",
   async (req: Request, res: Response, next: NextFunction) => {
     const query = req.query.search as string;
     if (!query) {
@@ -45,7 +52,7 @@ app.get(
 );
 
 app.get(
-  "/gutenberg/:id",
+  "/api/gutenberg/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     const id = Number(req.params.id);
     const excludeText = Boolean(req.query.notext);

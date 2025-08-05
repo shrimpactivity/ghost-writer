@@ -1,8 +1,8 @@
 import { Book, InitData } from "../types";
 
 export class BookService {
-  private static readonly BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
+  private static readonly BASE_URL = import.meta.env.VITE_API_URL || "/api";
+  
   async getInit() {
     const response = await fetch(`${BookService.BASE_URL}/init`);
     if (!response.ok) {

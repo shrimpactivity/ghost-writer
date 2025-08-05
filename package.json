@@ -4,6 +4,7 @@
   "description": "Text suggestion from beyond the grave.",
   "main": "index.js",
   "scripts": {
+    "start": "node server/dist/index.js",
     "build:client": "npm run build --workspace=client",
     "build:server": "npm run build --workspace=server",
     "build": "npm run build:client && npm run build:server",
