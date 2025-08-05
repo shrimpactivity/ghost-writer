@@ -1,4 +1,15 @@
 [
-  {"id":2701,"title":"Moby Dick; Or, The Whale","authors":["Melville, Herman"],"url":"https://www.gutenberg.org/ebooks/2701.txt.utf-8"}
-
+  {"id":2701,"title":"Moby Dick; Or, The Whale","authors":["Melville, Herman"],"url":"https://www.gutenberg.org/ebooks/2701.txt.utf-8"},
+  {"id":100,"title":"The Complete Works of William Shakespeare","authors":["Shakespeare, William"],"url":"https://www.gutenberg.org/ebooks/100.txt.utf-8"},
+  {"id":42671,"title":"Pride and Prejudice","authors":["Austen, Jane"],"url":"https://www.gutenberg.org/ebooks/42671.txt.utf-8"},
+  {"id":2554,"title":"Crime and Punishment","authors":["Dostoyevsky, Fyodor"],"url":"https://www.gutenberg.org/ebooks/2554.txt.utf-8"},
+  {"id":10,"title":"The King James Version of the Bible","authors":[],"url":"https://www.gutenberg.org/ebooks/10.txt.utf-8"},
+  {"id":1727,"title":"The Odyssey","authors":["Homer"],"url":"https://www.gutenberg.org/ebooks/1727.txt.utf-8"},
+  {"id":84,"title":"Frankenstein; Or, The Modern Prometheus","authors":["Shelley, Mary Wollstonecraft"],"url":"https://www.gutenberg.org/ebooks/84.txt.utf-8"},
+  {"id":145,"title":"Middlemarch","authors":["Eliot, George"],"url":"https://www.gutenberg.org/ebooks/145.txt.utf-8"},
+  {"id":1400,"title":"Great Expectations","authors":["Dickens, Charles"],"url":"https://www.gutenberg.org/ebooks/1400.txt.utf-8"},
+  {"id":4300,"title":"Ulysses","authors":["Joyce, James"],"url":"https://www.gutenberg.org/ebooks/4300.txt.utf-8"},
+  {"id":345,"title":"Dracula","authors":["Stoker, Bram"],"url":"https://www.gutenberg.org/ebooks/345.txt.utf-8"},
+  {"id":5200,"title":"Metamorphosis","authors":["Kafka, Franz"],"url":"https://www.gutenberg.org/ebooks/5200.txt.utf-8"},
+  {"id":2600,"title":"War and Peace","authors":["Tolstoy, Leo, graf"],"url":"https://www.gutenberg.org/ebooks/2600.txt.utf-8"}
 ]
