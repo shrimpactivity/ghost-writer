@@ -1,3 +1,4 @@
+import path from "path";
 import { createLogger, transports, format } from "winston";
 import { NODE_ENV, LOG_LEVEL } from "./env";
 
@@ -7,7 +8,7 @@ const logger = createLogger({
       level: LOG_LEVEL
     }),
     new transports.File({
-      dirname: "logs",
+      dirname: path.join(__dirname, "logs"),
       filename: `${NODE_ENV}.log`,
       level: LOG_LEVEL
     })

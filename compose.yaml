@@ -1,0 +1,16 @@
+services:
+  server:
+    container_name: ghost-writer
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_PORT: 3000
+    ports:
+      - 3000:3000
+    env_file:
+      - "server/.env"
+    environment:
+      - NODE_ENV=production 
+      - LOG_LEVEL=error
