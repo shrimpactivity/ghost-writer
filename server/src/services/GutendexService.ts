@@ -6,7 +6,7 @@ import { formatGutenbergText } from "../util/format";
 export class GutendexService {
   private static readonly BASE_URL = GUTENDEX_BASE_URI;
 
-  async findById(id: number): Promise<Book | null> {
+  async findById(id: number, excludeText=false): Promise<Book | null> {
     try {
       const response = await fetch(`${GutendexService.BASE_URL}/${id}`);
       const fullBook = (await response.json()) as FullBook;
@@ -14,7 +14,7 @@ export class GutendexService {
         return null;
       }
       const book = this.formatBook(fullBook);
-      if (book.url) {
+      if (excludeText === false && book.url) {
         const textData = await fetch(book.url);
         const rawText = await textData.text();
         book.text = formatGutenbergText(rawText);

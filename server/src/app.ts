@@ -48,12 +48,23 @@ app.get(
   "/gutenberg/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     const id = Number(req.params.id);
+    const excludeText = Boolean(req.query.notext);
     if (isNaN(id)) {
       return res.status(400).send("Id must be a number");
     }
 
     try {
-      const book = await gutendexService.findById(id);
+      const mobyDickId = 2107;
+      if (id === mobyDickId) {
+        const mobyDick = readFileSync("./src/data/moby_dick.txt").toString();
+        const book = defaultBooks.find(book => book.id === mobyDickId);
+        if (!book) {
+          throw new Error("Unable to locate default stored book");
+        }
+        return res.status(200).json({...book, text: mobyDick});
+      }
+
+      const book = await gutendexService.findById(id, excludeText);
       if (book === null) {
         return res
           .status(404)

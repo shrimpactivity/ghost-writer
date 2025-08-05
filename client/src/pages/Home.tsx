@@ -2,7 +2,6 @@ import { useRef } from "react";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { useGhosts } from "../context/Ghosts";
 import { useComposition } from "../hooks/Composition";
-import { formatAuthorName } from "../utils/format";
 import "./Home.css";
 
 function Home() {
@@ -76,6 +75,12 @@ function Home() {
     focusInput();
   };
 
+  function authorCompare(a?: string, b?: string) {
+    if (!a) return 1;
+    if (!b) return -1;
+    return a.localeCompare(b);
+  }
+
   if (isLoading) {
     return (
       <CenterHorizontal>
@@ -94,11 +99,11 @@ function Home() {
               value={ghost?.book.id}
               onChange={(e) => handleGhostSelection(e)}
             >
-              {books.map((book) => (
+              {books.sort((a, b) => authorCompare(a.authors[0], b.authors[0])).map((book) => (
                 <option
                   key={book.id}
                   value={book.id}
-                >{`${formatAuthorName(book.authors[0])} (${book.title})`}</option>
+                >{`${book.authors[0] ? book.authors[0] + " " : ""}(${book.title})`}</option>
               ))}
             </select>
           </div>

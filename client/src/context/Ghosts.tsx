@@ -67,9 +67,7 @@ export function GhostsProvider({ children }: PropsWithChildren) {
 
   function loadBooks(): Promise<BookWithText> {
     return bookService.getInit().then((data) => {
-      const storedBooksJSON = localStorage.getItem("books");
-      const storedBooks = storedBooksJSON ? JSON.parse(storedBooksJSON) : [];
-      const books: Book[] = storedBooks.length > 0 ? storedBooks : data.books;
+      const books = data.books;
       setBooks(books);
       notify("Summoning ghost through data ritual...");
       const defaultBookId = 2701; // Moby Dick
