@@ -38,7 +38,7 @@ export default function NavBar() {
         href="https://github.com/shrimpactivity/ghost-writer"
         target="_blank"
       >
-        Code
+        GitHub
       </a>
     </nav>
   );

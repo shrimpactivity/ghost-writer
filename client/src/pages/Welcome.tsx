@@ -28,7 +28,7 @@ export default function Welcome() {
           <CenterHorizontal>
             <ul>
               <li>Begin typing</li>
-              <li>Press the Tab key to accept the ghost's suggestion</li>
+              <li>Press [Tab] to accept the ghost's suggestion</li>
             </ul>
           </CenterHorizontal>
           <CenterHorizontal>
