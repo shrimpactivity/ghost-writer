@@ -2,6 +2,7 @@
 FROM node:current-alpine AS client-builder
 
 WORKDIR /app/client
+
 COPY client .
 RUN npm install
 RUN npm run build
@@ -10,10 +11,13 @@ RUN npm run build
 FROM node:current-alpine
 
 WORKDIR /app
-COPY server/ ./
+
+COPY server/package*.json ./
 RUN npm install
 RUN npm run build
-COPY --from=client-builder /app/client/dist .dist/public
+
+COPY server/dist ./
+COPY --from=client-builder /app/client/dist ./public
 
 EXPOSE 3000
 

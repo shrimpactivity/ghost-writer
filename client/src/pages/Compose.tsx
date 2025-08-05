@@ -149,9 +149,9 @@ function Compose() {
             <span key={i + 1} className="prediction-token">
               {predictionToken.split("").map((char, j) => (
                 <span
-                  key={Math.random()}
+                  key={`${i}-${j}`}
                   className="prediction-char"
-                  style={{ "--i": (i + 1) * (j + 1) } as any}
+                  style={{ "--i": `${j}` } as any}
                 >
                   {char}
                 </span>
