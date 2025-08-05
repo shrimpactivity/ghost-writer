@@ -17,14 +17,14 @@ export const useNotification = () => {
 
 export function NotificationProvider({ children }: PropsWithChildren) {
   const [ notification, setNotification ] = useState("");
-  const timeoutRef = useRef<NodeJS.Timeout>(undefined)
+  const timeoutRef = useRef<number>(undefined)
 
   const notify = (text: string, duration?: number) => {
     setNotification(text);
     if (duration) {
-      const newTimeout = setTimeout(() => setNotification(""), duration);
+      const newTimeout = window.setTimeout(() => setNotification(""), duration);
       if (timeoutRef) {
-        clearTimeout(timeoutRef.current);
+        window.clearTimeout(timeoutRef.current);
       }
       timeoutRef.current = newTimeout;
     }
