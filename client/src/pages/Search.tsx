@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { Book } from "../types";
 import "./Search.css";
+import LoadingIcon from "../components/LoadingIcon";
 
 const bookService = new BookService();
 
@@ -16,7 +17,7 @@ interface BookTableProps {
 
 function BookTable({ books, onRowClick }: BookTableProps) {
   if (books.length === 0) {
-    return <p>No results</p>;
+    return <p style={{color: "var(--tertiary)"}}>No results</p>;
   }
 
   return (
@@ -71,12 +72,20 @@ function Search() {
     navigate("/");
   };
 
+  if (isLoading) {
+    return (
+      <CenterHorizontal>
+        <LoadingIcon />
+      </CenterHorizontal>
+    )
+  }
+
   return (
     <CenterHorizontal>
       <div>
         <CenterHorizontal>
           <div>
-            <h1>Search Project Gutenberg</h1>
+            {submitted === false && <h1>Search Project Gutenberg</h1>}
           </div>
         </CenterHorizontal>
         <CenterHorizontal>
@@ -91,7 +100,6 @@ function Search() {
             </form>
           </div>
         </CenterHorizontal>
-        {isLoading ? <p>Loading...</p> : null}
         {submitted && isLoading === false ? (
           <BookTable books={searchResults} onRowClick={handleRowClick} />
         ) : null}

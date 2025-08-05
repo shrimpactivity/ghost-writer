@@ -3,6 +3,7 @@ import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { useGhosts } from "../context/Ghosts";
 import { useComposition } from "../hooks/Composition";
 import "./Home.css";
+import LoadingIcon from "../components/LoadingIcon";
 
 function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -84,7 +85,7 @@ function Home() {
   if (isLoading) {
     return (
       <CenterHorizontal>
-        <p>TODO: Loading...</p>
+        <LoadingIcon />
       </CenterHorizontal>
     );
   }
