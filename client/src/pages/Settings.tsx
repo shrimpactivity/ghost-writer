@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { useGhosts } from "../context/Ghosts";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
+import "./Settings.css";
 
 export default function Settings() {
   const { settings, setSettings } = useGhosts();
@@ -11,10 +12,9 @@ export default function Settings() {
   return (
     <CenterHorizontal>
       <div>
-        <h1>Settings</h1>
         <div className="form-group">
           <label>
-            Ghost Mood (prediction search depth)
+            Ghost Mood <span className="detail">(prediction search depth)</span>
             <select
               id="mood"
               value={settings.predictionDepth}
@@ -51,12 +51,21 @@ export default function Settings() {
         </div>
         <div className="form-group">
           <label>
-            Weighted Predictions (if true, selects prediction with highest probability)
-            <input type="checkbox" checked={settings.weighted} onChange={e => setSettings({...settings, weighted: e.target.checked})}/>
+            Weighted Predictions{" "}
+            <span className="detail">
+              (if true, selects prediction with highest probability)
+            </span>
+            <input
+              type="checkbox"
+              checked={settings.weighted}
+              onChange={(e) =>
+                setSettings({ ...settings, weighted: e.target.checked })
+              }
+            />
           </label>
         </div>
         <div>
-          <Link to="/">Done</Link>
+          <Link to="/" className="done-btn">Done</Link>
         </div>
       </div>
     </CenterHorizontal>

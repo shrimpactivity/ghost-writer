@@ -69,4 +69,5 @@
   padding: 0.3em 0.5em;
   border: 1px solid var(--tertiary);
   border-radius: 5px;
+  cursor: pointer;
 }

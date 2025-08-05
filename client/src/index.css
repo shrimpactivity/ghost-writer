@@ -2,6 +2,7 @@
 
 :root {
   font-family: 'Fira Code', monospace;
+  font-size: 18px;
 
   --fontColor: #daffd7;
   --primary: #80fcbc;

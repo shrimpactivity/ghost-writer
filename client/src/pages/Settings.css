@@ -1,0 +1,40 @@
+.form-group {
+  margin: 1.5em 0;
+}
+
+.form-group input, .form-group select {
+  font-size: 1em;
+  display: block;
+  margin: 0.5em 0;
+  background-color: var(--background);
+  border: 2px solid var(--primary);
+  border-radius: 5px;
+  padding: 0.5em;
+  color: var(--fontColor);
+}
+
+.detail {
+  display: block;
+  font-style: italic;
+  font-size: 0.7em;
+}
+
+.form-group input[type=checkbox] {
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+}
+
+.done-btn {
+  background-color: var(--background);
+  display: inline-block;
+  margin-top: 1em;
+  padding: 0.5em;
+  border: 2px solid var(--tertiary);
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  color: var(--tertiary);
+  text-decoration: none;
+  font-size: 1em;
+}
