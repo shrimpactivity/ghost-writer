@@ -13,7 +13,6 @@
   --backgroundLight: #272727;
   --backgroundTransparent: rgba(12, 12, 12, 0.4);
 
-
   color: var(--fontColor);
 
   background: center no-repeat url("./assets/background.png");
@@ -36,6 +35,23 @@ body {
 
 h1 {
   font-size: 1.3em;
+}
+
+.btn {
+  background-color: var(--background);
+  display: inline-block;
+  padding: 0.5em;
+  border: 2px solid var(--primary);
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  color: var(--fontColor);
+  text-decoration: none;
+  font-size: 1em;
+}
+
+.btn:hover {
+  box-shadow: 0px 0px 5px 2px;
+  color: var(--primary);
 }
 
 @media(max-width: 1200px) {
