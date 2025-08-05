@@ -5,7 +5,10 @@ import "./NavBar.css";
 export default function NavBar() {
   return (
     <nav className="nav-bar">
+      <NavLink to="/">
+
       <img src={logo} height="60px" alt="Goober the Ghost"/>
+      </NavLink>
       <NavLink
         className={({ isActive }) =>
           isActive ? "nav-link active" : "nav-link"

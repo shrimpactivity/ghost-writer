@@ -87,7 +87,7 @@ h1 {
 
   50% {
     transform: translateY(-1px);
-    color: cyan;
+    color: var(--primary);
   }
 
   75% {

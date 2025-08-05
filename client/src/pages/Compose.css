@@ -49,7 +49,6 @@
 
 .editor .prediction-token {
   margin: 0 0.2em;
-  animation: fadeCycle 1s infinite;
   display: inline-block;
 }
 
