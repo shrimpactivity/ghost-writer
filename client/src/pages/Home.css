@@ -43,15 +43,15 @@
 }
 
 .editor .prediction-token {
-  /* margin: 0 0.2em;
+  margin: 0 0.2em;
   animation: fadeCycle 1s infinite;
-  display: inline-block; */
+  display: inline-block;
 }
 
 .editor .prediction-char {
-  /* display: inline-block;
+  display: inline-block;
   animation: wave 2s infinite;
-  animation-delay: calc(.2s * var(--i)); */
+  animation-delay: calc(.2s * var(--i));
 }
 
 .editor-btns {

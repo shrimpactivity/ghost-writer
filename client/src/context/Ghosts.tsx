@@ -134,6 +134,7 @@ export function GhostsProvider({ children }: PropsWithChildren) {
         settings.predictionLength,
         settings.weighted,
       );
+      console.log(prediction);
       return prediction;
     }
     return [];
