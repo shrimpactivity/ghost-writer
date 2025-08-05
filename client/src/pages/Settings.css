@@ -26,6 +26,10 @@
   cursor: pointer;
 }
 
+.form-group input[type=number] {
+  width: 4em;
+}
+
 .done-btn {
   background-color: var(--background);
   display: inline-block;

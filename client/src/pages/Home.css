@@ -1,7 +1,7 @@
 .ghost-select {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
-  max-width: 420px;
+  max-width: 22rem;
   color: var(--fontColor);
   background-color: var(--background);
   border-color: var(--primary);
@@ -43,16 +43,15 @@
 }
 
 .editor .prediction-token {
-  margin: 0 0.2em;
-  -webkit-box-reflect: below -3px linear-gradient(transparent, rgba(0,0,0,.2));
+  /* margin: 0 0.2em;
   animation: fadeCycle 1s infinite;
-  display: inline-block;
+  display: inline-block; */
 }
 
 .editor .prediction-char {
-  display: inline-block;
+  /* display: inline-block;
   animation: wave 2s infinite;
-  animation-delay: calc(.2s * var(--i));
+  animation-delay: calc(.2s * var(--i)); */
 }
 
 .editor-btns {

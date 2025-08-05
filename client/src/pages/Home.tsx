@@ -149,15 +149,16 @@ function Home() {
             <span key={i + 1} className="prediction-token">
               {predictionToken.split("").map((char, j) => (
                 <span
-                  key={(i + 1) * (j + 1)}
+                  key={Math.random()}
                   className="prediction-char"
-                  style={{ "--i": (i + 1) * (j + 1) } as any}
+                  // style={{ "--i": (i + 1) * (j + 1) } as any}
                 >
                   {char}
                 </span>
               ))}
             </span>
           ))}
+          {composition.prediction.join(" ")}
         </div>
       </div>
     </CenterHorizontal>

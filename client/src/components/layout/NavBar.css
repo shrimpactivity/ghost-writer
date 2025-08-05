@@ -11,7 +11,7 @@
 
 .nav-link {
   font-size: 1rem;
-  font-family: 'Fira-code', monospace;
+  font-family: 'Fira code', monospace;
   border: 2px solid var(--backgroundLight);
   color: var(--fontColor);
   border-radius: 8px;
@@ -21,7 +21,7 @@
 
 .nav-link.active {
   font-size: 1rem;
-  font-family: 'Fira-code', monospace;
+  font-family: 'Fira code', monospace;
   color: var(--primary);
   border-color: var(--primary);
 }

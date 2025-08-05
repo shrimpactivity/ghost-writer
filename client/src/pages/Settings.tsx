@@ -53,7 +53,7 @@ export default function Settings() {
           <label>
             Weighted Predictions{" "}
             <span className="detail">
-              (if true, selects prediction with highest probability)
+              (if checked, selects prediction with highest probability)
             </span>
             <input
               type="checkbox"

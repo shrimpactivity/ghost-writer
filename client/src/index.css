@@ -1,3 +1,5 @@
+@import "@fontsource/fira-code";
+
 :root {
   font-family: 'Fira Code', monospace;
   font-size: 18px;
@@ -35,6 +37,25 @@ body {
 h1 {
   font-size: 1.3em;
 }
+
+@media(max-width: 1200px) {
+  :root {
+    font-size: 16px;
+  }
+}
+
+@media(max-width: 600px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+@media(max-width: 450px) {
+  :root {
+    font-size: 12px;
+  }
+}
+
 
 @keyframes wave {
 

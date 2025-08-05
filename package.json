@@ -4,8 +4,11 @@
   "description": "Text suggestion from beyond the grave.",
   "main": "index.js",
   "scripts": {
+    "build:client": "npm run build --workkspace=client",
+    "build:server": "npm run build --workkspace=server",
+    "build": "npm run build:client && npm run build:server",
     "dev:client": "npm run dev --workspace=client",
-    "build": "npm run build --workspace=client && npm run build --workspace=server",
+    "dev:server": "npm run dev --workspace=server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
