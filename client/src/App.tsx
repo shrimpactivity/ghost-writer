@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router";
-import Home from "./pages/Home";
+import Compose from "./pages/Compose";
 import Search from "./pages/Search";
 import Settings from "./pages/Settings";
 import "./App.css";
@@ -14,7 +14,8 @@ function App() {
       <NavBar />
       <Notification />
       <Routes>
-        <Route index element={<Home />} />
+        <Route index element={<Welcome />} />
+        <Route path="compose" element={<Compose />} />
         <Route path="search" element={<Search />} />
         <Route path="settings" element={<Settings />} />
         <Route path="welcome" element={<Welcome />} />

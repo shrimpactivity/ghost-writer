@@ -16,6 +16,7 @@
   margin: 1em 2em;
   padding: 1em 2em;
   max-width: 600px;
+  width: 600px;
   background-color: var(--backgroundTransparent);
   word-wrap: break-word;
 }

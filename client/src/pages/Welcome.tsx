@@ -31,7 +31,7 @@ export default function Welcome() {
           </ul>
         </CenterHorizontal>
         <CenterHorizontal>
-          <Link className="btn" to="/" style={{ marginTop: "1em" }}>
+          <Link className="btn" to="/compose" style={{ marginTop: "1em" }}>
             Start Writing
           </Link>
         </CenterHorizontal>

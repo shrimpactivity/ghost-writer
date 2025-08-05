@@ -63,9 +63,6 @@ export default function Settings() {
             />
           </label>
         </div>
-        <div>
-          <Link to="/" className="done-btn">Done</Link>
-        </div>
       </div>
     </CenterHorizontal>
   );

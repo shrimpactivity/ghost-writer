@@ -2,10 +2,10 @@ import { useRef } from "react";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { useGhosts } from "../context/Ghosts";
 import { useComposition } from "../hooks/Composition";
-import "./Home.css";
+import "./Compose.css";
 import LoadingIcon from "../components/LoadingIcon";
 
-function Home() {
+function Compose() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { books, ghost, isLoading, setCurrentBook } = useGhosts();
   const composition = useComposition();
@@ -164,4 +164,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Compose;

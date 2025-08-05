@@ -10,9 +10,9 @@ export default function NavBar() {
         className={({ isActive }) =>
           isActive ? "nav-link active" : "nav-link"
         }
-        to="/"
+        to="/compose"
       >
-        Home
+        Compose
       </NavLink>
       <NavLink
         className={({ isActive }) =>
