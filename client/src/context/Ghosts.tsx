@@ -118,7 +118,7 @@ export function GhostsProvider({ children }: PropsWithChildren) {
         setGhost({ book, markov });
         setIsLoading(false);
         notify(
-          `Summoning completed, now collaborating with ${formatAuthorName(book.authors[0])}`,
+          "Summoning complete",
           5000,
         );
       })

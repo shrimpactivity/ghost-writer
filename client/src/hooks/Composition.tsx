@@ -15,8 +15,20 @@ export function useComposition() {
       getPrediction(normalizedTokens),
     );
     setPrediction(formattedPrediction);
-    console.log(tokens);
   }, [tokens, input, ghost]);
+
+  useEffect(() => {
+    const storedTokensJSON = localStorage.getItem("composition");
+    if (storedTokensJSON) {
+      setTokens(JSON.parse(storedTokensJSON));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tokens.length) {
+      localStorage.setItem("composition", JSON.stringify(tokens));
+    }
+  }, [tokens]);
 
   function addInputToComposition() {
     if (input.trim().length > 0) {
@@ -26,7 +38,12 @@ export function useComposition() {
   }
 
   function addPredictionToComposition() {
-    setTokens(tokens.concat(input).concat(prediction));
+    let newTokens = [...tokens];
+    if (input.trim().length > 0) {
+      newTokens = newTokens.concat(input);
+    }
+    newTokens = newTokens.concat(prediction);
+    setTokens(newTokens);
     setInput("");
   }
 
@@ -75,6 +92,11 @@ export function useComposition() {
     });
   }
 
+  function clear() {
+    setTokens([]);
+    localStorage.setItem("composition", "[]");
+  }
+
   return {
     tokens,
     setTokens,
@@ -85,5 +107,6 @@ export function useComposition() {
     concatPrediction: addPredictionToComposition,
     moveInputBack,
     addNewLine,
+    clear,
   };
 }

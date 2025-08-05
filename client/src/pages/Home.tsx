@@ -1,12 +1,13 @@
+import { useRef } from "react";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { useGhosts } from "../context/Ghosts";
-import { useNotification } from "../context/Notification";
 import { useComposition } from "../hooks/Composition";
 import { formatAuthorName } from "../utils/format";
+import "./Home.css";
 
 function Home() {
+  const inputRef = useRef<HTMLInputElement>(null);
   const { books, ghost, isLoading, setCurrentBook } = useGhosts();
-  const { notify } = useNotification();
   const composition = useComposition();
 
   function handleGhostSelection(e: React.ChangeEvent<HTMLSelectElement>) {
@@ -14,6 +15,12 @@ function Home() {
     const book = books.find((book) => book.id === bookId);
     setCurrentBook(book!);
   }
+
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
 
   function handleCompositionInputChange(
     e: React.ChangeEvent<HTMLInputElement>,
@@ -51,6 +58,24 @@ function Home() {
     }
   }
 
+  const handleAcceptPrediction = () => {
+    composition.concatPrediction();
+    focusInput();
+  };
+
+  const handleCopyComposition = () => {
+    const formattedContent = composition.tokens.join(" ");
+    navigator.clipboard.writeText(formattedContent);
+    focusInput();
+  };
+
+  const handleClear = () => {
+    if (window.confirm("Delete entire composition?")) {
+      composition.clear();
+    }
+    focusInput();
+  };
+
   if (isLoading) {
     return (
       <CenterHorizontal>
@@ -62,39 +87,71 @@ function Home() {
   return (
     <CenterHorizontal>
       <div>
-        <h1>Home</h1>
-        <div className="ghost-select">
-          <select
-            value={ghost?.book.id}
-            onChange={(e) => handleGhostSelection(e)}
-          >
-            {books.map((book) => (
-              <option
-                key={book.id}
-                value={book.id}
-              >{`${formatAuthorName(book.authors[0])} (${book.title})`}</option>
-            ))}
-          </select>
-        </div>
-        <div
-          className="editor"
-        >
+        <CenterHorizontal>
+          <div>
+            <select
+              className="ghost-select"
+              value={ghost?.book.id}
+              onChange={(e) => handleGhostSelection(e)}
+            >
+              {books.map((book) => (
+                <option
+                  key={book.id}
+                  value={book.id}
+                >{`${formatAuthorName(book.authors[0])} (${book.title})`}</option>
+              ))}
+            </select>
+          </div>
+        </CenterHorizontal>
+        <CenterHorizontal>
+          <div className="editor-btns">
+            <button onClick={() => handleAcceptPrediction()}>
+              Accept (Tab)
+            </button>
+            <button onClick={() => handleCopyComposition()}>Copy</button>
+            <button onClick={() => handleClear()}>Clear</button>
+          </div>
+        </CenterHorizontal>
+
+        <div className="editor" onClick={() => focusInput()}>
           {composition.tokens.map((token, i) => {
             if (token === "\n") {
-              return <br key={i}/>;
+              return <br key={i} />;
             }
-            return <span key={i}>{token}</span>;
+            return (
+              <span className="token" key={i}>
+                {token}
+              </span>
+            );
           })}
           <input
             type="text"
+            autoFocus
+            ref={inputRef}
             className="composition-input"
             value={composition.input}
             onChange={(e) => handleCompositionInputChange(e)}
             onKeyDown={(e) => handleInputKey(e)}
+            style={{
+              width:
+                composition.input.length === 0
+                  ? "0.6em"
+                  : `${composition.input.length * 0.6}em`,
+            }}
           />
-          <span className="prediction" style={{ color: "red" }}>
-            {composition.prediction.join(" ")}
-          </span>
+          {composition.prediction.map((predictionToken, i) => (
+            <span key={i + 1} className="prediction-token">
+              {predictionToken.split("").map((char, j) => (
+                <span
+                  key={(i + 1) * (j + 1)}
+                  className="prediction-char"
+                  style={{ "--i": (i + 1) * (j + 1) } as any}
+                >
+                  {char}
+                </span>
+              ))}
+            </span>
+          ))}
         </div>
       </div>
     </CenterHorizontal>
