@@ -5,6 +5,7 @@
 
   --fontColor: #daffd7;
   --primary: #80fcbc;
+  --primaryDark: #23573c;
   --secondary: #00F0F0;
   --tertiary: #fc719b;
   --background: #0c0c0c;
@@ -30,6 +31,10 @@ body {
   margin: 0px;
   max-height: 10em;
   overflow: scroll;
+}
+
+h1 {
+  font-size: 1.3em;
 }
 
 @keyframes wave {

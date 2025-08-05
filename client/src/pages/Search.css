@@ -1,0 +1,48 @@
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.search-bar input, .search-bar button {
+  font-size: 1rem;
+  background-color: unset;
+  color: var(--fontColor);
+  padding: 0.3em 0.8em;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+}
+
+.search-bar button {
+  font-family: 'Fira Code', monospace;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: var(--primaryDark);
+}
+
+.books-table {
+  margin: 1em;
+  background-color: var(--background);
+  border-collapse: collapse;
+}
+
+.books-table th {
+  color: var(--tertiary);
+  font-weight: bold;
+  border-bottom: 2px solid var(--tertiary);
+  padding: 0.6em;
+  text-align: left;
+}
+
+.books-table td {
+  border-bottom: 1px solid var(--backgroundLight);
+  padding: 0.4em 0.6em;
+}
+
+.book-row:hover {
+  cursor: pointer;
+  background-color: var(--primaryDark);
+}

@@ -5,6 +5,7 @@ import { useGhosts } from "../context/Ghosts";
 import { useNavigate } from "react-router";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import { Book } from "../types";
+import "./Search.css";
 
 const bookService = new BookService();
 
@@ -15,11 +16,11 @@ interface BookTableProps {
 
 function BookTable({ books, onRowClick }: BookTableProps) {
   if (books.length === 0) {
-    return <p>No results</p>
+    return <p>No results</p>;
   }
 
   return (
-    <table>
+    <table className="books-table">
       <thead>
         <tr>
           <th>Author</th>
@@ -28,7 +29,7 @@ function BookTable({ books, onRowClick }: BookTableProps) {
       </thead>
       <tbody>
         {books.map((book) => (
-          <tr key={book.id} onClick={() => onRowClick(book)}>
+          <tr key={book.id} className="book-row" onClick={() => onRowClick(book)}>
             <td>{book.authors.join(" / ")}</td>
             <td>{book.title}</td>
           </tr>
@@ -52,37 +53,48 @@ function Search() {
     setIsLoading(true);
     setSubmitted(true);
     notify("Searching beyond the grave...");
-    bookService.search(query).then(results => {
-      setSearchResults(results);
-      setIsLoading(false);
-      notify("");
-    }).catch(err => {
-      notify(err.message);
-      setIsLoading(false);
-    });
+    bookService
+      .search(query)
+      .then((results) => {
+        setSearchResults(results);
+        setIsLoading(false);
+        notify("");
+      })
+      .catch((err) => {
+        notify(err.message);
+        setIsLoading(false);
+      });
   };
 
   const handleRowClick = (book: Book) => {
     setCurrentBook(book);
-    navigate("/")
+    navigate("/");
   };
 
   return (
     <CenterHorizontal>
       <div>
-        <h1>Search Project Gutenberg</h1>
-        <div>
-          <form onSubmit={(e) => handleFormSubmit(e)}>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button type="submit">Search</button>
-          </form>
-        </div>
-        { isLoading ? <p>Loading...</p> : null }
-        { submitted && isLoading === false ? <BookTable books={searchResults} onRowClick={handleRowClick} /> : null}
+        <CenterHorizontal>
+          <div>
+            <h1>Search Project Gutenberg</h1>
+          </div>
+        </CenterHorizontal>
+        <CenterHorizontal>
+          <div>
+            <form className="search-bar" onSubmit={(e) => handleFormSubmit(e)}>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button type="submit">Search</button>
+            </form>
+          </div>
+        </CenterHorizontal>
+        {isLoading ? <p>Loading...</p> : null}
+        {submitted && isLoading === false ? (
+          <BookTable books={searchResults} onRowClick={handleRowClick} />
+        ) : null}
       </div>
     </CenterHorizontal>
   );
