@@ -13,7 +13,7 @@ WORKDIR /app
 COPY server/ ./
 RUN npm install
 RUN npm run build
-COPY --from=client-builder /app/client/dist ./public
+COPY --from=client-builder /app/client/dist .dist/public
 
 EXPOSE 3000
 
