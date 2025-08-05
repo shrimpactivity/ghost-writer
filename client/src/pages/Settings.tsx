@@ -1,4 +1,3 @@
-import { Link } from "react-router";
 import { useGhosts } from "../context/Ghosts";
 import CenterHorizontal from "../components/layout/CenterHorizontal";
 import "./Settings.css";

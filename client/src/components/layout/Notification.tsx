@@ -4,12 +4,12 @@ import "./Notification.css";
 
 export default function Notification() {
   const { notification } = useNotification();
-  if (notification) {
-    return (
-      <CenterHorizontal>
-        <div className="notification">{notification}</div>
-      </CenterHorizontal>
-    );
-  }
+
+  return (
+    <CenterHorizontal>
+      <div className="notification">{notification}</div>
+    </CenterHorizontal>
+  );
+
   return null;
 }

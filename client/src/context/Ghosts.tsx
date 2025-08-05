@@ -54,10 +54,11 @@ export function GhostsProvider({ children }: PropsWithChildren) {
     notify("Initializing cemetery abstraction...");
     loadBooks()
       .then((bookWithText) => {
+        notify("Processing ecto-plasmetic prose...")
         const markov = new MarkovCoil(bookWithText.text.split(" "));
         setGhost({ book: { ...bookWithText, text: undefined }, markov });
         setIsLoading(false);
-        notify(`Data initialization ritual completed`, 5000);
+        notify(`Data ritual completed`, 5000);
       })
       .catch((err) => {
         notify(err.message, 10000);
@@ -111,12 +112,12 @@ export function GhostsProvider({ children }: PropsWithChildren) {
           localStorage.setItem("books", JSON.stringify([...books, book]));
         }
 
-        notify("Parsing ecto-language...");
+        notify("Processing ecto-plasmetic prose...");
         const markov = new MarkovCoil(text.split(" "));
         setGhost({ book, markov });
         setIsLoading(false);
         notify(
-          "Summoning complete",
+          "Summoning completed",
           5000,
         );
       })
@@ -134,7 +135,6 @@ export function GhostsProvider({ children }: PropsWithChildren) {
         settings.predictionLength,
         settings.weighted,
       );
-      console.log(prediction);
       return prediction;
     }
     return [];

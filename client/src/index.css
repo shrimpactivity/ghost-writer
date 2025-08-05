@@ -78,15 +78,16 @@ h1 {
   0%,
   100% {
     transform: translateY(-2px);
+    color: cyan;
   }
 
   30% {
     transform: translateY(1px);
-    color: cyan;
   }
 
   50% {
     transform: translateY(-1px);
+    color: cyan;
   }
 
   75% {

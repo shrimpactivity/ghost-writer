@@ -91,34 +91,34 @@ function Compose() {
   }
 
   return (
-    <CenterHorizontal>
-      <div>
-        <CenterHorizontal>
-          <div>
-            <select
-              className="ghost-select"
-              value={ghost?.book.id}
-              onChange={(e) => handleGhostSelection(e)}
-            >
-              {books.sort((a, b) => authorCompare(a.authors[0], b.authors[0])).map((book) => (
+    <>
+      <CenterHorizontal>
+        <div>
+          <select
+            className="ghost-select"
+            value={ghost?.book.id}
+            onChange={(e) => handleGhostSelection(e)}
+          >
+            {books
+              .sort((a, b) => authorCompare(a.authors[0], b.authors[0]))
+              .map((book) => (
                 <option
                   key={book.id}
                   value={book.id}
                 >{`${book.authors[0] ? book.authors[0] + " " : ""}(${book.title})`}</option>
               ))}
-            </select>
-          </div>
-        </CenterHorizontal>
-        <CenterHorizontal>
-          <div className="editor-btns">
-            <button onClick={() => handleAcceptPrediction()}>
-              Accept (Tab)
-            </button>
-            <button onClick={() => handleCopyComposition()}>Copy</button>
-            <button onClick={() => handleClear()}>Clear</button>
-          </div>
-        </CenterHorizontal>
+          </select>
+        </div>
+      </CenterHorizontal>
+      <CenterHorizontal>
+        <div className="editor-btns">
+          <button onClick={() => handleAcceptPrediction()}>Accept (Tab)</button>
+          <button onClick={() => handleCopyComposition()}>Copy</button>
+          <button onClick={() => handleClear()}>Clear</button>
+        </div>
+      </CenterHorizontal>
 
+      <div className="editor-container">
         <div className="editor" onClick={() => focusInput()}>
           {composition.tokens.map((token, i) => {
             if (token === "\n") {
@@ -160,7 +160,7 @@ function Compose() {
           ))}
         </div>
       </div>
-    </CenterHorizontal>
+    </>
   );
 }
 

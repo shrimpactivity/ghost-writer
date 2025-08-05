@@ -1,5 +1,5 @@
 .notification {
-  padding: 1em;
+  padding: 0.5em;
   color: var(--secondary);
   animation: fadeCycle 1s infinite;
   animation-timing-function: linear;
